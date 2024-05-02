@@ -1,7 +1,8 @@
 import './style.css'
 import {Tweakpane} from "./components/tweakpane.ts";
+import { WebGL } from './core/webgl.ts';
 
-const tweakpane = new Tweakpane();
+new Tweakpane();
 
 document.addEventListener('DOMContentLoaded', function () {
     loadContent();
@@ -15,4 +16,7 @@ const loadContent = () => {
     if (!gl) return;
 
     // TODO: Initialize WebGL here
+    const webGl = new WebGL(gl, canvas);
+
+    webGl.startRender();
 }
