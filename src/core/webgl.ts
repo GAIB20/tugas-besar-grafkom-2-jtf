@@ -1,8 +1,10 @@
+import { Model } from "./model";
 
 
 export class WebGL {
     gl : WebGLRenderingContext;
     renderId : number | undefined;
+
 
     constructor(gl: WebGLRenderingContext, canvas: HTMLCanvasElement) {
         this.gl = gl;
@@ -13,23 +15,13 @@ export class WebGL {
         this.gl.viewport(0, 0, canvas.width, canvas.height);
     }
 
-
-    draw() {
-
-    }
-
-    renderLoop() {
+    clear() {
         this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
-        this.draw();
     }
 
-    startRender() {
-        this.renderId = requestAnimationFrame(this.renderLoop);
-        this.renderLoop();
+    draw(model : Model) {
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, model.vertexBuffer);
+        model.elementBuffer && this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, model.elementBuffer);
+        model.shaderProgram && this.gl.useProgram(model.shaderProgram);
     }
-
-    stopRender() {
-        this.renderId && cancelAnimationFrame(this.renderId);
-    }
-
 }
