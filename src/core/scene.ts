@@ -1,4 +1,4 @@
-import { Model } from "./model";
+import { Mesh, Model } from "./interface";
 import { WebGL } from "./webgl";
 
 
@@ -6,6 +6,7 @@ export class Scene {
     webGL : WebGL;
     renderId : number | undefined;
     models : Model[] = [];
+    meshes: Mesh[] = [];
 
     constructor(webGL : WebGL) {
         this.webGL = webGL;
