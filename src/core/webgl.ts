@@ -17,7 +17,7 @@ export class WebGL {
         varying lowp vec4 vColor;
     
         void main(void) {
-        gl_Position = uTranslationMatrix * uRotationMatrix * vec4(aVertexPosition, 1.0f);
+        gl_Position = uTranslationMatrix * uRotationMatrix * vec4(aVertexPosition, 1.0);
         vColor = aVertexColor;
         }
     `;
@@ -54,6 +54,11 @@ export class WebGL {
 
         this.gl.shaderSource(vertexShader, this.vsSource);
         this.gl.compileShader(vertexShader);
+        if (!this.gl.getShaderParameter(vertexShader, this.gl.COMPILE_STATUS)) {
+            console.error('An error occurred compiling the vertex shaders: ' + this.gl.getShaderInfoLog(vertexShader));
+            this.gl.deleteShader(vertexShader);
+            return;
+        }
 
         const colorShader = this.gl.createShader(this.gl.FRAGMENT_SHADER);
         if (colorShader == null) {
@@ -62,6 +67,11 @@ export class WebGL {
 
         this.gl.shaderSource(colorShader, this.fsSource);
         this.gl.compileShader(colorShader);
+        if (!this.gl.getShaderParameter(colorShader, this.gl.COMPILE_STATUS)) {
+            console.error('An error occurred compiling the fragment shaders: ' + this.gl.getShaderInfoLog(colorShader));
+            this.gl.deleteShader(colorShader);
+            return;
+        }
 
         const shaderProgram = this.gl.createProgram();
         if (shaderProgram == null) {

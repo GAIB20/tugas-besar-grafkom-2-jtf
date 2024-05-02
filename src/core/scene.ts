@@ -7,16 +7,15 @@ export class Scene {
     renderId : number | undefined;
     models : Model[] = [];
     meshes: Mesh[] = [];
-
-    constructor(webGL : WebGL) {
-        this.webGL = webGL;
-    }
-
-    renderLoop() {
+    renderLoop = () => {
         this.webGL.clear();
         this.models.forEach(model => {
             this.webGL.draw(model);
         });
+    }
+
+    constructor(webGL : WebGL) {
+        this.webGL = webGL;
     }
 
     startRender() {
