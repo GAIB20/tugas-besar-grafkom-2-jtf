@@ -9,9 +9,4 @@ export interface Mesh {
     vertexLength: number
     elementBuffer: WebGLBuffer | undefined
     elementLength: number | undefined
-    shaderProgram: WebGLProgram
-}
-
-export interface VertexData {
-
 }
