@@ -1,4 +1,5 @@
-import { Model } from "./interface";
+import { Mesh, VertexData } from "./interface";
+import { Model } from "./model";
 
 
 export class WebGL {
@@ -17,8 +18,8 @@ export class WebGL {
         varying lowp vec4 vColor;
     
         void main(void) {
-        gl_Position = uTranslationMatrix * uRotationMatrix * vec4(aVertexPosition, 1.0);
-        vColor = aVertexColor;
+            gl_Position = uTranslationMatrix * uRotationMatrix * vec4(aVertexPosition, 1.0);
+            vColor = aVertexColor != vec4(0.0) ? aVertexColor : vec4(1.0);
         }
     `;
 
@@ -33,7 +34,7 @@ export class WebGL {
 
     constructor(gl: WebGLRenderingContext, canvas: HTMLCanvasElement) {
         this.gl = gl;
-        this.gl.clearColor(0.0, 0.0, 0.0, 1.0); // Clear to black, fully opaque
+        this.gl.clearColor(0.2, 0.2, 0.9, 1.0); // Clear to black, fully opaque
         this.gl.clearDepth(1.0); // Clear everything
         this.gl.enable(gl.DEPTH_TEST); // Enable depth testing
         this.gl.depthFunc(gl.LEQUAL); // Near things obscure far things
@@ -101,8 +102,57 @@ export class WebGL {
         this.uRotationMatrixLocation =  uRotationMatrixLocation;
     }
 
-    createMesh() {
+    createMesh(vertexData: VertexData, elementData?: Uint16Array) : Mesh {
+        const vertexBuffer = this.gl.createBuffer();
+        if (vertexBuffer == null) {
+            throw new Error('Failed to create vertex buffer.');
+        }
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, vertexBuffer);
+        this.gl.bufferData(this.gl.ARRAY_BUFFER, vertexData.data, this.gl.STATIC_DRAW);
 
+        const mesh : Mesh = {
+            vertexBuffer: vertexBuffer,
+            vertexLength: vertexData.data.length,
+        }
+
+        if(elementData) {
+            const elementBuffer = this.gl.createBuffer();
+            if (elementBuffer == null) {
+                throw new Error('Failed to create element buffer.');
+            }
+            this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, elementBuffer);
+            this.gl.bufferData(this.gl.ELEMENT_ARRAY_BUFFER, elementData, this.gl.STATIC_DRAW);
+
+            mesh.elementBuffer = elementBuffer;
+            mesh.elementLength = elementData.length;
+        }
+
+        //handle POS atrib
+        this.gl.vertexAttribPointer(
+            0,
+            3,
+            this.gl.FLOAT,
+            false,
+            vertexData.stride * Float32Array.BYTES_PER_ELEMENT,
+            vertexData.posOffset * Float32Array.BYTES_PER_ELEMENT,
+        );
+        this.gl.enableVertexAttribArray(0);
+
+
+        //handle COL atrib
+        if(vertexData.colOffset) {
+            this.gl.vertexAttribPointer(
+                1,
+                4,
+                this.gl.FLOAT,
+                false,
+                vertexData.stride * Float32Array.BYTES_PER_ELEMENT,
+                vertexData.colOffset * Float32Array.BYTES_PER_ELEMENT,
+            );
+            this.gl.enableVertexAttribArray(1);
+        }
+
+        return mesh;
     }
 
     clear() {
