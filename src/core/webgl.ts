@@ -113,6 +113,9 @@ export class WebGL {
         const mesh : Mesh = {
             vertexBuffer: vertexBuffer,
             vertexLength: vertexData.data.length,
+            stride: vertexData.stride,
+            posOffset: vertexData.posOffset,
+            colOffset: vertexData.colOffset,
         }
 
         if(elementData) {
@@ -127,30 +130,9 @@ export class WebGL {
             mesh.elementLength = elementData.length;
         }
 
-        //handle POS atrib
-        this.gl.vertexAttribPointer(
-            0,
-            3,
-            this.gl.FLOAT,
-            false,
-            vertexData.stride * Float32Array.BYTES_PER_ELEMENT,
-            vertexData.posOffset * Float32Array.BYTES_PER_ELEMENT,
-        );
-        this.gl.enableVertexAttribArray(0);
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, null);
+        this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, null);
 
-
-        //handle COL atrib
-        if(vertexData.colOffset) {
-            this.gl.vertexAttribPointer(
-                1,
-                4,
-                this.gl.FLOAT,
-                false,
-                vertexData.stride * Float32Array.BYTES_PER_ELEMENT,
-                vertexData.colOffset * Float32Array.BYTES_PER_ELEMENT,
-            );
-            this.gl.enableVertexAttribArray(1);
-        }
 
         return mesh;
     }
@@ -160,10 +142,38 @@ export class WebGL {
     }
 
     draw(model : Model) {
+        
+        this.gl.useProgram(this.shaderProgram);
+
+        
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, model.mesh.vertexBuffer);
         model.mesh.elementBuffer && this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, model.mesh.elementBuffer);
+        
+        //handle POS atrib
+        this.gl.vertexAttribPointer(
+            0,
+            3,
+            this.gl.FLOAT,
+            false,
+            model.mesh.stride * Float32Array.BYTES_PER_ELEMENT,
+            model.mesh.posOffset * Float32Array.BYTES_PER_ELEMENT,
+        );
+        this.gl.enableVertexAttribArray(0);
 
-        this.gl.useProgram(this.shaderProgram)
+
+        //handle COL atrib
+        if(model.mesh.colOffset) {
+            this.gl.vertexAttribPointer(
+                1,
+                4,
+                this.gl.FLOAT,
+                false,
+                model.mesh.stride * Float32Array.BYTES_PER_ELEMENT,
+                model.mesh.colOffset * Float32Array.BYTES_PER_ELEMENT,
+            );
+            this.gl.enableVertexAttribArray(1);
+        }
+        
         this.gl.uniformMatrix4fv(this.uTranslationMatrixLocation, false, model.translation);
         this.gl.uniformMatrix4fv(this.uRotationMatrixLocation, false, model.rotation);
 
@@ -172,5 +182,8 @@ export class WebGL {
         } else {
             this.gl.drawArrays(this.gl.TRIANGLES, 0, model.mesh.vertexLength);
         }
+
+        this.gl.disableVertexAttribArray(0);
+        this.gl.disableVertexAttribArray(1);
     }
 }
