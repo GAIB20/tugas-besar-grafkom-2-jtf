@@ -23,7 +23,7 @@ export class Scene {
         const test : VertexData = {
             data: new Float32Array(vertices),
             posOffset: 0,
-            stride: vertices.length
+            stride: vertices.length/3
         }
 
         this.meshes.push(this.webGL.createMesh(test, new Uint16Array(indices)));

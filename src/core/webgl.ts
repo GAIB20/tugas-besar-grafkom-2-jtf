@@ -19,7 +19,7 @@ export class WebGL {
     
         void main(void) {
             gl_Position = uTranslationMatrix * uRotationMatrix * vec4(aVertexPosition, 1.0);
-            vColor = aVertexColor != vec4(0.0) ? aVertexColor : vec4(1.0);
+            vColor = aVertexColor != vec4(vec3(0.0), 1.0) ? aVertexColor : vec4(1.0);
         }
     `;
 
