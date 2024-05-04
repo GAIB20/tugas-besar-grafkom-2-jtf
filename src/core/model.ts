@@ -2,12 +2,12 @@ import { Mesh } from "./interface"
 import { identity } from "./mat4";
 
 export class Model {
-    mesh: Mesh;
+    meshID: number;
     translation: Float32Array;
     rotation: Float32Array;
 
-    constructor(mesh : Mesh) {
-        this.mesh = mesh;
+    constructor(meshID : number) {
+        this.meshID = meshID;
         this.translation = identity();
         this.rotation = identity();
     }

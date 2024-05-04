@@ -7,7 +7,7 @@ export class Scene {
     webGL : WebGL;
     renderId : number | undefined;
     models : Model[] = [];
-    meshes: Mesh[] = [];
+    gltf: any;
 
     renderLoop = () => {
         this.webGL.clear();
@@ -33,10 +33,25 @@ export class Scene {
             stride: vertices2.length/3,
         }
 
-        this.meshes.push(this.webGL.createMesh(test, new Uint16Array(indices)));
-        this.meshes.push(this.webGL.createMesh(test2, new Uint16Array(indices)));
-        this.models.push(new Model(this.meshes[0]));
-        this.models.push(new Model(this.meshes[1]));
+        this.webGL.createMesh(test, new Uint16Array(indices));
+        this.webGL.createMesh(test2, new Uint16Array(indices));
+        this.models.push(new Model(0));
+        this.models.push(new Model(1));
+    }
+
+    async loadGLTF(url: string): Promise<any> {
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const gltf = await response.json();
+            console.log('GLTF loaded:', gltf);
+            this.gltf = gltf;
+        } catch (error) {
+            console.error('Error loading GLTF file:', error);
+            throw error;
+        }
     }
 
     startRender() {
@@ -45,6 +60,11 @@ export class Scene {
 
     stopRender() {
         this.renderId && cancelAnimationFrame(this.renderId);
+    }
+
+    destroy() {
+        this.stopRender();
+        this.webGL.destroy();
     }
 }
 

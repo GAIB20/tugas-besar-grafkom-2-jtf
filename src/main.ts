@@ -20,5 +20,7 @@ const loadContent = () => {
     const webGL = new WebGL(gl, canvas);
     const scene =  new Scene(webGL);
 
+    // scene.loadGLTF("../test-data/sample.gltf");
+
     scene.startRender();
 }

@@ -31,6 +31,8 @@ export class WebGL {
         }
     `;
 
+    meshes = new Array<Mesh>()
+
 
     constructor(gl: WebGLRenderingContext, canvas: HTMLCanvasElement) {
         this.gl = gl;
@@ -102,7 +104,8 @@ export class WebGL {
         this.uRotationMatrixLocation =  uRotationMatrixLocation;
     }
 
-    createMesh(vertexData: VertexData, elementData?: Uint16Array) : Mesh {
+    createMesh(vertexData: VertexData, elementData?: Uint16Array) : number {
+        const meshID = this.meshes.length;
         const vertexBuffer = this.gl.createBuffer();
         if (vertexBuffer == null) {
             throw new Error('Failed to create vertex buffer.');
@@ -130,11 +133,13 @@ export class WebGL {
             mesh.elementLength = elementData.length;
         }
 
+        this.meshes.push(mesh);
+
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, null);
         this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, null);
 
 
-        return mesh;
+        return meshID;
     }
 
     clear() {
@@ -144,10 +149,11 @@ export class WebGL {
     draw(model : Model) {
         
         this.gl.useProgram(this.shaderProgram);
-
+        const mesh = this.meshes.at(model.meshID);
+        if(!mesh) throw new Error(`mesh with ID ${model.meshID} not found.`);
         
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, model.mesh.vertexBuffer);
-        model.mesh.elementBuffer && this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, model.mesh.elementBuffer);
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, mesh.vertexBuffer);
+        mesh.elementBuffer && this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, mesh.elementBuffer);
         
         //handle POS atrib
         this.gl.vertexAttribPointer(
@@ -155,21 +161,21 @@ export class WebGL {
             3,
             this.gl.FLOAT,
             false,
-            model.mesh.stride * Float32Array.BYTES_PER_ELEMENT,
-            model.mesh.posOffset * Float32Array.BYTES_PER_ELEMENT,
+            mesh.stride * Float32Array.BYTES_PER_ELEMENT,
+            mesh.posOffset * Float32Array.BYTES_PER_ELEMENT,
         );
         this.gl.enableVertexAttribArray(0);
 
 
         //handle COL atrib
-        if(model.mesh.colOffset) {
+        if(mesh.colOffset) {
             this.gl.vertexAttribPointer(
                 1,
                 4,
                 this.gl.FLOAT,
                 false,
-                model.mesh.stride * Float32Array.BYTES_PER_ELEMENT,
-                model.mesh.colOffset * Float32Array.BYTES_PER_ELEMENT,
+                mesh.stride * Float32Array.BYTES_PER_ELEMENT,
+                mesh.colOffset * Float32Array.BYTES_PER_ELEMENT,
             );
             this.gl.enableVertexAttribArray(1);
         }
@@ -177,13 +183,22 @@ export class WebGL {
         this.gl.uniformMatrix4fv(this.uTranslationMatrixLocation, false, model.translation);
         this.gl.uniformMatrix4fv(this.uRotationMatrixLocation, false, model.rotation);
 
-        if(model.mesh.elementBuffer && model.mesh.elementLength) {
-            this.gl.drawElements(this.gl.TRIANGLES, model.mesh.elementLength, this.gl.UNSIGNED_SHORT, 0);
+        if(mesh.elementBuffer && mesh.elementLength) {
+            this.gl.drawElements(this.gl.TRIANGLES, mesh.elementLength, this.gl.UNSIGNED_SHORT, 0);
         } else {
-            this.gl.drawArrays(this.gl.TRIANGLES, 0, model.mesh.vertexLength);
+            this.gl.drawArrays(this.gl.TRIANGLES, 0, mesh.vertexLength);
         }
 
         this.gl.disableVertexAttribArray(0);
         this.gl.disableVertexAttribArray(1);
+    }
+
+    destroy() {
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, null);
+        this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, null);
+        this.meshes.forEach(mesh => {
+            this.gl.deleteBuffer(mesh.vertexBuffer);
+            mesh.elementBuffer && this.gl.deleteBuffer(mesh.elementBuffer);
+        });
     }
 }
