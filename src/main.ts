@@ -1,7 +1,9 @@
 import './style.css'
 import {Tweakpane} from "./components/tweakpane.ts";
+import { WebGL } from './core/webgl.ts';
+import { Scene } from './core/scene.ts';
 
-const tweakpane = new Tweakpane();
+new Tweakpane();
 
 document.addEventListener('DOMContentLoaded', function () {
     loadContent();
@@ -15,4 +17,10 @@ const loadContent = () => {
     if (!gl) return;
 
     // TODO: Initialize WebGL here
+    const webGL = new WebGL(gl, canvas);
+    const scene =  new Scene(webGL);
+
+    // scene.loadGLTF("../test-data/sample.gltf");
+
+    scene.startRender();
 }
