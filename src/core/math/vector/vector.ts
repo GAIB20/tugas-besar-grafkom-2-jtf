@@ -1,3 +1,4 @@
+import { ZERO_TOLERANCE } from '../../../constants/math';
 import { Vector3Type, Vector4Type } from './vector.d';
 
 /**
@@ -69,5 +70,34 @@ export abstract class Vector<T extends Vector3Type | Vector4Type> {
   dot(v: Vector<T>): number {
     this.checkDimension(v);
     return this.coords.reduce((sum, coord, i) => sum + coord * v.coords[i], 0);
+  }
+
+  /**
+   * Normalizes the current vector.
+   * @returns A new Vector instance representing the normalized vector.
+   * @throws {Error} If the vector is the zero vector.
+   */
+  normalize(): Vector<T> {
+    const magnitude = Math.sqrt(
+      this.coords.reduce((sum, coord) => sum + coord * coord, 0)
+    );
+
+    if (magnitude < ZERO_TOLERANCE) {
+      throw new Error('Cannot normalize the zero vector');
+    }
+
+    const newCoords = this.coords.map((coord) => coord / magnitude) as T;
+    return this.createVector(newCoords);
+  }
+
+  /**
+   * Calculates the cross product of the current vector and the given vector.
+   * Note: This method is only valid for 3D vectors.
+   * @param v - The vector to calculate the cross product with.
+   * @returns A new Vector instance representing the cross product of the two vectors.
+   * @throws {Error} If the vectors are not both 3D.
+   */
+  cross(v: Vector<T>): Vector<T> {
+    throw new Error('Cross product is only defined for 3D vectors');
   }
 }
