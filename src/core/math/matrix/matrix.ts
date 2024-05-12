@@ -1,3 +1,4 @@
+import { ZERO_TOLERANCE } from '../../../constants/math';
 import { Matrix3Type, Matrix4Type } from './matrix.d';
 
 /**
@@ -102,8 +103,7 @@ export abstract class Matrix<T extends Matrix3Type | Matrix4Type> {
         det *= -1;
       }
 
-      const tolerance = 1e-10;
-      if (Math.abs(matrix[i][i]) < tolerance) {
+      if (Math.abs(matrix[i][i]) < ZERO_TOLERANCE) {
         return 0; // Singular matrix, determinant is effectively 0
       }
 
