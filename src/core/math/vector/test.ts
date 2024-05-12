@@ -14,6 +14,8 @@ export const TestVector = () => {
   console.log('v3a.subtract(v3b):', v3a.subtract(v3b));
   console.log('v3a.multiply(2):', v3a.multiply(2));
   console.log('v3a.dot(v3b):', v3a.dot(v3b));
+  console.log('v3a.normalize():', v3a.normalize());
+  console.log('v3a.cross(v3b):', v3a.cross(v3b));
 
   // Test Vector4 methods
   console.log('Testing Vector4 methods...');
@@ -21,6 +23,7 @@ export const TestVector = () => {
   console.log('v4a.subtract(v4b):', v4a.subtract(v4b));
   console.log('v4a.multiply(2):', v4a.multiply(2));
   console.log('v4a.dot(v4b):', v4a.dot(v4b));
+  console.log('v4a.normalize():', v4a.normalize());
 };
 
 /**
@@ -28,6 +31,8 @@ export const TestVector = () => {
  * v3.substract: [-3, -3, -3]
  * v3.mul: [2, 4, 6]
  * v3.dot: 32
+ * v3.normalize: [0.2672612419124244, 0.5345224838248488, 0.8017837257372732]
+ * v3.cross: [-3, 6, -3]
  *
  * v4.add: [6, 8, 10, 12]
  * v4.substract: [-4, -4, -4, -4]
