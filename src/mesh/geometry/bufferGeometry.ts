@@ -1,4 +1,6 @@
 import { BufferAttribute } from './bufferAttribute';
+import { Vector3 } from '../../core/math/vector/vector3';
+import { Vector3Type } from '../../core/math/vector/vector.d';
 
 export class BufferGeometry {
   private _attributes: { [name: string]: BufferAttribute };
@@ -41,15 +43,32 @@ export class BufferGeometry {
   }
 
   calculateNormals(forceNewAttribute = false) {
-    const position = this.getAttribute('position');
-    if (!position) return;
-    let normal = this.getAttribute('normal');
-    if (forceNewAttribute || !normal)
-      normal = new BufferAttribute(
-        new Float32Array(position.length),
-        position.size
+    const positionAttribute = this.getAttribute('position');
+    if (!positionAttribute) return;
+    let normalAttribute = this.getAttribute('normal');
+    if (forceNewAttribute || !normalAttribute)
+      normalAttribute = new BufferAttribute(
+        new Float32Array(positionAttribute.length),
+        positionAttribute.size
       );
-    // Lakukan kalkulasi normal disini.
-    this.setAttribute('normal', normal);
+
+    // Assume the positions are ordered as triangle faces
+    for (let i = 0; i < positionAttribute.count; i += 3) {
+      const p0 = new Vector3(...(positionAttribute.get(i) as Vector3Type));
+      const p1 = new Vector3(...(positionAttribute.get(i + 1) as Vector3Type));
+      const p2 = new Vector3(...(positionAttribute.get(i + 2) as Vector3Type));
+
+      const edge1 = p1.subtract(p0);
+      const edge2 = p2.subtract(p0);
+
+      const normal: Vector3 = edge1.cross(edge2).normalize() as Vector3;
+
+      // Set the normal for each vertex in the face to the face normal
+      for (let j = 0; j < 3; j++) {
+        normalAttribute.set(i + j, [normal.x, normal.y, normal.z]);
+      }
+    }
+
+    this.setAttribute('normal', normalAttribute);
   }
 }
