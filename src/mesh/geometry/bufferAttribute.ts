@@ -15,7 +15,7 @@ export class BufferAttribute {
   private _stride = 0;
   private _offset = 0;
 
-  private _isDirty = true; // kita copy atribut minimal sekali di awal terlebih dahulu
+  private _isDirty = true;
 
   /**
    * Creates an instance of BufferAttribute.
@@ -117,16 +117,20 @@ export class BufferAttribute {
 
   set(index: number, data: number[]) {
     this._isDirty = true;
-    // Set elemen[index] dengan data (data.length == this._size)
-    // Jangan lupa untuk menyesuaikan dengan offset dan stride.
+    const start = index * this._size + this._offset;
+    for (let i = 0; i < this._size; i++) {
+      this._data[start + i * this._stride] = data[i];
+    }
   }
 
   get(index: number, size?: number) {
     index *= this._size;
     if (!size) size = this._size;
     const data: number[] = [];
-    // Ambil elemen[index] ke data (data.length == size)
-    // Jangan lupa untuk menyesuaikan dengan offset dan stride.
+    const start = index * this._size + this._offset;
+    for (let i = 0; i < size; i++) {
+      data.push(this._data[start + i * this._stride]);
+    }
     return data;
   }
 }
