@@ -13,7 +13,12 @@ export class Vector4 extends Vector<Vector4Type> {
    * @param z - The z-coordinate of the vector.
    * @param w - The w-coordinate of the vector.
    */
-  constructor(x: number, y: number, z: number, w: number) {
+  constructor(
+    public x: number,
+    public y: number,
+    public z: number,
+    public w: number
+  ) {
     super([x, y, z, w]);
   }
 
