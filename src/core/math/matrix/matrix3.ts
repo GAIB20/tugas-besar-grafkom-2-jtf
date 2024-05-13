@@ -13,7 +13,7 @@ export class Matrix3 extends Matrix<Matrix3Type> {
    * @param y - The second row of the matrix.
    * @param z - The third row of the matrix.
    */
-  constructor(x: Vector3, y: Vector3, z: Vector3) {
+  constructor(x: Vector3 = new Vector3(), y: Vector3 = new Vector3(), z: Vector3 = new Vector3()) {
     super([x.coords, y.coords, z.coords]);
   }
 
