@@ -1,4 +1,4 @@
-import { BufferAttribute } from './bufferAttribute';
+import { BufferAttribute } from './BufferAttribute';
 import { Vector3 } from '../../core/math/vector/vector3';
 import { Vector3Type } from '../../core/math/vector/vector.d';
 
