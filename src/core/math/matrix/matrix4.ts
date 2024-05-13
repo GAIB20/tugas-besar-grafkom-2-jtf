@@ -14,7 +14,7 @@ export class Matrix4 extends Matrix<Matrix4Type> {
    * @param z - The third row of the matrix.
    * @param w - The fourth row of the matrix.
    */
-  constructor(x: Vector4, y: Vector4, z: Vector4, w: Vector4) {
+  constructor(x: Vector4 = new Vector4(), y: Vector4 = new Vector4(), z: Vector4 = new Vector4(), w: Vector4 = new Vector4()) {
     super([x.coords, y.coords, z.coords, w.coords]);
   }
 
