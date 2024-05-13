@@ -38,7 +38,7 @@ export class BufferAttribute {
     this._size = size;
     this._dtype = options.dtype || WebGLRenderingContext.FLOAT;
     this._normalize = options.normalize || false;
-    this._stride = options.stride || 0;
+    this._stride = options.stride || size;
     this._offset = options.offset || 0;
   }
 
@@ -117,19 +117,18 @@ export class BufferAttribute {
 
   set(index: number, data: number[]) {
     this._isDirty = true;
-    const start = index * this._size + this._offset;
+    const start = index * this._stride + this._offset;
     for (let i = 0; i < this._size; i++) {
-      this._data[start + i * this._stride] = data[i];
+      this._data[start + i] = data[i];
     }
   }
 
   get(index: number, size?: number) {
-    index *= this._size;
+    index *= this._stride;
     if (!size) size = this._size;
     const data: number[] = [];
-    const start = index * this._size + this._offset;
     for (let i = 0; i < size; i++) {
-      data.push(this._data[start + i * this._stride]);
+      data.push(this._data[index + i]);
     }
     return data;
   }
