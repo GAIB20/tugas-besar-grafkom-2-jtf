@@ -1,25 +1,27 @@
-import { Mesh, VertexData } from "./interface";
-import { Model } from "./model";
+import { BufferAttribute } from "../mesh/geometry/bufferAttribute";
+import { BufferGeometry } from "../mesh/geometry/bufferGeometry";
+import { Matrix4 } from "./math/matrix/matrix4";
+import { Vector4 } from "./math/vector/vector4";
 
+type AttribSetter = (v: BufferAttribute) => void;
 
 export class WebGL {
     gl: WebGLRenderingContext;
     shaderProgram: WebGLProgram | null;
-    uTranslationMatrixLocation: WebGLUniformLocation | null;
-    uRotationMatrixLocation: WebGLUniformLocation | null;
+    uViewMatrixLocation: WebGLUniformLocation | null;
+    uColor: WebGLUniformLocation | null;
 
     vsSource = `
-        attribute vec3 aVertexPosition;
-        attribute vec4 aVertexColor;
+        attribute vec3 position;
     
-        uniform mat4 uTranslationMatrix;
-        uniform mat4 uRotationMatrix;
+        uniform mat4 uViewMatrix;
+        uniform vec4 uColor;
     
         varying lowp vec4 vColor;
     
         void main(void) {
-            gl_Position = uTranslationMatrix * uRotationMatrix * vec4(aVertexPosition, 1.0);
-            vColor = aVertexColor != vec4(vec3(0.0), 1.0) ? aVertexColor : vec4(1.0);
+            gl_Position = uViewMatrix * vec4(position, 1.0);
+            vColor = uColor;
         }
     `;
 
@@ -31,7 +33,7 @@ export class WebGL {
         }
     `;
 
-    meshes = new Array<Mesh>()
+    attribSetters : {[name: string] : AttribSetter} = {};
 
 
     constructor(gl: WebGLRenderingContext, canvas: HTMLCanvasElement) {
@@ -43,10 +45,11 @@ export class WebGL {
         this.gl.viewport(0, 0, canvas.width, canvas.height);
         
         this.shaderProgram = null;
-        this.uRotationMatrixLocation = null;
-        this.uTranslationMatrixLocation = null;
+        this.uViewMatrixLocation = null;
+        this.uColor = null;
 
         this.compileShaders();
+        this.getAttribSetters();
     }
 
     compileShaders() {
@@ -86,119 +89,87 @@ export class WebGL {
 
         // Bind attribute locations before linking the program
         this.gl.bindAttribLocation(shaderProgram, 0, 'aVertexPosition');
-        this.gl.bindAttribLocation(shaderProgram, 1, 'aVertexColor');
       
         this.gl.linkProgram(shaderProgram);
         this.shaderProgram = shaderProgram;
 
-        const uTranslationMatrixLocation = this.gl.getUniformLocation(shaderProgram, 'uTranslationMatrix');
-        if (uTranslationMatrixLocation == null) {
-            throw new Error('Failed to retrieve transalation matrix location.');
+        const uViewMatrixLocation = this.gl.getUniformLocation(shaderProgram, 'uViewMatrix');
+        if (uViewMatrixLocation == null) {
+            throw new Error('Failed to retrieve view matrix location.');
         }
-        this.uTranslationMatrixLocation =  uTranslationMatrixLocation;
-
-        const uRotationMatrixLocation = this.gl.getUniformLocation(shaderProgram, 'uRotationMatrix');
-        if (uRotationMatrixLocation == null) {
-            throw new Error('Failed to retrieve rotation matrix location.');
-        }
-        this.uRotationMatrixLocation =  uRotationMatrixLocation;
+        this.uViewMatrixLocation =  uViewMatrixLocation;
     }
 
-    createMesh(vertexData: VertexData, elementData?: Uint16Array) : number {
-        const meshID = this.meshes.length;
-        const vertexBuffer = this.gl.createBuffer();
-        if (vertexBuffer == null) {
-            throw new Error('Failed to create vertex buffer.');
+    createAttrib(name: string) : AttribSetter {
+        if(this.shaderProgram == null) {
+            throw new Error('Failed to retrieve shader program.');
         }
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, vertexBuffer);
-        this.gl.bufferData(this.gl.ARRAY_BUFFER, vertexData.data, this.gl.STATIC_DRAW);
+        const gl = this.gl;
+        const loc = gl.getAttribLocation(this.shaderProgram, name);
+        const buf = gl.createBuffer();
+        return (v : BufferAttribute) => {
+            gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+            gl.enableVertexAttribArray(loc);
+            gl.bufferData(gl.ARRAY_BUFFER, v.data, gl.STATIC_DRAW);
+            gl.vertexAttribPointer(loc, v.size, v.dtype, v.normalize, v.stride, v.offset);
+        }
+    }
 
-        const mesh : Mesh = {
-            vertexBuffer: vertexBuffer,
-            vertexLength: vertexData.data.length,
-            stride: vertexData.stride,
-            posOffset: vertexData.posOffset,
-            colOffset: vertexData.colOffset,
+    getAttribSetters() {
+        const gl = this.gl;
+        if(this.shaderProgram == null) {
+            throw new Error('Failed to retrieve shader program.');
+        }
+        const attribSetters: {[name: string] : AttribSetter} = {};
+        const numAttribs = gl.getProgramParameter(this.shaderProgram, gl.ACTIVE_ATTRIBUTES);
+        for (let i = 0; i < numAttribs; i++) {
+            const info = gl.getActiveAttrib(this.shaderProgram, i);
+            if (!info) break;
+            attribSetters[info.name] = this.createAttrib(info.name);
         }
 
-        if(elementData) {
-            const elementBuffer = this.gl.createBuffer();
-            if (elementBuffer == null) {
-                throw new Error('Failed to create element buffer.');
-            }
-            this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, elementBuffer);
-            this.gl.bufferData(this.gl.ELEMENT_ARRAY_BUFFER, elementData, this.gl.STATIC_DRAW);
-
-            mesh.elementBuffer = elementBuffer;
-            mesh.elementLength = elementData.length;
-        }
-
-        this.meshes.push(mesh);
-
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, null);
-        this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, null);
-
-
-        return meshID;
+        this.attribSetters = attribSetters;
     }
 
     clear() {
         this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
     }
 
-    draw(model : Model) {
-        
-        this.gl.useProgram(this.shaderProgram);
-        const mesh = this.meshes.at(model.meshID);
-        if(!mesh) throw new Error(`mesh with ID ${model.meshID} not found.`);
-        
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, mesh.vertexBuffer);
-        mesh.elementBuffer && this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, mesh.elementBuffer);
-        
-        //handle POS atrib
-        this.gl.vertexAttribPointer(
-            0,
-            3,
-            this.gl.FLOAT,
-            false,
-            mesh.stride * Float32Array.BYTES_PER_ELEMENT,
-            mesh.posOffset * Float32Array.BYTES_PER_ELEMENT,
-        );
-        this.gl.enableVertexAttribArray(0);
+    draw(bufferGeometry : BufferGeometry) {
+        const gl = this.gl;        
+        gl.useProgram(this.shaderProgram);
 
+        this.attribSetters["position"](bufferGeometry.attributes["position"]);
+        
+        const identity = new Matrix4().identity();
+        const color = new Float32Array(4);
+        color[0] = 1;
+        color[1] = 1;
+        color[2] = 1;
+        color[3] = 1;
+        gl.uniformMatrix4fv(this.uViewMatrixLocation, false, identity.toColumnMajorArray());
+        gl.uniformMatrix4fv(this.uColor, false, color);
 
-        //handle COL atrib
-        if(mesh.colOffset) {
-            this.gl.vertexAttribPointer(
-                1,
-                4,
-                this.gl.FLOAT,
-                false,
-                mesh.stride * Float32Array.BYTES_PER_ELEMENT,
-                mesh.colOffset * Float32Array.BYTES_PER_ELEMENT,
+        if(bufferGeometry.indices) {
+            const eleBuf = gl.createBuffer();
+            gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, eleBuf);
+            gl.bufferData(
+                gl.ELEMENT_ARRAY_BUFFER,
+                bufferGeometry.indices.data,
+                gl.STATIC_DRAW
             );
-            this.gl.enableVertexAttribArray(1);
-        }
-        
-        this.gl.uniformMatrix4fv(this.uTranslationMatrixLocation, false, model.translation);
-        this.gl.uniformMatrix4fv(this.uRotationMatrixLocation, false, model.rotation);
-
-        if(mesh.elementBuffer && mesh.elementLength) {
-            this.gl.drawElements(this.gl.TRIANGLES, mesh.elementLength, this.gl.UNSIGNED_SHORT, 0);
+            this.gl.drawElements(this.gl.TRIANGLES, bufferGeometry.indices.count, this.gl.UNSIGNED_SHORT, bufferGeometry.indices.offset);
         } else {
-            this.gl.drawArrays(this.gl.TRIANGLES, 0, mesh.vertexLength);
+            this.gl.drawArrays(this.gl.TRIANGLES, 0, bufferGeometry.attributes['position'].count);
         }
-
-        this.gl.disableVertexAttribArray(0);
-        this.gl.disableVertexAttribArray(1);
     }
 
-    destroy() {
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, null);
-        this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, null);
-        this.meshes.forEach(mesh => {
-            this.gl.deleteBuffer(mesh.vertexBuffer);
-            mesh.elementBuffer && this.gl.deleteBuffer(mesh.elementBuffer);
-        });
-    }
+    // destroy() {
+    //     this.gl.bindBuffer(this.gl.ARRAY_BUFFER, null);
+    //     this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, null);
+    //     this.meshes.forEach(mesh => {
+    //         this.gl.deleteBuffer(mesh.vertexBuffer);
+    //         mesh.elementBuffer && this.gl.deleteBuffer(mesh.elementBuffer);
+    //     });
+    // }
 }
