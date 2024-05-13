@@ -1,5 +1,4 @@
 import { Mesh } from "./interface"
-import { identity } from "./mat4";
 
 export class Model {
     meshID: number;

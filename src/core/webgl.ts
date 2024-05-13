@@ -111,7 +111,7 @@ export class WebGL {
             gl.bindBuffer(gl.ARRAY_BUFFER, buf);
             gl.enableVertexAttribArray(loc);
             gl.bufferData(gl.ARRAY_BUFFER, v.data, gl.STATIC_DRAW);
-            gl.vertexAttribPointer(loc, v.size, v.dtype, v.normalize, v.stride, v.offset);
+            gl.vertexAttribPointer(loc, v.size, v.dtype, v.normalize, v.stride * v.data.BYTES_PER_ELEMENT, v.offset);
         }
     }
 

@@ -1,4 +1,6 @@
-import { Mesh, VertexData } from "./interface";
+import { BoxGeometry } from "../mesh/geometry/boxGeometry";
+import { PlaneGeometry } from "../mesh/geometry/planeGeometry";
+import { VertexData } from "./interface";
 import { Model } from "./model";
 import { WebGL } from "./webgl";
 
@@ -11,36 +13,24 @@ export class Scene {
 
     renderLoop = () => {
         this.webGL.clear();
-        this.models.forEach(model => {
-            this.webGL.draw(model);
-        });
+        // this.models.forEach(model => {
+        //     this.webGL.draw(model);
+        // });
+        const test = new BoxGeometry();
+        this.webGL.draw(test);
         this.renderId = requestAnimationFrame(this.renderLoop);
     }
 
     constructor(webGL : WebGL) {
         this.webGL = webGL;
-
-        const test : VertexData = {
-            data: new Float32Array(vertices),
-            posOffset: 0,
-            colOffset: 3,
-            stride: vertices.length/3,
-        }
-
-        const test2 : VertexData = {
-            data: new Float32Array(vertices2),
-            posOffset: 0,
-            stride: vertices2.length/3,
-        }
-
-        this.webGL.createMesh(test, new Uint16Array(indices));
-        this.webGL.createMesh(test2, new Uint16Array(indices));
-        this.models.push(new Model(0));
-        this.models.push(new Model(1));
     }
 
     async loadGLTF(url: string): Promise<any> {
         try {
+            const a = await fetch("data:application/octet-stream;base64,AAABAAIAAAAAAAAAAAAAAAAAAAAAAIA/AAAAAAAAAAAAAAAAAACAPwAAAAA=");
+            const b = await a.blob();
+            const c = await b.arrayBuffer();
+            console.log(new Float32Array(c, 8));
             const response = await fetch(url);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
@@ -64,7 +54,8 @@ export class Scene {
 
     destroy() {
         this.stopRender();
-        this.webGL.destroy();
+        // this.webGL.destroy();
+        this.models = [];
     }
 }
 
