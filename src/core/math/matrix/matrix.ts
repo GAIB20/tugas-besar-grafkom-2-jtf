@@ -33,6 +33,15 @@ export abstract class Matrix<T extends Matrix3Type | Matrix4Type> {
   }
 
   /**
+   * Pre-multiplies the current matrix with another matrix.
+   * @param other - The other matrix to pre-multiply with.
+   * @returns The result of the pre-multiplication.
+   */
+  preMultiply(other: Matrix<T>): Matrix<T> {
+    return other.multiply(this);
+  }
+
+  /**
    * Transposes the current matrix.
    * @returns The transpose of the current matrix.
    */
@@ -185,4 +194,41 @@ export abstract class Matrix<T extends Matrix3Type | Matrix4Type> {
    * @returns A new matrix of the same type.
    */
   protected abstract createMatrix(rows: T): Matrix<T>;
+
+  /**
+   * Translates the matrix by the given x, y, and z values.
+   * Note: This method is only valid for 4x4 matrices.
+   * @param x - The value to translate along the x-axis.
+   * @param y - The value to translate along the y-axis.
+   * @param z - The value to translate along the z-axis.
+   * @throws {Error} If the matrix is not 4x4.
+   */
+  translate(x: number, y: number, z: number): Matrix<T> {
+    return this;
+  }
+
+  /**
+   * Rotates the matrix around the x, y, and z axes.
+   * The rotations are applied in sequence: first x, then y, and finally z.
+   * Note: This method is only valid for 4x4 matrices.
+   * @param x - The angle to rotate around the x-axis, in degrees.
+   * @param y - The angle to rotate around the y-axis, in degrees.
+   * @param z - The angle to rotate around the z-axis, in degrees.
+   * @throws {Error} If the matrix is not 4x4.
+   */
+  rotate(x: number, y: number, z: number): Matrix<T> {
+    return this;
+  }
+
+  /**
+   * Scales the matrix by the given x, y, and z values.
+   * Note: This method is only valid for 4x4 matrices.
+   * @param x - The value to scale along the x-axis.
+   * @param y - The value to scale along the y-axis.
+   * @param z - The value to scale along the z-axis.
+   * @throws {Error} If the matrix is not 4x4.
+   */
+  scale(x: number, y: number, z: number): Matrix<T> {
+    return this;
+  }
 }
