@@ -1,6 +1,4 @@
 import { Matrix4 } from "./math/matrix/matrix4";
-import { Vector3Type, Vector4Type } from "./math/vector/vector.d";
-import { Vector } from "./math/vector/vector";
 import { Matrix } from "./math/matrix/matrix";
 import { Vector3 } from "./math/vector/vector3";
 import { Vector4 } from "./math/vector/vector4";
@@ -70,7 +68,10 @@ export class Object3D {
     }
     
     public set parent(parent : Object3D|undefined) {
-        this._parent = parent;
+        if (this._parent !== parent) {
+            this._parent = parent;
+            this.computeWorldMatrix(false, true);
+        }
     }
 
     /**
