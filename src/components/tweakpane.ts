@@ -1,93 +1,21 @@
 import { ButtonApi, Pane } from 'tweakpane';
 import { BindingApi } from '@tweakpane/core';
-
-export interface RGB {
-  r: number;
-  g: number;
-  b: number;
-}
-
-export interface Coordinate {
-  x: number;
-  y: number;
-  z: number;
-}
+import { RGB, Coordinate } from '../core/interface';
+import { StateManager } from '../core/state';
 
 export class Tweakpane {
   pane: Pane;
+  state: StateManager;
 
   modelBinding: BindingApi;
-  modelParams: {
-    model: string;
-  } = {
-    model: 'A'
-  };
-
   materialBinding: BindingApi;
-  materialParams: {
-    material: string;
-  } = {
-    material: 'Basic'
-  };
-
   diffuseColorBinding: BindingApi;
   diffuseTextureBinding: BindingApi;
-  diffuseParams: {
-    color: RGB;
-    texture: string;
-  } = {
-    color: {
-      r: 255,
-      g: 0,
-      b: 0
-    },
-    texture: 'A'
-  };
-
   specularColorBinding: BindingApi;
   specularTextureBinding: BindingApi;
-  specularParams: {
-    color: RGB;
-    texture: string;
-  } = {
-    color: {
-      r: 255,
-      g: 0,
-      b: 0
-    },
-    texture: 'A'
-  };
-
   bumpTextureBinding: BindingApi;
-  bumpParams: {
-    texture: string;
-  } = {
-    texture: 'A'
-  };
-
   frameBinding: BindingApi;
-  frameParams: {
-    frame: string;
-  } = {
-    frame: '1 of 10'
-  };
-
   fpsBinding: BindingApi;
-  fpsParams: {
-    fps: string;
-  } = {
-    fps: '30'
-  };
-
-  controllerParams: {
-    play: boolean;
-    reverse: boolean;
-    replay: boolean;
-  } = {
-    play: true,
-    reverse: false,
-    replay: false
-  };
   playBtn: ButtonApi;
   pauseBtn: ButtonApi;
   reverseBtn: BindingApi;
@@ -99,29 +27,14 @@ export class Tweakpane {
   lastBtn: ButtonApi;
 
   projectionBinding: BindingApi;
-  projectionParams: {
-    projection: string;
-  } = {
-    projection: 'Orthographic'
-  };
-
-  positionParams: {
-    radius: number;
-    coordinate: Coordinate;
-  } = {
-    radius: 1,
-    coordinate: {
-      x: 0,
-      y: 0,
-      z: 0
-    }
-  };
   radiusBinding: BindingApi;
   coordinateBinding: BindingApi;
 
   resetBtn: ButtonApi;
 
   constructor() {
+    this.state = StateManager.getInstance();
+
     // Get tweakpane container
     const tweakpaneContainer = document.getElementById('tweakpane-container');
 
@@ -139,7 +52,7 @@ export class Tweakpane {
 
     // Model: Selector
     this.modelBinding = modelFolder
-      .addBinding(this.modelParams, 'model', {
+      .addBinding(this.state, 'model', {
         view: 'list',
         label: 'Model',
         options: [
@@ -150,7 +63,7 @@ export class Tweakpane {
         value: 'A'
       })
       .on('change', (e) => {
-        this.changeModel(e.value);
+        this.state.changeModel(e.value);
       });
 
     // Model: Material
@@ -159,7 +72,7 @@ export class Tweakpane {
       expanded: true
     });
     this.materialBinding = materialFolder
-      .addBinding(this.materialParams, 'material', {
+      .addBinding(this.state, 'material', {
         view: 'list',
         label: 'Material',
         options: [
@@ -169,7 +82,7 @@ export class Tweakpane {
         value: 'Basic'
       })
       .on('change', (e) => {
-        this.changeMaterial(e.value);
+        this.state.changeMaterial(e.value);
       });
 
     // Material: Diffuse
@@ -180,17 +93,17 @@ export class Tweakpane {
 
     // Diffuse: Color
     this.diffuseColorBinding = diffuseFolder
-      .addBinding(this.diffuseParams, 'color', {
+      .addBinding(this.state, 'diffuseColor', {
         picker: 'inline',
         expanded: true
       })
       .on('change', (e) => {
-        this.changeDiffuseColor(e.value);
+        this.state.changeDiffuseColor(e.value);
       });
 
     // Diffuse: Texture
     this.diffuseTextureBinding = diffuseFolder
-      .addBinding(this.diffuseParams, 'texture', {
+      .addBinding(this.state, 'diffuseTexture', {
         view: 'list',
         label: 'Texture',
         options: [
@@ -200,7 +113,7 @@ export class Tweakpane {
         value: 'A'
       })
       .on('change', (e) => {
-        this.changeDiffuseTexture(e.value);
+        this.state.changeDiffuseTexture(e.value);
       });
 
     // Material: Specular
@@ -211,17 +124,17 @@ export class Tweakpane {
 
     // Specular: Color
     this.specularColorBinding = specularFolder
-      .addBinding(this.specularParams, 'color', {
+      .addBinding(this.state, 'specularColor', {
         picker: 'inline',
         expanded: true
       })
       .on('change', (e) => {
-        this.changeSpecularColor(e.value);
+        this.state.changeSpecularColor(e.value);
       });
 
     // Specular: Texture
     this.specularTextureBinding = specularFolder
-      .addBinding(this.specularParams, 'texture', {
+      .addBinding(this.state, 'specularTexture', {
         view: 'list',
         label: 'Texture',
         options: [
@@ -231,7 +144,7 @@ export class Tweakpane {
         value: 'A'
       })
       .on('change', (e) => {
-        this.changeSpecularTexture(e.value);
+        this.state.changeSpecularTexture(e.value);
       });
 
     // Material: Bump
@@ -242,7 +155,7 @@ export class Tweakpane {
 
     // Bump: Texture
     this.bumpTextureBinding = bumpFolder
-      .addBinding(this.bumpParams, 'texture', {
+      .addBinding(this.state, 'bumpTexture', {
         view: 'list',
         label: 'Texture',
         options: [
@@ -252,7 +165,7 @@ export class Tweakpane {
         value: 'A'
       })
       .on('change', (e) => {
-        this.changeBumpTexture(e.value);
+        this.state.changeBumpTexture(e.value);
       });
 
     // Model : Animation
@@ -262,12 +175,12 @@ export class Tweakpane {
     });
 
     // Animation: Frame
-    this.frameBinding = animationFolder.addBinding(this.frameParams, 'frame', {
+    this.frameBinding = animationFolder.addBinding(this.state, 'frame', {
       readonly: true
     });
 
     // Animation: FPS
-    this.fpsBinding = animationFolder.addBinding(this.fpsParams, 'fps', {
+    this.fpsBinding = animationFolder.addBinding(this.state, 'fps', {
       readonly: true
     });
 
@@ -281,56 +194,56 @@ export class Tweakpane {
     this.playBtn = controllerFolder
       .addButton({ title: 'Play' })
       .on('click', () => {
-        this.onPlay();
+        this.state.onPlay();
       });
 
     // Controller: Pause
     this.pauseBtn = controllerFolder
       .addButton({ title: 'Pause' })
       .on('click', () => {
-        this.onPause();
+        this.state.onPause();
       });
 
     // Controller: Reverse
     this.reverseBtn = controllerFolder
-      .addBinding(this.controllerParams, 'reverse')
+      .addBinding(this.state.controller, 'reverse')
       .on('change', () => {
-        this.onReverse();
+        this.state.onReverse();
       });
 
     // Controller: Auto-replay
     this.replayBtn = controllerFolder
-      .addBinding(this.controllerParams, 'replay')
+      .addBinding(this.state.controller, 'replay')
       .on('change', () => {
-        this.onReplay();
+        this.state.onReplay();
       });
 
     // Controller: Next
     this.nextBtn = controllerFolder
       .addButton({ title: 'Next' })
       .on('click', () => {
-        this.onNext();
+        this.state.onNext();
       });
 
     // Controller: Previous
     this.prevBtn = controllerFolder
       .addButton({ title: 'Previous' })
       .on('click', () => {
-        this.onPrev();
+        this.state.onPrev();
       });
 
     // Controller: First
     this.firstBtn = controllerFolder
       .addButton({ title: 'First' })
       .on('click', () => {
-        this.onFirst();
+        this.state.onFirst();
       });
 
     // Controller: Last
     this.lastBtn = controllerFolder
       .addButton({ title: 'Last' })
       .on('click', () => {
-        this.onLast();
+        this.state.onLast();
       });
 
     // Camera
@@ -341,7 +254,7 @@ export class Tweakpane {
 
     // Camera: Projection
     this.projectionBinding = cameraFolder
-      .addBinding(this.projectionParams, 'projection', {
+      .addBinding(this.state, 'projection', {
         view: 'list',
         label: 'Projection',
         options: [
@@ -352,7 +265,7 @@ export class Tweakpane {
         value: 'Orthographic'
       })
       .on('change', (e) => {
-        this.changeProjection(e.value);
+        this.state.changeProjection(e.value);
       });
 
     // Camera: Position
@@ -363,7 +276,7 @@ export class Tweakpane {
 
     // Position: Radius
     this.radiusBinding = positionFolder
-      .addBinding(this.positionParams, 'radius', {
+      .addBinding(this.state.position, 'radius', {
         view: 'slider',
         label: 'radius',
         min: 0.1,
@@ -371,99 +284,21 @@ export class Tweakpane {
         value: 1
       })
       .on('change', (ev) => {
-        this.changeRadius(ev.value);
+        this.state.changeRadius(ev.value);
       });
 
     // Position: Coordinate
     this.coordinateBinding = positionFolder
-      .addBinding(this.positionParams, 'coordinate', {})
+      .addBinding(this.state.position, 'coordinate', {})
       .on('change', (ev) => {
-        this.changeCoordinate(ev.value);
+        this.state.changeCoordinate(ev.value);
       });
 
     // Camera: Reset
     this.resetBtn = cameraFolder
       .addButton({ title: 'Reset' })
       .on('click', () => {
-        this.onReset();
+        this.state.onResetCamera();
       });
-  }
-
-  changeModel(newModel: string) {
-    console.log(newModel);
-  }
-
-  changeMaterial(newMaterial: string) {
-    console.log(newMaterial);
-  }
-
-  changeDiffuseColor(newColor: RGB) {
-    console.log(newColor);
-  }
-
-  changeDiffuseTexture(newTexture: string) {
-    console.log(newTexture);
-  }
-
-  changeSpecularColor(newColor: RGB) {
-    console.log(newColor);
-  }
-
-  changeSpecularTexture(newTexture: string) {
-    console.log(newTexture);
-  }
-
-  changeBumpTexture(newTexture: string) {
-    console.log(newTexture);
-  }
-
-  onPlay() {
-    console.log('play');
-    this.controllerParams.play = true;
-  }
-
-  onPause() {
-    console.log('Pause');
-    this.controllerParams.play = false;
-  }
-
-  onReverse() {
-    console.log('Reverse');
-  }
-
-  onReplay() {
-    console.log('Replay');
-  }
-
-  onNext() {
-    console.log('Next');
-  }
-
-  onPrev() {
-    console.log('Prev');
-  }
-
-  onFirst() {
-    console.log('First');
-  }
-
-  onLast() {
-    console.log('Last');
-  }
-
-  changeProjection(newProjection: string) {
-    console.log(newProjection);
-  }
-
-  changeRadius(newRadius: number) {
-    console.log(newRadius);
-  }
-
-  changeCoordinate(newCoordinate: Coordinate) {
-    console.log(newCoordinate);
-  }
-
-  onReset() {
-    console.log('Reset');
   }
 }
