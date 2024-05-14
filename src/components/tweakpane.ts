@@ -1,6 +1,5 @@
 import { ButtonApi, Pane } from 'tweakpane';
 import { BindingApi } from '@tweakpane/core';
-import { RGB, Coordinate } from '../core/interface';
 import { StateManager } from '../core/state';
 
 export class Tweakpane {
