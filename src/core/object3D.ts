@@ -88,7 +88,7 @@ export class Object3D {
         }
         this.computeLocalMatrix();
         if (this.parent) {
-            this._worldMatrix = this.parent._worldMatrix.preMultiply(this._localMatrix);
+            this._worldMatrix = this.parent.worldMatrix.preMultiply(this._localMatrix);
         } else {
             this._worldMatrix = this._localMatrix.clone();
         }
