@@ -1,5 +1,5 @@
-import { BufferAttribute } from './bufferAttribute';
-import { BufferGeometry } from './bufferGeometry';
+import { BufferAttribute } from './BufferAttribute';
+import { BufferGeometry } from './BufferGeometry';
 
 export class PlaneGeometry extends BufferGeometry {
   constructor(width = 1, height = 1) {
@@ -18,7 +18,7 @@ export class PlaneGeometry extends BufferGeometry {
       0,
       -hw,
       hh,
-      0,
+      0
     ]);
     const indices = new Uint16Array([0, 1, 2, 2, 3, 0]);
     this.setAttribute('position', new BufferAttribute(vertices, 3));
