@@ -14,7 +14,18 @@ export class StateManager {
   fps = '30';
   controller = { play: true, reverse: false, replay: false };
   projection = 'Orthographic';
-  position = { radius: 1, coordinate: { x: 0, y: 0, z: 0 } as Coordinate };
+  cameraPosition = {
+    radius: 1,
+    coordinate: { x: 0, y: 0, z: 0 } as Coordinate
+  };
+
+  translate = { x: 0, y: 0, z: 0 } as Coordinate;
+  rotate = { x: 0, y: 0, z: 0 } as Coordinate;
+  scale = { x: 1, y: 1, z: 1 } as Coordinate;
+
+  currentTranslate = { x: 0, y: 0, z: 0 } as Coordinate;
+  currentRotate = { x: 0, y: 0, z: 0 } as Coordinate;
+  currentScale = { x: 1, y: 1, z: 1 } as Coordinate;
 
   private constructor() {}
 
@@ -101,5 +112,42 @@ export class StateManager {
 
   onResetCamera() {
     console.log('Reset Camera');
+  }
+
+  onTranslateChanged(newTranslate: Coordinate) {
+    const dX = newTranslate.x - this.currentTranslate.x;
+    const dY = newTranslate.y - this.currentTranslate.y;
+    const dZ = newTranslate.z - this.currentTranslate.z;
+
+    // Translate Matrix
+    console.log(newTranslate);
+    console.log(this.currentTranslate);
+    console.log(dX, dY, dZ);
+
+    this.currentTranslate = { ...newTranslate };
+  }
+
+  onRotateChanged(newRotate: Coordinate) {
+    const dX = newRotate.x - this.currentRotate.x;
+    const dY = newRotate.y - this.currentRotate.y;
+    const dZ = newRotate.z - this.currentRotate.z;
+
+    // Rotate Matrix
+    console.log(newRotate);
+    console.log(dX, dY, dZ);
+
+    this.currentRotate = { ...newRotate };
+  }
+
+  onScaleChanged(newScale: Coordinate) {
+    const dX = newScale.x / this.currentScale.x;
+    const dY = newScale.y / this.currentScale.y;
+    const dZ = newScale.z / this.currentScale.z;
+
+    // Scale Matrix
+    console.log(newScale);
+    console.log(dX, dY, dZ);
+
+    this.currentScale = { ...newScale };
   }
 }

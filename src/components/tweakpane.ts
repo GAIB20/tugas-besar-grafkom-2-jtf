@@ -4,6 +4,7 @@ import { StateManager } from '../core/state';
 
 export class Tweakpane {
   pane: Pane;
+  leftPane: Pane;
   state: StateManager;
 
   modelBinding: BindingApi;
@@ -29,18 +30,30 @@ export class Tweakpane {
   radiusBinding: BindingApi;
   coordinateBinding: BindingApi;
 
-  resetBtn: ButtonApi;
+  resetCameraBtn: ButtonApi;
+
+  // Left Pane
+  translateBinding: BindingApi;
+  rotateBinding: BindingApi;
+  scaleBinding: BindingApi;
 
   constructor() {
     this.state = StateManager.getInstance();
 
     // Get tweakpane container
     const tweakpaneContainer = document.getElementById('tweakpane-container');
+    const leftTweakpaneContainer = document.getElementById(
+      'left-tweakpane-container'
+    );
 
     // Initialize pane
     this.pane = new Pane({
       // @ts-ignore
       container: tweakpaneContainer
+    });
+    this.leftPane = new Pane({
+      // @ts-ignore
+      container: leftTweakpaneContainer
     });
 
     // Model
@@ -275,7 +288,7 @@ export class Tweakpane {
 
     // Position: Radius
     this.radiusBinding = positionFolder
-      .addBinding(this.state.position, 'radius', {
+      .addBinding(this.state.cameraPosition, 'radius', {
         view: 'slider',
         label: 'radius',
         min: 0.1,
@@ -288,16 +301,46 @@ export class Tweakpane {
 
     // Position: Coordinate
     this.coordinateBinding = positionFolder
-      .addBinding(this.state.position, 'coordinate', {})
+      .addBinding(this.state.cameraPosition, 'coordinate', {})
       .on('change', (ev) => {
         this.state.changeCoordinate(ev.value);
       });
 
     // Camera: Reset
-    this.resetBtn = cameraFolder
+    this.resetCameraBtn = cameraFolder
       .addButton({ title: 'Reset' })
       .on('click', () => {
         this.state.onResetCamera();
+      });
+
+    /**
+     * Left Tweakpane
+     */
+    const objectControllerFolder = this.leftPane.addFolder({
+      title: 'Object Controller',
+      expanded: true
+    });
+
+    this.translateBinding = objectControllerFolder
+      .addBinding(this.state, 'translate', {})
+      .on('change', (ev) => {
+        this.state.onTranslateChanged(ev.value);
+      });
+
+    this.rotateBinding = objectControllerFolder
+      .addBinding(this.state, 'rotate', {})
+      .on('change', (ev) => {
+        this.state.onRotateChanged(ev.value);
+      });
+
+    this.scaleBinding = objectControllerFolder
+      .addBinding(this.state, 'scale', {
+        x: { min: 0.1, max: 3, step: 0.1 },
+        y: { min: 0.1, max: 3, step: 0.1 },
+        z: { min: 0.1, max: 3, step: 0.1 }
+      })
+      .on('change', (ev) => {
+        this.state.onScaleChanged(ev.value);
       });
   }
 }
