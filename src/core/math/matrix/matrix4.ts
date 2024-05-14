@@ -33,15 +33,13 @@ export class Matrix4 extends Matrix<Matrix4Type> {
     return new Matrix4(vectors[0], vectors[1], vectors[2], vectors[3]);
   }
 
-
   /**
    * Clones currrent matrix and create new matrix instances.
    * @returns The cloned matrix.
    */
   clone(): Matrix<Matrix4Type> {
-    return new Matrix4(this.x, this.y, this.z, this.w)
+    return new Matrix4(this.x, this.y, this.z, this.w);
   }
-
 
   /**
    * Rotates the matrix around the x, y, and z axes.
@@ -114,5 +112,38 @@ export class Matrix4 extends Matrix<Matrix4Type> {
       new Vector4(0, 0, 0, 1)
     );
     return this.multiply(scaleMatrix);
+  }
+
+  /**
+   * Creates an orthographic projection matrix.
+   * @param left - The left plane of the orthographic projection.
+   * @param right - The right plane of the orthographic projection.
+   * @param bottom - The bottom plane of the orthographic projection.
+   * @param top - The top plane of the orthographic projection.
+   * @param near - The near plane of the orthographic projection.
+   * @param far - The far plane of the orthographic projection.
+   * @returns A new Matrix4 instance representing the orthographic projection matrix. Followed column major ordering.
+   */
+  static orthographic(
+    left: number,
+    right: number,
+    bottom: number,
+    top: number,
+    near: number,
+    far: number
+  ): Matrix<Matrix4Type> {
+    const lr = 1 / (left - right);
+    const bt = 1 / (bottom - top);
+    const nf = 1 / (near - far);
+    const rows: Matrix4Type = [
+      [-2 * lr, 0, 0, 0],
+      [0, -2 * bt, 0, 0],
+      [0, 0, 2 * nf, 0],
+      [(left + right) * lr, (top + bottom) * bt, (far + near) * nf, 1]
+    ];
+    const mat = new Matrix4();
+    mat.rows = rows;
+
+    return mat;
   }
 }
