@@ -1,4 +1,5 @@
 import { BoxGeometry } from "../mesh/geometry/boxGeometry";
+import { BufferGeometry } from "../mesh/geometry/bufferGeometry";
 import { PlaneGeometry } from "../mesh/geometry/planeGeometry";
 import { VertexData } from "./interface";
 import { Model } from "./model";
@@ -8,21 +9,27 @@ import { WebGL } from "./webgl";
 export class Scene {
     webGL : WebGL;
     renderId : number | undefined;
-    models : Model[] = [];
+    buffers : BufferGeometry[] = [];
     gltf: any;
 
     renderLoop = () => {
         this.webGL.clear();
-        // this.models.forEach(model => {
-        //     this.webGL.draw(model);
-        // });
-        const test = new BoxGeometry();
-        this.webGL.draw(test);
+        this.buffers.forEach(buffer => {
+            this.webGL.draw(buffer);
+        });
+        
         this.renderId = requestAnimationFrame(this.renderLoop);
     }
 
     constructor(webGL : WebGL) {
         this.webGL = webGL;
+
+        const test = new BoxGeometry();
+        this.webGL.attachAttribSetter(test.attributes["position"], "position");
+        this.buffers.push(test);
+        const test2 = new PlaneGeometry();
+        this.webGL.attachAttribSetter(test2.attributes["position"], "position");
+        this.buffers.push(test2);
     }
 
     async loadGLTF(url: string): Promise<any> {
@@ -55,7 +62,7 @@ export class Scene {
     destroy() {
         this.stopRender();
         // this.webGL.destroy();
-        this.models = [];
+        this.buffers = [];
     }
 }
 

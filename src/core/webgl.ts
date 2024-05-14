@@ -115,6 +115,27 @@ export class WebGL {
         }
     }
 
+    attachAttribSetter(attribBuffer: BufferAttribute, name: string) {
+        if(this.shaderProgram == null) {
+            throw new Error('Failed to retrieve shader program.');
+        }
+        const gl = this.gl;
+        const loc = gl.getAttribLocation(this.shaderProgram, name);
+        const buf = gl.createBuffer();
+        const attribSetter = (v : BufferAttribute) => {
+            gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+            gl.enableVertexAttribArray(loc);
+            if(v.isDirty) {
+                console.log('a');
+                gl.bufferData(gl.ARRAY_BUFFER, v.data, gl.STATIC_DRAW);
+                v.consume();
+            }
+            gl.vertexAttribPointer(loc, v.size, v.dtype, v.normalize, v.stride * v.data.BYTES_PER_ELEMENT, v.offset);
+        }
+
+        attribBuffer.attribSetter = attribSetter;
+    }
+
     getAttribSetters() {
         const gl = this.gl;
         if(this.shaderProgram == null) {
@@ -139,7 +160,8 @@ export class WebGL {
         const gl = this.gl;        
         gl.useProgram(this.shaderProgram);
 
-        this.attribSetters["position"](bufferGeometry.attributes["position"]);
+        // this.attribSetters["position"](bufferGeometry.attributes["position"]);
+        bufferGeometry.attributes["position"].attribSetter(bufferGeometry.attributes["position"]);
         
         const identity = new Matrix4().identity();
         const color = new Float32Array(4);

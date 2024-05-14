@@ -7,6 +7,9 @@ type TypedArray =
   | Int16Array
   | Int32Array;
 
+type AttribSetter = (v: BufferAttribute) => void;
+
+
 export class BufferAttribute {
   private _data: TypedArray;
   private _size: number;
@@ -16,6 +19,7 @@ export class BufferAttribute {
   private _offset = 0;
 
   private _isDirty = true;
+  private _attribSetter: AttribSetter;
 
   /**
    * Creates an instance of BufferAttribute.
@@ -40,6 +44,9 @@ export class BufferAttribute {
     this._normalize = options.normalize || false;
     this._stride = options.stride || size;
     this._offset = options.offset || 0;
+    this._attribSetter = (v) => {
+      throw new Error('Attribute setter nit yet attached.');
+    }
   }
 
   // Public get accessor to private properties.
@@ -63,6 +70,9 @@ export class BufferAttribute {
   }
   get isDirty() {
     return this._isDirty;
+  }
+  get attribSetter() {
+    return this._attribSetter;
   }
   // Public set accessor to private properties.
   // Should toggle isDirty flag to true.
@@ -88,6 +98,10 @@ export class BufferAttribute {
   }
   set offset(offset: number) {
     this._offset = offset;
+    this._isDirty = true;
+  }
+  set attribSetter(attribSetter: AttribSetter) {
+    this._attribSetter = attribSetter;
     this._isDirty = true;
   }
 
