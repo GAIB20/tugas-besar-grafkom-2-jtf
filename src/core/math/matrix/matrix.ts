@@ -231,4 +231,13 @@ export abstract class Matrix<T extends Matrix3Type | Matrix4Type> {
   scale(x: number, y: number, z: number): Matrix<T> {
     return this;
   }
+
+  /**
+   * Clones the current matrix.
+   * @returns A new instance of the current matrix.
+   */
+  clone(): Matrix<T> {
+    const clonedRows = JSON.parse(JSON.stringify(this.rows)) as T;
+    return this.createMatrix(clonedRows);
+  }
 }
