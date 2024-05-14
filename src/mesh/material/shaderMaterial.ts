@@ -1,6 +1,6 @@
 export default class ShaderMaterial {
   constructor(
-    protected vertexShaderSource: string,
-    protected fragmentShaderSource: string
+    public readonly vertexShaderSource: string,
+    public readonly fragmentShaderSource: string
   ) {}
 }
