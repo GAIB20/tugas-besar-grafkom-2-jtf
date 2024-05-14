@@ -16,6 +16,8 @@ export const TestMatrix = () => {
   const m3 = new Matrix3(v3a, v3b, v3c);
   const m4 = new Matrix4(v4a, v4b, v4c, v4d);
 
+  const m5 = m4.clone();
+
   // Test Matrix3 methods
   console.log('Testing Matrix3 methods...');
   console.log('m3:', m3);
@@ -31,6 +33,11 @@ export const TestMatrix = () => {
   console.log('m4.determinant():', m4.determinant());
   console.log('m4.inverse():', m4.inverse());
   console.log('m4.toColumnMajorArray():', m4.toColumnMajorArray());
+
+  console.log('m5:', m5);
+
+  const m6 = new Matrix4().identity();
+  console.log('m6:', m6.inverse());
 
   // Test multiplication
   console.log('Testing multiplication...');

@@ -31,6 +31,17 @@ export abstract class Vector<T extends Vector3Type | Vector4Type> {
   }
 
   /**
+   * Sets the coordinates of the vector.
+   * @param coords - The new coordinates of the vector.
+   */
+  set(coords: T): void {
+    if (coords.length !== this.coords.length) {
+      throw new Error('Input dimensions must match vector dimensions');
+    }
+    this.coords = coords;
+  }
+
+  /**
    * Adds the given vector to the current vector.
    * @param v - The vector to add.
    * @returns A new Vector instance representing the result of the addition.

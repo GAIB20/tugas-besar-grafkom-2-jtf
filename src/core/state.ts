@@ -1,8 +1,13 @@
+import ShaderMaterial from '../mesh/material/ShaderMaterial';
+import BasicMaterial from '../mesh/material/basic/BasicMaterial';
+import PhongMaterial from '../mesh/material/phong/PhongMaterial';
 import { RGB, Coordinate } from './interface';
+import { WebGL } from './webgl';
 
 export class StateManager {
   private static instance: StateManager;
 
+  // Tweakpane Variables
   model = 'A';
   material = 'Basic';
   diffuseColor: RGB = { r: 255, g: 0, b: 0 };
@@ -23,11 +28,24 @@ export class StateManager {
   rotate = { x: 0, y: 0, z: 0 } as Coordinate;
   scale = { x: 1, y: 1, z: 1 } as Coordinate;
 
-  currentTranslate = { x: 0, y: 0, z: 0 } as Coordinate;
-  currentRotate = { x: 0, y: 0, z: 0 } as Coordinate;
-  currentScale = { x: 1, y: 1, z: 1 } as Coordinate;
+  // State Variables
+  private currentTranslate = { x: 0, y: 0, z: 0 } as Coordinate;
+  private currentRotate = { x: 0, y: 0, z: 0 } as Coordinate;
+  private currentScale = { x: 1, y: 1, z: 1 } as Coordinate;
 
-  private constructor() {}
+  // WebGL
+  private webGL: WebGL | undefined;
+
+  // Shader Material
+  shader: ShaderMaterial;
+  private basicMaterial: BasicMaterial;
+  private phongMaterial: PhongMaterial;
+
+  private constructor() {
+    this.basicMaterial = new BasicMaterial();
+    this.phongMaterial = new PhongMaterial();
+    this.shader = this.basicMaterial;
+  }
 
   public static getInstance(): StateManager {
     if (!StateManager.instance) {
@@ -36,16 +54,28 @@ export class StateManager {
     return StateManager.instance;
   }
 
+  setWebGL(webGL: WebGL) {
+    this.webGL = webGL;
+  }
+
   changeModel(newModel: string) {
     console.log(newModel);
   }
 
   changeMaterial(newMaterial: string) {
     console.log(newMaterial);
+
+    if (newMaterial == 'basic') {
+      this.shader = this.basicMaterial;
+    } else {
+      this.shader = this.phongMaterial;
+    }
   }
 
   changeDiffuseColor(newColor: RGB) {
     console.log(newColor);
+
+    this.shader.setColor(newColor.r, newColor.g, newColor.b);
   }
 
   changeDiffuseTexture(newTexture: string) {

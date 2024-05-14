@@ -42,10 +42,18 @@ export class BufferGeometry {
     return this;
   }
 
+  getPosition(): BufferAttribute {
+    return this.getAttribute('position');
+  }
+
+  getNormal() {
+    return this.getAttribute('normal');
+  }
+
   calculateNormals(forceNewAttribute = false) {
-    const positionAttribute = this.getAttribute('position');
+    const positionAttribute = this.getPosition();
     if (!positionAttribute) return;
-    let normalAttribute = this.getAttribute('normal');
+    let normalAttribute = this.getNormal();
     if (forceNewAttribute || !normalAttribute)
       normalAttribute = new BufferAttribute(
         new Float32Array(positionAttribute.length),
