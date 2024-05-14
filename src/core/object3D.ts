@@ -1,30 +1,33 @@
-import type { Matrix4Type } from "./math/matrix/matrix.d";
 import { Matrix4 } from "./math/matrix/matrix4";
+import { Vector3Type, Vector4Type } from "./math/vector/vector.d";
+import { Vector } from "./math/vector/vector";
+import { Matrix } from "./math/matrix/matrix";
 import { Vector3 } from "./math/vector/vector3";
 import { Vector4 } from "./math/vector/vector4";
+import { Matrix4Type } from "./math/matrix/matrix.d";
 
 
-class Object3D {
+export class Object3D {
     private _position: Vector3;
     private _rotation: Vector3;
     private _quaternion: Vector4;
     private _scale: Vector3 = new Vector3(1, 1, 1);
-    private _localMatrix: Matrix4;
-    private _worldMatrix: Matrix4;
+    private _localMatrix: Matrix<Matrix4Type>;
+    private _worldMatrix: Matrix<Matrix4Type>;
     private _parent?: Object3D;
     private _children: Object3D[];
     private _name : string;
     visible=true
 
-    constructor({name = '', children = [], parent = undefined, localMatrix = new Matrix4(), worldMatrix = new Matrix4(), position = new Vector3(), rotation = new Vector3(), quaternion = new Vector4()}){
-        this._name = name;
-        this._parent = parent;
-        this._position = position;
-        this._quaternion = quaternion;
-        this._rotation = rotation;
-        this._children = children;
-        this._localMatrix = localMatrix;
-        this._worldMatrix = worldMatrix;
+    constructor(){
+        this._name = '';
+        this._parent = undefined;
+        this._position = new Vector3();
+        this._quaternion = new Vector4();
+        this._rotation = new Vector3();
+        this._children = [];
+        this._localMatrix = new Matrix4().identity();
+        this._worldMatrix = new Matrix4().identity();
     }
 
     public get name() : string {
@@ -48,12 +51,12 @@ class Object3D {
     }
     
     
-    public get localMatrix() : Matrix4 {
+    public get localMatrix() : Matrix<Matrix4Type> {
         return this._localMatrix;
     }
 
     
-    public get worldMatrix() : Matrix4 {
+    public get worldMatrix() : Matrix<Matrix4Type> {
         return this._worldMatrix;
     }
     
@@ -66,7 +69,7 @@ class Object3D {
         return this._quaternion;
     }
     
-    public set parent(parent : Object3D) {
+    public set parent(parent : Object3D|undefined) {
         this._parent = parent;
     }
 
@@ -74,7 +77,49 @@ class Object3D {
      * computeLocalMatrix
      */
     public computeLocalMatrix() {
-        this._localMatrix = 
+        this._localMatrix = this._localMatrix.translate(this._position.x, this._position.y, this._position.z)
+        .rotate(this._rotation.x, this._rotation.y, this._rotation.z)
+        .scale(this._scale.x,this._scale.y, this._scale.z);
     }
-    
+
+    public computeWorldMatrix(updateParent=true, updateChildren=true){
+        if (updateParent && this.parent) {
+            this.parent.computeWorldMatrix(true, false);
+        }
+        this.computeLocalMatrix();
+        if (this.parent) {
+            this._worldMatrix = this.parent._worldMatrix.preMultiply(this._localMatrix);
+        } else {
+            this._worldMatrix = this._localMatrix.clone();
+        }
+        if (updateChildren) {
+            for (let i = 0; i < this.children.length; i++) {
+                this.children[i].computeWorldMatrix(false, true);
+            }
+        }
+    }
+
+    add(node: Object3D): Object3D {
+        if (node.parent !== this) {
+            node.removeFromParent();
+            node.parent = this;
+        }
+        this.children.push(node);
+        return this;
+    }
+
+    remove(node: Object3D) {
+        const index = this.children.indexOf(node);
+            if (index !== -1) {
+                node.parent = undefined;
+                this.children.splice(index, 1);
+            }
+        return this;
+    }
+
+    removeFromParent() {
+        if (this.parent) this.parent.remove(this);
+        return this;
+    }
+
 }

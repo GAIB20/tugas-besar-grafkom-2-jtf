@@ -15,10 +15,10 @@ export class Matrix4 extends Matrix<Matrix4Type> {
    * @param w - The fourth row of the matrix.
    */
   constructor(
-    x: Vector4 = new Vector4(),
-    y: Vector4 = new Vector4(),
-    z: Vector4 = new Vector4(),
-    w: Vector4 = new Vector4()
+    private x: Vector4 = new Vector4(),
+    private y: Vector4 = new Vector4(),
+    private z: Vector4 = new Vector4(),
+    private w: Vector4 = new Vector4()
   ) {
     super([x.coords, y.coords, z.coords, w.coords]);
   }
@@ -32,6 +32,16 @@ export class Matrix4 extends Matrix<Matrix4Type> {
     const vectors = rows.map((row) => new Vector4(...row));
     return new Matrix4(vectors[0], vectors[1], vectors[2], vectors[3]);
   }
+
+
+  /**
+   * Clones currrent matrix and create new matrix instances.
+   * @returns The cloned matrix.
+   */
+  clone(): Matrix<Matrix4Type> {
+    return new Matrix4(this.x, this.y, this.z, this.w)
+  }
+
 
   /**
    * Rotates the matrix around the x, y, and z axes.
