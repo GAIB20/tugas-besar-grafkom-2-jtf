@@ -46,7 +46,6 @@ export class StateManager {
   shaderManager: ShaderManager;
   sceneManager: SceneManager;
   cameraManager: CameraManager;
-  selectedMesh: Mesh | null;
 
   private constructor(
     webGL: WebGL | null = null,
@@ -67,7 +66,6 @@ export class StateManager {
     this.shaderManager = shaderManager;
     this.sceneManager = sceneManager;
     this.cameraManager = cameraManager;
-    this.selectedMesh = null;
 
     //for emiter
     this.listeners = new Map();
@@ -93,13 +91,13 @@ export class StateManager {
   emit(eventName: EventName, data: any): void {
     const listeners = this.listeners.get(eventName);
     if (listeners) {
-        listeners.forEach(listener => listener(data));
+      listeners.forEach((listener) => listener(data));
     }
   }
 
   on(eventName: EventName, listener: Listener): void {
     if (!this.listeners.has(eventName)) {
-        this.listeners.set(eventName, []);
+      this.listeners.set(eventName, []);
     }
     this.listeners.get(eventName)!.push(listener);
   }
@@ -110,7 +108,7 @@ export class StateManager {
 
   changeSelectedMesh(mesh: Mesh) {
     console.log(mesh);
-    this.selectedMesh = mesh;
+    this.sceneManager.setSelectedMesh(mesh);
   }
 
   changeModel(newModel: string) {
@@ -123,14 +121,13 @@ export class StateManager {
   changeMaterial(newMaterial: string) {
     console.log(newMaterial);
 
-    this.shaderManager.setMaterial(newMaterial);
+    ShaderManager.changeMaterial(this.sceneManager.selectedMesh, newMaterial);
   }
 
   changeDiffuseColor(newColor: RGB) {
     console.log(newColor);
 
-    this.shaderManager.setColor(newColor);
-    this.webGL.createShaderProgram();
+    ShaderManager.changeDiffuseColor(this.sceneManager.selectedMesh, newColor);
   }
 
   changeDiffuseTexture(newTexture: string) {

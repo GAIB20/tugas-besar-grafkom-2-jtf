@@ -1,7 +1,8 @@
 import { BoxGeometry } from '../../mesh/geometry/boxGeometry';
 import { PlaneGeometry } from '../../mesh/geometry/planeGeometry';
-import ShaderMaterial from '../../mesh/material/ShaderMaterial';
+import BasicMaterial from '../../mesh/material/basic/BasicMaterial';
 import { Mesh } from '../mesh';
+import { Object3D } from '../object3D';
 import { Scene } from '../scene';
 
 export class SceneManager {
@@ -10,20 +11,28 @@ export class SceneManager {
   private sceneB: Scene;
   private sceneC: Scene;
 
-  constructor(material: ShaderMaterial) {
+  selectedMesh: Object3D;
+
+  constructor() {
     // Box
     this.sceneA = new Scene().add(
-      new Mesh(new BoxGeometry(200, 200, 200), material)
+      new Mesh(new BoxGeometry(200, 200, 200), new BasicMaterial())
     );
 
     // Plane
     this.sceneB = new Scene().add(
-      new Mesh(new PlaneGeometry(700, 700), material)
+      new Mesh(new PlaneGeometry(700, 700), new BasicMaterial())
     );
 
     // Box and Plane
-    const boxMesh = new Mesh(new BoxGeometry(200, 200, 200), material);
-    const box2Mesh = new Mesh(new BoxGeometry(150, 150, 150), material);
+    const boxMesh = new Mesh(
+      new BoxGeometry(200, 200, 200),
+      new BasicMaterial()
+    );
+    const box2Mesh = new Mesh(
+      new BoxGeometry(150, 150, 150),
+      new BasicMaterial()
+    );
 
     box2Mesh.position.y = 400;
 
@@ -35,6 +44,7 @@ export class SceneManager {
     this.sceneC = new Scene().add(boxMesh);
 
     this.scene = this.sceneA;
+    this.selectedMesh = this.scene;
   }
 
   get() {
@@ -49,5 +59,11 @@ export class SceneManager {
     } else if (newScene == 'C') {
       this.scene = this.sceneC;
     }
+
+    this.selectedMesh = this.scene;
+  }
+
+  setSelectedMesh(mesh: Mesh) {
+    this.selectedMesh = mesh;
   }
 }

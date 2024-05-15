@@ -103,10 +103,11 @@ export class WebGL {
   }
 
   draw(node: Object3D, camera: Camera) {
-    // Use the shader program
-    this.gl.useProgram(this.shaderProgram);
-
     if (node instanceof Mesh) {
+      this.shader = node.material;
+      this.createShaderProgram();
+      this.gl.useProgram(this.shaderProgram);
+
       // Bind the geometry
       const positionBuffer = this.gl.createBuffer();
       this.gl.bindBuffer(this.gl.ARRAY_BUFFER, positionBuffer);

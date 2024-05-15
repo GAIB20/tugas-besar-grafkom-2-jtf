@@ -16,7 +16,7 @@ const onMounted = () => {
   if (!canvas) return;
 
   const shaderManager = new ShaderManager();
-  const sceneManager = new SceneManager(shaderManager.get());
+  const sceneManager = new SceneManager();
   const cameraManager = new CameraManager(canvas);
   const webGL = new WebGL(canvas, shaderManager.get());
 

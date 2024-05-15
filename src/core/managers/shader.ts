@@ -2,6 +2,8 @@ import ShaderMaterial from '../../mesh/material/ShaderMaterial';
 import BasicMaterial from '../../mesh/material/basic/BasicMaterial';
 import PhongMaterial from '../../mesh/material/phong/PhongMaterial';
 import { RGB } from '../interface';
+import { Mesh } from '../mesh';
+import { Object3D } from '../object3D';
 
 export class ShaderManager {
   shader: ShaderMaterial;
@@ -28,5 +30,31 @@ export class ShaderManager {
 
   setColor(newColor: RGB) {
     this.shader.setColor(newColor.r, newColor.g, newColor.b);
+  }
+
+  static changeMaterial(node: Object3D, newMaterial: string) {
+    if (node instanceof Mesh) {
+      let material;
+      if (newMaterial == 'basic') {
+        material = new BasicMaterial();
+      } else {
+        material = new PhongMaterial();
+      }
+      node.material = material;
+    }
+
+    node.children.forEach((child: Object3D) => {
+      ShaderManager.changeMaterial(child, newMaterial);
+    });
+  }
+
+  static changeDiffuseColor(node: Object3D, newColor: RGB) {
+    if (node instanceof Mesh) {
+      node.material.setColor(newColor.r, newColor.g, newColor.b);
+    }
+
+    node.children.forEach((child: Object3D) => {
+      ShaderManager.changeDiffuseColor(child, newColor);
+    });
   }
 }
