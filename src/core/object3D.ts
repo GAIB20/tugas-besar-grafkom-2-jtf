@@ -27,6 +27,10 @@ export class Object3D {
     this._worldMatrix = new Matrix4().identity();
   }
 
+  public set name(name: string) {
+    this._name = name;
+  }
+
   public get name(): string {
     return this._name;
   }
