@@ -7,7 +7,6 @@ export class Camera extends Object3D {
 
   computeWorldMatrix() {
     super.computeWorldMatrix();
-    console.log('world', this.worldMatrix);
     this._invWorldMatrix = this.worldMatrix.inverse();
   }
 

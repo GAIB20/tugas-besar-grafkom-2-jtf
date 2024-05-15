@@ -1,8 +1,16 @@
-import ShaderMaterial from '../mesh/material/ShaderMaterial';
-import BasicMaterial from '../mesh/material/basic/BasicMaterial';
-import PhongMaterial from '../mesh/material/phong/PhongMaterial';
-import { RGB, Coordinate } from './interface';
-import { WebGL } from './webgl';
+import { Camera } from '../../camera/Camera';
+import { OrthographicCamera } from '../../camera/OrthographicCamera';
+import { BoxGeometry } from '../../mesh/geometry/boxGeometry';
+import ShaderMaterial from '../../mesh/material/ShaderMaterial';
+import BasicMaterial from '../../mesh/material/basic/BasicMaterial';
+import PhongMaterial from '../../mesh/material/phong/PhongMaterial';
+import { RGB, Coordinate } from '../interface';
+import { Mesh } from '../mesh';
+import { Scene } from '../scene';
+import { WebGL } from '../webgl';
+import { CameraManager } from './camera';
+import { SceneManager } from './scene';
+import { ShaderManager } from './shader';
 
 export class StateManager {
   private static instance: StateManager;
@@ -33,49 +41,71 @@ export class StateManager {
   private currentRotate = { x: 0, y: 0, z: 0 } as Coordinate;
   private currentScale = { x: 1, y: 1, z: 1 } as Coordinate;
 
-  // WebGL
-  private webGL: WebGL | undefined;
+  // Variables
+  webGL: WebGL;
+  shaderManager: ShaderManager;
+  sceneManager: SceneManager;
+  cameraManager: CameraManager;
 
-  // Shader Material
-  shader: ShaderMaterial;
-  private basicMaterial: BasicMaterial;
-  private phongMaterial: PhongMaterial;
+  private constructor(
+    webGL: WebGL | null = null,
+    shaderManager: ShaderManager | null = null,
+    sceneManager: SceneManager | null = null,
+    cameraManager: CameraManager | null = null
+  ) {
+    if (
+      webGL === null ||
+      shaderManager === null ||
+      sceneManager === null ||
+      cameraManager === null
+    ) {
+      throw new Error('StateManager must be initialized with all managers');
+    }
 
-  private constructor() {
-    this.basicMaterial = new BasicMaterial();
-    this.phongMaterial = new PhongMaterial();
-    this.shader = this.basicMaterial;
+    this.webGL = webGL;
+    this.shaderManager = shaderManager;
+    this.sceneManager = sceneManager;
+    this.cameraManager = cameraManager;
   }
 
-  public static getInstance(): StateManager {
+  public static getInstance(
+    webGL: WebGL | null = null,
+    shaderManager: ShaderManager | null = null,
+    sceneManager: SceneManager | null = null,
+    cameraManager: CameraManager | null = null
+  ): StateManager {
     if (!StateManager.instance) {
-      StateManager.instance = new StateManager();
+      StateManager.instance = new StateManager(
+        webGL,
+        shaderManager,
+        sceneManager,
+        cameraManager
+      );
     }
     return StateManager.instance;
   }
 
-  setWebGL(webGL: WebGL) {
-    this.webGL = webGL;
-  }
+  /**
+   * Event Handlers
+   */
 
   changeModel(newModel: string) {
     console.log(newModel);
+
+    this.sceneManager.setScene(newModel);
   }
 
   changeMaterial(newMaterial: string) {
     console.log(newMaterial);
 
-    if (newMaterial == 'basic') {
-      this.shader = this.basicMaterial;
-    } else {
-      this.shader = this.phongMaterial;
-    }
+    this.shaderManager.setMaterial(newMaterial);
   }
 
   changeDiffuseColor(newColor: RGB) {
     console.log(newColor);
 
-    this.shader.setColor(newColor.r, newColor.g, newColor.b);
+    this.shaderManager.setColor(newColor);
+    this.webGL.createShaderProgram();
   }
 
   changeDiffuseTexture(newTexture: string) {

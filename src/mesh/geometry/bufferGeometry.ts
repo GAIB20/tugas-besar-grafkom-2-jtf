@@ -76,7 +76,6 @@ export class BufferGeometry {
         normalAttribute.set(i + j, [normal.x, normal.y, normal.z]);
       }
     }
-
     this.setAttribute('normal', normalAttribute);
   }
 }

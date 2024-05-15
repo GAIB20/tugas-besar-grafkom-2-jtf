@@ -1,6 +1,6 @@
 import { ButtonApi, Pane } from 'tweakpane';
 import { BindingApi } from '@tweakpane/core';
-import { StateManager } from '../core/state';
+import { StateManager } from '../core/managers/state';
 
 export class Tweakpane {
   pane: Pane;
