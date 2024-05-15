@@ -1,12 +1,4 @@
-import { Camera } from '../../camera/Camera';
-import { OrthographicCamera } from '../../camera/OrthographicCamera';
-import { BoxGeometry } from '../../mesh/geometry/boxGeometry';
-import ShaderMaterial from '../../mesh/material/ShaderMaterial';
-import BasicMaterial from '../../mesh/material/basic/BasicMaterial';
-import PhongMaterial from '../../mesh/material/phong/PhongMaterial';
 import { RGB, Coordinate } from '../interface';
-import { Mesh } from '../mesh';
-import { Scene } from '../scene';
 import { WebGL } from '../webgl';
 import { CameraManager } from './camera';
 import { SceneManager } from './scene';
