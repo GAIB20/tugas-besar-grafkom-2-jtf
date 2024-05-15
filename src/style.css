@@ -15,3 +15,32 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.button-container {
+  margin-top: 5px;
+}
+
+.button-container {
+  margin-top: 5px;
+}
+
+button {
+  display: block; /* Ensure buttons are block-level for margin */
+  margin: 5px 0; /* Space between buttons */
+  padding: 2px 15px; /* Padding for better touch area and appearance */
+  background-color: #777777; /* A nice blue shade */
+  color: white; /* White text on a blue background */
+  border: none; /* No borders */
+  border-radius: 5px; /* Rounded corners */
+  cursor: pointer;
+  font-size: 16px; /* Larger font size for readability */
+  transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+  min-height: 16px;
+}
+
+button:hover {
+  background-color: #555555; /* Darker shade of blue for hover effect */
+}
+
+button:focus {
+  outline: none; /* Remove the outline to keep the design clean */
+}

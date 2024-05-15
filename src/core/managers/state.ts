@@ -1,11 +1,19 @@
 import { RGB, Coordinate } from '../interface';
+import { Mesh } from '../mesh';
 import { WebGL } from '../webgl';
 import { CameraManager } from './camera';
 import { SceneManager } from './scene';
 import { ShaderManager } from './shader';
 
+interface Listener {
+  (data: any): void;
+}
+
+type EventName = 'sceneChange';
+
 export class StateManager {
   private static instance: StateManager;
+  private listeners: Map<EventName, Listener[]> = new Map();
 
   // Tweakpane Variables
   model = 'A';
@@ -38,6 +46,7 @@ export class StateManager {
   shaderManager: ShaderManager;
   sceneManager: SceneManager;
   cameraManager: CameraManager;
+  selectedMesh: Mesh | null;
 
   private constructor(
     webGL: WebGL | null = null,
@@ -58,6 +67,10 @@ export class StateManager {
     this.shaderManager = shaderManager;
     this.sceneManager = sceneManager;
     this.cameraManager = cameraManager;
+    this.selectedMesh = null;
+
+    //for emiter
+    this.listeners = new Map();
   }
 
   public static getInstance(
@@ -76,15 +89,35 @@ export class StateManager {
     }
     return StateManager.instance;
   }
+  ///emiter
+  emit(eventName: EventName, data: any): void {
+    const listeners = this.listeners.get(eventName);
+    if (listeners) {
+        listeners.forEach(listener => listener(data));
+    }
+  }
+
+  on(eventName: EventName, listener: Listener): void {
+    if (!this.listeners.has(eventName)) {
+        this.listeners.set(eventName, []);
+    }
+    this.listeners.get(eventName)!.push(listener);
+  }
 
   /**
    * Event Handlers
    */
 
+  changeSelectedMesh(mesh: Mesh) {
+    console.log(mesh);
+    this.selectedMesh = mesh;
+  }
+
   changeModel(newModel: string) {
     console.log(newModel);
 
     this.sceneManager.setScene(newModel);
+    this.emit('sceneChange', this.sceneManager.get());
   }
 
   changeMaterial(newMaterial: string) {
