@@ -1,4 +1,5 @@
 import { RGB, Coordinate } from '../interface';
+import { Mesh } from '../mesh';
 import { WebGL } from '../webgl';
 import { CameraManager } from './camera';
 import { SceneManager } from './scene';
@@ -45,6 +46,7 @@ export class StateManager {
   shaderManager: ShaderManager;
   sceneManager: SceneManager;
   cameraManager: CameraManager;
+  selectedMesh: Mesh | null;
 
   private constructor(
     webGL: WebGL | null = null,
@@ -65,6 +67,7 @@ export class StateManager {
     this.shaderManager = shaderManager;
     this.sceneManager = sceneManager;
     this.cameraManager = cameraManager;
+    this.selectedMesh = null;
 
     //for emiter
     this.listeners = new Map();
@@ -104,6 +107,11 @@ export class StateManager {
   /**
    * Event Handlers
    */
+
+  changeSelectedMesh(mesh: Mesh) {
+    console.log(mesh);
+    this.selectedMesh = mesh;
+  }
 
   changeModel(newModel: string) {
     console.log(newModel);
