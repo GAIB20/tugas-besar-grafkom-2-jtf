@@ -197,39 +197,26 @@ export class StateManager {
   }
 
   onTranslateChanged(newTranslate: Coordinate) {
-    const dX = newTranslate.x - this.currentTranslate.x;
-    const dY = newTranslate.y - this.currentTranslate.y;
-    const dZ = newTranslate.z - this.currentTranslate.z;
+    this.sceneManager.selectedMesh.position.x = newTranslate.x;
+    this.sceneManager.selectedMesh.position.y = newTranslate.y;
+    this.sceneManager.selectedMesh.position.z = newTranslate.z;
 
-    // Translate Matrix
-    console.log(newTranslate);
-    console.log(this.currentTranslate);
-    console.log(dX, dY, dZ);
-
-    this.currentTranslate = { ...newTranslate };
+    this.sceneManager.selectedMesh.computeWorldMatrix();
   }
 
   onRotateChanged(newRotate: Coordinate) {
-    const dX = newRotate.x - this.currentRotate.x;
-    const dY = newRotate.y - this.currentRotate.y;
-    const dZ = newRotate.z - this.currentRotate.z;
+    this.sceneManager.selectedMesh.rotation.x = newRotate.x;
+    this.sceneManager.selectedMesh.rotation.y = newRotate.y;
+    this.sceneManager.selectedMesh.rotation.z = newRotate.z;
 
-    // Rotate Matrix
-    console.log(newRotate);
-    console.log(dX, dY, dZ);
-
-    this.currentRotate = { ...newRotate };
+    this.sceneManager.selectedMesh.computeWorldMatrix();
   }
 
   onScaleChanged(newScale: Coordinate) {
-    const dX = newScale.x / this.currentScale.x;
-    const dY = newScale.y / this.currentScale.y;
-    const dZ = newScale.z / this.currentScale.z;
+    this.sceneManager.selectedMesh.scale.x = newScale.x;
+    this.sceneManager.selectedMesh.scale.y = newScale.y;
+    this.sceneManager.selectedMesh.scale.z = newScale.z;
 
-    // Scale Matrix
-    console.log(newScale);
-    console.log(dX, dY, dZ);
-
-    this.currentScale = { ...newScale };
+    this.sceneManager.selectedMesh.computeWorldMatrix();
   }
 }
