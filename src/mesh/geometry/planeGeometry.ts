@@ -9,20 +9,24 @@ export class PlaneGeometry extends BufferGeometry {
     const vertices = new Float32Array([
       -hw,
       -hh,
-      0,
+      0, // bottom left corner
       hw,
       -hh,
-      0,
+      0, // bottom right corner
       hw,
       hh,
-      0,
+      0, // top right corner
       -hw,
       hh,
-      0
+      0, // top left corner
+      -hw,
+      -hh,
+      0, // bottom left corner
+      hw,
+      hh,
+      0 // top right corner
     ]);
-    const indices = new Uint16Array([0, 1, 2, 2, 3, 0]);
     this.setAttribute('position', new BufferAttribute(vertices, 3));
-    this.setIndices(new BufferAttribute(indices, 1));
-    // this.calculateNormals();
+    this.calculateNormals();
   }
 }
