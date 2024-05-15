@@ -23,7 +23,7 @@ export class SceneManager {
 
     // Box and Plane
     this.sceneC = new Scene()
-      .add(new Mesh(new BoxGeometry(400, 400, 400), material))
+      .add(new Mesh(new BoxGeometry(400, 400, 400), material).add(new Mesh(new PlaneGeometry(700, 700), material)))
       .add(new Mesh(new PlaneGeometry(700, 700), material));
 
     this.scene = this.sceneA;

@@ -5,6 +5,7 @@ import { StateManager } from './core/managers/state.ts';
 import { ShaderManager } from './core/managers/shader.ts';
 import { CameraManager } from './core/managers/camera.ts';
 import { SceneManager } from './core/managers/scene.ts';
+import { SceneGraph } from './components/scenegraph.ts';
 
 document.addEventListener('DOMContentLoaded', function () {
   onMounted();
@@ -27,6 +28,7 @@ const onMounted = () => {
   );
 
   const tweakpane = new Tweakpane();
+  const scenegraph = new SceneGraph();
 
   function render(time: number) {
     // TODO: Animation
