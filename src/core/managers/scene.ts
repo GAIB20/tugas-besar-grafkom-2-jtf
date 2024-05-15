@@ -29,10 +29,12 @@ export class SceneManager {
       new BoxGeometry(200, 200, 200),
       new BasicMaterial()
     );
+    boxMesh.name = 'ParentBox';
     const box2Mesh = new Mesh(
       new BoxGeometry(150, 150, 150),
       new BasicMaterial()
     );
+    box2Mesh.name = 'ChildBox';
 
     box2Mesh.position.y = 400;
 
