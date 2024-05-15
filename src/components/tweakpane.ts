@@ -322,13 +322,22 @@ export class Tweakpane {
     });
 
     this.translateBinding = objectControllerFolder
-      .addBinding(this.state, 'translate', {})
+      .addBinding(this.state, 'translate', {
+        x: { min: -400, max: 400, step: 5 },
+        y: { min: -400, max: 400, step: 5 },
+        z: { min: -400, max: 400, step: 5 }
+      })
       .on('change', (ev) => {
         this.state.onTranslateChanged(ev.value);
       });
 
     this.rotateBinding = objectControllerFolder
-      .addBinding(this.state, 'rotate', {})
+      .addBinding(this.state, 'rotate', {
+        label: 'rotate(deg)',
+        x: { min: -360, max: 360, step: 5 },
+        y: { min: -360, max: 360, step: 5 },
+        z: { min: -360, max: 360, step: 5 }
+      })
       .on('change', (ev) => {
         this.state.onRotateChanged(ev.value);
       });
