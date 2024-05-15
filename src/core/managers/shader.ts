@@ -1,6 +1,6 @@
 import ShaderMaterial from '../../mesh/material/ShaderMaterial';
 import BasicMaterial from '../../mesh/material/basic/BasicMaterial';
-import PhongMaterial from '../../mesh/material/phong/phongMaterial';
+import PhongMaterial from '../../mesh/material/phong/PhongMaterial';
 import { RGB } from '../interface';
 
 export class ShaderManager {
