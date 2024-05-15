@@ -9,8 +9,8 @@ export class CameraManager {
     this.orthographicCamera = new OrthographicCamera(
       -canvas.clientWidth / 2,
       canvas.clientWidth / 2,
-      canvas.clientHeight / 2,
       -canvas.clientHeight / 2,
+      canvas.clientHeight / 2,
       -500,
       500
     );

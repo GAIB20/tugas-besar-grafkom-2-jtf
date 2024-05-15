@@ -22,9 +22,17 @@ export class SceneManager {
     );
 
     // Box and Plane
-    this.sceneC = new Scene()
-      .add(new Mesh(new BoxGeometry(400, 400, 400), material))
-      .add(new Mesh(new PlaneGeometry(700, 700), material));
+    const boxMesh = new Mesh(new BoxGeometry(200, 200, 200), material);
+    const box2Mesh = new Mesh(new BoxGeometry(150, 150, 150), material);
+
+    box2Mesh.position.y = 400;
+
+    boxMesh.add(box2Mesh);
+
+    boxMesh.position.x = 0;
+    boxMesh.scale.x = 1.6;
+    boxMesh.rotation.z = 90;
+    this.sceneC = new Scene().add(boxMesh);
 
     this.scene = this.sceneA;
   }

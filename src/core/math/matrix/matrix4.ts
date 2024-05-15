@@ -49,7 +49,7 @@ export class Matrix4 extends Matrix<Matrix4Type> {
    * @param z - The angle to rotate around the z-axis, in degrees.
    * @returns The rotated matrix.
    */
-  rotate(x: number, y: number, z: number): Matrix<Matrix4Type> {
+  static rotate(x: number, y: number, z: number): Matrix<Matrix4Type> {
     const radX = (x * Math.PI) / 180;
     const radY = (y * Math.PI) / 180;
     const radZ = (z * Math.PI) / 180;
@@ -75,9 +75,7 @@ export class Matrix4 extends Matrix<Matrix4Type> {
       new Vector4(0, 0, 0, 1)
     );
 
-    return rotationMatrixZ.multiply(
-      rotationMatrixY.multiply(rotationMatrixX.multiply(this))
-    );
+    return rotationMatrixZ.multiply(rotationMatrixY.multiply(rotationMatrixX));
   }
 
   /**
@@ -87,14 +85,14 @@ export class Matrix4 extends Matrix<Matrix4Type> {
    * @param z - The value to translate along the z-axis.
    * @returns The translated matrix.
    */
-  translate(x: number, y: number, z: number): Matrix<Matrix4Type> {
+  static translate(x: number, y: number, z: number): Matrix<Matrix4Type> {
     const translationMatrix = new Matrix4(
       new Vector4(1, 0, 0, x),
       new Vector4(0, 1, 0, y),
       new Vector4(0, 0, 1, z),
       new Vector4(0, 0, 0, 1)
     );
-    return this.multiply(translationMatrix);
+    return translationMatrix;
   }
 
   /**
@@ -104,14 +102,14 @@ export class Matrix4 extends Matrix<Matrix4Type> {
    * @param z - The value to scale along the z-axis.
    * @returns The scaled matrix.
    */
-  scale(x: number, y: number, z: number): Matrix<Matrix4Type> {
+  static scale(x: number, y: number, z: number): Matrix<Matrix4Type> {
     const scaleMatrix = new Matrix4(
       new Vector4(x, 0, 0, 0),
       new Vector4(0, y, 0, 0),
       new Vector4(0, 0, z, 0),
       new Vector4(0, 0, 0, 1)
     );
-    return this.multiply(scaleMatrix);
+    return scaleMatrix;
   }
 
   /**
@@ -132,14 +130,14 @@ export class Matrix4 extends Matrix<Matrix4Type> {
     near: number,
     far: number
   ): Matrix<Matrix4Type> {
-    const lr = 1 / (left - right);
-    const bt = 1 / (bottom - top);
-    const nf = 1 / (near - far);
+    const a = 1 / (right - left);
+    const b = 1 / (top - bottom);
+    const c = 1 / (near - far);
     const rows: Matrix4Type = [
-      [-2 * lr, 0, 0, 0],
-      [0, -2 * bt, 0, 0],
-      [0, 0, 2 * nf, 0],
-      [(left + right) * lr, (top + bottom) * bt, (far + near) * nf, 1]
+      [2 * a, 0, 0, 0],
+      [0, 2 * b, 0, 0],
+      [0, 0, 2 * c, 0],
+      [(left + right) * -a, (top + bottom) * -b, (far + near) * c, 1]
     ];
     const mat = new Matrix4();
     mat.rows = rows;

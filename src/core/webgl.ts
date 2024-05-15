@@ -133,26 +133,26 @@ export class WebGL {
       );
 
       // Set the uniforms
-      const modelViewMatrix = camera.viewProjectionMatrix.toColumnMajorArray();
-      const projectionMatrix = node.worldMatrix.toColumnMajorArray();
+      const viewProjectionMatrix = camera.viewProjectionMatrix.flatten();
+      const worldMatrix = node.worldMatrix.flatten();
 
       const color = this.shader.getColor().coords;
 
       this.gl.uniformMatrix4fv(
         this.gl.getUniformLocation(
           this.shaderProgram,
-          ShaderAttribute.ModelViewMatrix
+          ShaderAttribute.WorldMatrix
         ),
         false,
-        modelViewMatrix
+        worldMatrix
       );
       this.gl.uniformMatrix4fv(
         this.gl.getUniformLocation(
           this.shaderProgram,
-          ShaderAttribute.ProjectionMatrix
+          ShaderAttribute.ViewProjectionMatrix
         ),
         false,
-        projectionMatrix
+        viewProjectionMatrix
       );
       this.gl.uniform4fv(
         this.gl.getUniformLocation(

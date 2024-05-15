@@ -78,10 +78,19 @@ export class Object3D {
    * computeLocalMatrix
    */
   public computeLocalMatrix() {
-    this._localMatrix = this._localMatrix
-      .translate(this._position.x, this._position.y, this._position.z)
-      .rotate(this._rotation.x, this._rotation.y, this._rotation.z)
-      .scale(this._scale.x, this._scale.y, this._scale.z);
+    this._localMatrix = Matrix4.translate(
+      this._position.x,
+      this._position.y,
+      this._position.z
+    )
+      .multiply(
+        Matrix4.rotate(
+          this._rotation.x,
+          this._rotation.y,
+          this._rotation.z
+        ).multiply(Matrix4.scale(this._scale.x, this._scale.y, this._scale.z))
+      )
+      .transpose();
   }
 
   public computeWorldMatrix(updateParent = true, updateChildren = true) {
@@ -90,9 +99,7 @@ export class Object3D {
     }
     this.computeLocalMatrix();
     if (this.parent) {
-      this._worldMatrix = this.parent.worldMatrix.preMultiply(
-        this._localMatrix
-      );
+      this._worldMatrix = this.parent.worldMatrix.multiply(this._localMatrix);
     } else {
       this._worldMatrix = this._localMatrix.clone();
     }
