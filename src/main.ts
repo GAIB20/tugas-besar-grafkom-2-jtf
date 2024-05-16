@@ -28,6 +28,8 @@ const onMounted = () => {
   );
 
   const tweakpane = new Tweakpane();
+  state.setTweakpane(tweakpane);
+
   const scenegraph = new SceneGraph();
 
   function render(time: number) {

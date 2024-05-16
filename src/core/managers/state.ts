@@ -1,3 +1,4 @@
+import { Tweakpane } from '../../components/tweakpane';
 import { RGB, Coordinate } from '../interface';
 import { Mesh } from '../mesh';
 import { WebGL } from '../webgl';
@@ -14,6 +15,8 @@ type EventName = 'sceneChange';
 export class StateManager {
   private static instance: StateManager;
   private listeners: Map<EventName, Listener[]> = new Map();
+
+  tweakpane?: Tweakpane;
 
   // Tweakpane Variables
   model = 'A';
@@ -41,6 +44,8 @@ export class StateManager {
   shaderManager: ShaderManager;
   sceneManager: SceneManager;
   cameraManager: CameraManager;
+
+  isChangingUI: boolean = false;
 
   private constructor(
     webGL: WebGL | null = null,
@@ -82,7 +87,8 @@ export class StateManager {
     }
     return StateManager.instance;
   }
-  ///emiter
+
+  // Emiter
   emit(eventName: EventName, data: any): void {
     const listeners = this.listeners.get(eventName);
     if (listeners) {
@@ -97,30 +103,64 @@ export class StateManager {
     this.listeners.get(eventName)!.push(listener);
   }
 
+  // Setter
+  setTweakpane(tweakpane: Tweakpane) {
+    this.tweakpane = tweakpane;
+  }
+
   /**
    * Event Handlers
    */
 
+  setUIWithSelectedMeshData() {
+    const mesh = this.sceneManager.selectedMesh;
+
+    if (!(mesh instanceof Mesh)) return;
+
+    this.isChangingUI = true;
+
+    const diffuseColor = mesh.material.getColor().coords;
+    this.diffuseColor.r = diffuseColor[0] * 255;
+    this.diffuseColor.g = diffuseColor[1] * 255;
+    this.diffuseColor.b = diffuseColor[2] * 255;
+    this.tweakpane?.diffuseColorBinding.refresh();
+
+    this.translate.x = mesh.position.x;
+    this.translate.y = mesh.position.y;
+    this.translate.z = mesh.position.z;
+    this.tweakpane?.translateBinding.refresh();
+
+    this.rotate.x = mesh.rotation.x;
+    this.rotate.y = mesh.rotation.y;
+    this.rotate.z = mesh.rotation.z;
+    this.tweakpane?.rotateBinding.refresh();
+
+    this.scale.x = mesh.scale.x;
+    this.scale.y = mesh.scale.y;
+    this.scale.z = mesh.scale.z;
+    this.tweakpane?.scaleBinding.refresh();
+
+    this.isChangingUI = false;
+  }
+
   changeSelectedMesh(mesh: Mesh) {
-    console.log(mesh);
     this.sceneManager.setSelectedMesh(mesh);
+    this.setUIWithSelectedMeshData();
   }
 
   changeModel(newModel: string) {
-    console.log(newModel);
-
     this.sceneManager.setScene(newModel);
+    this.setUIWithSelectedMeshData();
     this.emit('sceneChange', this.sceneManager.get());
   }
 
   changeMaterial(newMaterial: string) {
-    console.log(newMaterial);
-
     ShaderManager.changeMaterial(this.sceneManager.selectedMesh, newMaterial);
+    // Set default params
   }
 
   changeDiffuseColor(newColor: RGB) {
-    console.log(newColor);
+    if (this.isChangingUI) return;
 
     ShaderManager.changeDiffuseColor(this.sceneManager.selectedMesh, newColor);
   }
