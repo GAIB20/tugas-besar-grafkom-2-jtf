@@ -4,6 +4,7 @@ import { OrthographicCamera } from '../../camera/OrthographicCamera';
 export class CameraManager {
   camera: Camera;
   private orthographicCamera: OrthographicCamera;
+  private obliqueCamera = Pb
 
   constructor(canvas: HTMLCanvasElement) {
     this.orthographicCamera = new OrthographicCamera(

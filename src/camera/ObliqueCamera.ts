@@ -1,7 +1,7 @@
 import { Matrix4 } from '../core/math/matrix/matrix4';
 import { Camera } from './Camera';
 
-export class OrthographicCamera extends Camera {
+export class ObliqueCamera extends Camera {
   top: number;
   bottom: number;
   left: number;
