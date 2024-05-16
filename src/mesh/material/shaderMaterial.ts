@@ -1,10 +1,11 @@
 import { ShaderAttribute } from '../../constants/shader';
+import { Vector3 } from '../../core/math/vector/vector3';
 import { Vector4 } from '../../core/math/vector/vector4';
 
 export default class ShaderMaterial {
   public readonly vertexShaderSource: string;
   public readonly fragmentShaderSource: string;
-  private color: Vector4;
+  private color: Vector3;
   private texture: WebGLTexture | null;
   private useTexture: boolean;
   private attributes: { [name: string]: any } = {};
@@ -12,13 +13,13 @@ export default class ShaderMaterial {
   constructor(vertexShaderSource: string, fragmentShaderSource: string) {
     this.vertexShaderSource = vertexShaderSource;
     this.fragmentShaderSource = fragmentShaderSource;
-    this.color = new Vector4(1, 0, 0, 1);
+    this.color = new Vector3(1, 0, 0);
     this.texture = null;
     this.useTexture = false;
   }
 
-  setColor(r: number, g: number, b: number, a: number = 1) {
-    this.color.set([r / 255, g / 255, b / 255, a]);
+  setColor(r: number, g: number, b: number) {
+    this.color.set([r / 255, g / 255, b / 255]);
   }
 
   setTexture(texture: WebGLTexture) {
@@ -26,7 +27,7 @@ export default class ShaderMaterial {
     this.useTexture = true;
   }
 
-  getColor(): Vector4 {
+  getColor(): Vector3 {
     return this.color;
   }
 

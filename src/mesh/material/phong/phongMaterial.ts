@@ -1,4 +1,4 @@
-import ShaderMaterial from '../ShaderMaterial';
+import ShaderMaterial from '../shaderMaterial';
 import VertexShader from './glsl/vert.glsl';
 import FragmentShader from './glsl/frag.glsl';
 
