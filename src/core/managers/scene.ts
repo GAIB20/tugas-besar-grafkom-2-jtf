@@ -47,10 +47,22 @@ export class SceneManager {
 
     this.scene = this.sceneA;
     this.selectedMesh = this.scene;
+    this.setSelectedMeshOnScene();
   }
 
   get() {
     return this.scene;
+  }
+
+  setSelectedMeshOnScene() {
+    for (let child of this.scene.children) {
+      if (child instanceof Mesh) {
+        this.selectedMesh = child;
+        return;
+      }
+    }
+
+    this.selectedMesh = this.scene;
   }
 
   setScene(newScene: string) {
@@ -62,7 +74,7 @@ export class SceneManager {
       this.scene = this.sceneC;
     }
 
-    this.selectedMesh = this.scene;
+    this.setSelectedMeshOnScene();
   }
 
   setSelectedMesh(mesh: Mesh) {
