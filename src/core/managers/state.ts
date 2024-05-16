@@ -36,11 +36,6 @@ export class StateManager {
   rotate = { x: 0, y: 0, z: 0 } as Coordinate;
   scale = { x: 1, y: 1, z: 1 } as Coordinate;
 
-  // State Variables
-  private currentTranslate = { x: 0, y: 0, z: 0 } as Coordinate;
-  private currentRotate = { x: 0, y: 0, z: 0 } as Coordinate;
-  private currentScale = { x: 1, y: 1, z: 1 } as Coordinate;
-
   // Variables
   webGL: WebGL;
   shaderManager: ShaderManager;
