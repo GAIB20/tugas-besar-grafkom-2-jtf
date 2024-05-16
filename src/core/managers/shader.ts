@@ -1,6 +1,6 @@
 import ShaderMaterial from '../../mesh/material/ShaderMaterial';
 import BasicMaterial from '../../mesh/material/basic/BasicMaterial';
-import PhongMaterial from '../../mesh/material/phong/PhongMaterial';
+import PhongMaterial from '../../mesh/material/phong/phongMaterial';
 import { RGB } from '../interface';
 import { Mesh } from '../mesh';
 import { Object3D } from '../object3D';
@@ -13,7 +13,7 @@ export class ShaderManager {
   constructor() {
     this.basicMaterial = new BasicMaterial();
     this.phongMaterial = new PhongMaterial();
-    this.shader = this.basicMaterial;
+    this.shader = this.phongMaterial;
   }
 
   get() {

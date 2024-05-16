@@ -1,18 +1,28 @@
 export default `
 precision highp float;
+//uniform vec3 u_lightPos; 
+uniform vec3 u_viewPos; 
+//uniform vec3 u_lightColor;
+uniform vec3 u_diffuseColor;
 
-uniform vec4 u_diffuseColor;
-uniform sampler2D u_diffuseTexture;
-uniform bool u_useTexture;
-
-varying vec2 v_texcoord;
+varying lowp vec3 v_fragPos;
+varying lowp vec3 v_normal;
 
 void main() {
-    vec4 color = u_diffuseColor;
-    if (u_useTexture) {
-        vec4 texColor = texture2D(u_diffuseTexture, v_texcoord);
-        color = mix(color, texColor, float(u_useTexture));
-    }
-    gl_FragColor = color;
+    float ambientStrength = 0.1;
+    vec3 ambient = ambientStrength * vec3(1.0, 1.0, 1.0);
+
+    vec3 norm = normalize(v_normal);
+    vec3 lightDir = normalize(normalize(vec3(1.2, 1.0, 2.0)) - v_fragPos);
+    float diff = max(dot(norm, lightDir), 0.0);
+    vec3 diffuse = diff * vec3(1.0, 1.0, 1.0);
+
+    vec3 viewDir = normalize(u_viewPos - v_fragPos);
+    vec3 reflectDir = reflect(-lightDir, norm);  
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32.0);
+    vec3 specular = spec * vec3(1.0, 1.0, 1.0);  
+        
+    vec3 result = (ambient + diffuse + specular) * u_diffuseColor;
+    gl_FragColor = vec4(result, 1.0);
 }
 `;

@@ -24,6 +24,7 @@ export class WebGL {
 
     this.gl = gl;
     this.gl.viewport(0, 0, canvas.width, canvas.height);
+    
 
     this.shaderProgram = null;
     this.uViewMatrixLocation = null;
@@ -103,6 +104,7 @@ export class WebGL {
   }
 
   draw(node: Object3D, camera: Camera) {
+    this.gl.enable(this.gl.DEPTH_TEST);
     if (node instanceof Mesh) {
       this.shader = node.material;
       this.createShaderProgram();
@@ -123,10 +125,37 @@ export class WebGL {
         this.shaderProgram,
         ShaderAttribute.Position
       );
+
       this.gl.enableVertexAttribArray(positionAttributeLocation);
       this.gl.vertexAttribPointer(
         positionAttributeLocation,
         node.geometry.getPosition().size,
+        this.gl.FLOAT,
+        false,
+        0,
+        0
+      );
+
+      // Bind the geometry
+      node.geometry.calculateNormals();
+      console.log(node.geometry.getNormal());
+      const normalBuffer = this.gl.createBuffer();
+      this.gl.bindBuffer(this.gl.ARRAY_BUFFER, normalBuffer);
+      this.gl.bufferData(
+        this.gl.ARRAY_BUFFER,
+        new Float32Array(node.geometry.getNormal().data),
+        this.gl.STATIC_DRAW
+      );
+
+      const normalAttributeLocation = this.gl.getAttribLocation(
+        this.shaderProgram,
+        ShaderAttribute.Normal
+      );
+      
+      this.gl.enableVertexAttribArray(normalAttributeLocation);
+      this.gl.vertexAttribPointer(
+        normalAttributeLocation,
+        node.geometry.getNormal().size,
         this.gl.FLOAT,
         false,
         0,
@@ -155,12 +184,19 @@ export class WebGL {
         false,
         viewProjectionMatrix
       );
-      this.gl.uniform4fv(
+      this.gl.uniform3fv(
         this.gl.getUniformLocation(
           this.shaderProgram,
           ShaderAttribute.DiffuseColor
         ),
         color
+      );
+      this.gl.uniform3fv(
+        this.gl.getUniformLocation(
+          this.shaderProgram,
+          ShaderAttribute.ViewPosition
+        ),
+        camera.position.coords
       );
 
       // Draw the geometry
