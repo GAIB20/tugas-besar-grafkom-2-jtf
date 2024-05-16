@@ -15,6 +15,16 @@ const createButton = (
     container.className = 'button-container';
 
     const button = document.createElement('button');
+    button.addEventListener('click', () => {
+        // Remove selected class from all buttons
+        const buttons = document.querySelectorAll('.button-container button');
+        buttons.forEach((e) => {
+            const btn = e as HTMLButtonElement;
+            btn.classList.remove('selected');
+        });
+        // Add selected class to the clicked button
+        button.classList.add('selected');
+    });
     button.textContent = text;
 
     const childContainer = document.createElement('div');
