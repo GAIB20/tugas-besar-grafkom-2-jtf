@@ -39,6 +39,12 @@ export class Object3D {
     return this._position;
   }
 
+  
+  public set position(v : Vector3) {
+    this._position = v;
+  }
+  
+
   public get rotation(): Vector3 {
     return this._rotation;
   }
@@ -77,6 +83,11 @@ export class Object3D {
       this.computeWorldMatrix(false, true);
     }
   }
+  
+  public set rotation(v : Vector3) {
+    this._rotation = v;
+  }
+  
 
   /**
    * computeLocalMatrix
