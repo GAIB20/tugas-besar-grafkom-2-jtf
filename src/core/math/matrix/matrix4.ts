@@ -1,6 +1,7 @@
 import { Matrix } from './matrix';
 import { Matrix4Type } from './matrix.d';
 import { Vector4 } from '../vector/vector4';
+import { DEG2RAD } from '../../../constants/math';
 
 /**
  * Matrix4 class represents a 4x4 matrix in a Cartesian coordinate system.
@@ -153,8 +154,8 @@ export class Matrix4 extends Matrix<Matrix4Type> {
    * @param top - The top plane of the oblique projection.
    * @param near - The near plane of the oblique projection.
    * @param far - The far plane of the oblique projection.
-   * @param teta - Degree on XZ of the oblique projection.
-   * @param gamma - Degree on YZ of the oblique projection.
+   * @param angle - Degree of angle on plane of the oblique projection.
+   * @param scale - Scale of the oblique projection
    * @returns A new Matrix4 instance representing the oblique projection matrix. Followed column major ordering.
    */
     static oblique (
@@ -164,45 +165,21 @@ export class Matrix4 extends Matrix<Matrix4Type> {
       top: number,
       near: number,
       far: number,
-      teta: number,
-      gamma: number
+      angle: number,
+      scale: number,
     ): Matrix<Matrix4Type> {
-      const a = 1 / (right - left);
-      const b = 1 / (top - bottom);
-      const c = 1 / (near - far);
-      const d = 1 / Math.tan(teta);
-      const e = 1 / Math.tan(gamma);
-
-      const rowsH : Matrix4Type = [
+      angle *= DEG2RAD;
+      const orto = this.orthographic(left,right,bottom,top,near,far);
+      const rows : Matrix4Type = [
         [1, 0, 0, 0],
         [0, 1, 0, 0],
-        [d, e, 1, 0],
+        [-scale * Math.cos(angle), scale * Math.sin(angle), 1, 0],
         [0, 0, 0, 1]
-      ] 
-
-      const h = new Matrix4();
-      h.rows = rowsH;
-      
-      const rowsST: Matrix4Type = [
-        [2 * a, 0, 0, 0],
-        [0, 2 * b, 0, 0],
-        [0, 0, 2 * c, 0],
-        [(left + right) * -a, (top + bottom) * -b, (far + near) * c, 1]
-      ];
-      const st = new Matrix4();
-      st.rows = rowsST;
-
-      const rowsOrth : Matrix4Type =[
-        [1, 0, 0, 0],
-        [0, 1, 0, 0],
-        [0, 0, 0, 0],
-        [0, 0, 0 ,1]
       ]
-      const ort = new Matrix4();
-      ort.rows = rowsOrth;
-      
-      const mat = ort.multiply(st).multiply(h);
-      return mat;
+      const mat = new Matrix4();
+      mat.rows = rows;
+
+      return orto.multiply(mat);
     }
 
 

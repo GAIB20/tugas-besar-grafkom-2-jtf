@@ -8,8 +8,7 @@ export class ObliqueCamera extends Camera {
   right: number;
   near: number;
   far: number;
-  teta: number;
-  gamma: number;
+  angle: number;
 
   constructor(
     left: number,
@@ -18,8 +17,7 @@ export class ObliqueCamera extends Camera {
     top: number,
     near: number,
     far: number,
-    teta: number,
-    gamma: number,
+    angle: number,
   ) {
     super(); // Setup Node
     this.left = left;
@@ -28,8 +26,7 @@ export class ObliqueCamera extends Camera {
     this.bottom = bottom;
     this.near = near;
     this.far = far;
-    this.teta = teta;
-    this.gamma = gamma;
+    this.angle = angle;
     // Jangan lupa untuk panggil computeProjectionMatrix() setiap
     // kali mengubah nilai left, right, top, bottom, near, atau far.
     this.computeProjectionMatrix();
@@ -45,8 +42,8 @@ export class ObliqueCamera extends Camera {
       this.top,
       this.near,
       this.far,
-      this.teta,
-      this.gamma
+      this.angle,
+      0.5
     );
   }
 }

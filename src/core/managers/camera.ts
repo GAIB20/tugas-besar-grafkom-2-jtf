@@ -18,6 +18,7 @@ export class CameraManager {
       -500,
       500
     );
+
     this.obliqueCamera = new ObliqueCamera(
       -canvas.clientWidth / 2,
       canvas.clientWidth / 2,
@@ -26,17 +27,16 @@ export class CameraManager {
       -500,
       500,
       45,
-      45
     );
 
     this.perspectiveCamera = new PerspectiveCamera(
       60,
-      -500,
+      0.01,
       canvas.clientWidth / canvas.clientHeight,
       500,
     )
 
-    this.camera = this.orthographicCamera;
+    this.camera = this.obliqueCamera;
   }
 
   get() {
