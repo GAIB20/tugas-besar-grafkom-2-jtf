@@ -44,3 +44,8 @@ button:hover {
 button:focus {
   outline: none; /* Remove the outline to keep the design clean */
 }
+
+.selected {
+  background-color: #007bff; /* Change to desired color */
+  color: white; /* Change to desired text color */
+}

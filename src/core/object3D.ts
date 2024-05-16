@@ -103,7 +103,7 @@ export class Object3D {
     }
     this.computeLocalMatrix();
     if (this.parent) {
-      this._worldMatrix = this.parent.worldMatrix.multiply(this._localMatrix);
+      this._worldMatrix = this._localMatrix.multiply(this.parent.worldMatrix);
     } else {
       this._worldMatrix = this._localMatrix.clone();
     }
