@@ -144,4 +144,96 @@ export class Matrix4 extends Matrix<Matrix4Type> {
 
     return mat;
   }
+
+    /**
+   * Creates an oblique projection matrix.
+   * @param left - The left plane of the oblique projection.
+   * @param right - The right plane of the oblique projection.
+   * @param bottom - The bottom plane of the oblique projection.
+   * @param top - The top plane of the oblique projection.
+   * @param near - The near plane of the oblique projection.
+   * @param far - The far plane of the oblique projection.
+   * @param teta - Degree on XZ of the oblique projection.
+   * @param gamma - Degree on YZ of the oblique projection.
+   * @returns A new Matrix4 instance representing the oblique projection matrix. Followed column major ordering.
+   */
+    static oblique (
+      left: number,
+      right: number,
+      bottom: number,
+      top: number,
+      near: number,
+      far: number,
+      teta: number,
+      gamma: number
+    ): Matrix<Matrix4Type> {
+      const a = 1 / (right - left);
+      const b = 1 / (top - bottom);
+      const c = 1 / (near - far);
+      const d = 1 / Math.tan(teta);
+      const e = 1 / Math.tan(gamma);
+
+      const rowsH : Matrix4Type = [
+        [1, 0, 0, 0],
+        [0, 1, 0, 0],
+        [d, e, 1, 0],
+        [0, 0, 0, 1]
+      ] 
+
+      const h = new Matrix4();
+      h.rows = rowsH;
+      
+      const rowsST: Matrix4Type = [
+        [2 * a, 0, 0, 0],
+        [0, 2 * b, 0, 0],
+        [0, 0, 2 * c, 0],
+        [(left + right) * -a, (top + bottom) * -b, (far + near) * c, 1]
+      ];
+      const st = new Matrix4();
+      st.rows = rowsST;
+
+      const rowsOrth : Matrix4Type =[
+        [1, 0, 0, 0],
+        [0, 1, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0 ,1]
+      ]
+      const ort = new Matrix4();
+      ort.rows = rowsOrth;
+      
+      const mat = ort.multiply(st).multiply(h);
+      return mat;
+    }
+
+
+    /**
+   * Creates an perspective projection matrix.
+   * @param fov - The field of the view volume of the perspective projection.
+   * @param near - The closest visible boundary plane of the perspective projection.
+   * @param aspect - The aspect ratio plane of the perspective projection.
+   * @param far - The furthest visible boundary plane of the perspective projection.
+   * @returns A new Matrix4 instance representing the perspective projection matrix. Followed column major ordering.
+   */
+    static perspective (
+      fov: number,
+      near: number,
+      aspect: number,
+      far: number,
+    ): Matrix<Matrix4Type> {
+      
+      const f = Math.tan(0.5*Math.PI*(1-fov/180));
+      const nf = 1 / (near - far);
+
+      const rows : Matrix4Type = [
+        [f/aspect, 0, 0, 0],
+        [0, f, 0, 0],
+        [0, 0,   (far + near) * nf, -1,],
+        [0, 0, 2 * far * near * nf,  0,],
+      ]
+      
+      const mat = new Matrix4();
+      mat.rows = rows;
+      return mat;
+    }
+
 }
