@@ -15,7 +15,8 @@ varying vec2 v_texcoord;
 void main() {
     vec3 N = normalize(v_normal);
     if(u_useTexture > 0.0) {
-        N = normalize(2.0 * texture2D(u_diffuseTexture, v_texcoord).rgb - 1.0);
+        vec3 texNormal = 2.0 * texture2D(u_diffuseTexture, v_texcoord).rgb - 1.0;
+        N = normalize(N + normalize(texNormal));
     }
     vec3 L = normalize(u_lightPos - v_fragPos);
     // Lambert's cosine law
