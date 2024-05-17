@@ -13,7 +13,7 @@ export class ShaderManager {
   constructor() {
     this.basicMaterial = new BasicMaterial();
     this.phongMaterial = new PhongMaterial();
-    this.shader = this.phongMaterial;
+    this.shader = this.basicMaterial;
   }
 
   get() {
@@ -28,8 +28,12 @@ export class ShaderManager {
     }
   }
 
-  setColor(newColor: RGB) {
-    this.shader.setColor(newColor.r, newColor.g, newColor.b);
+  setDiffuseColor(newColor: RGB) {
+    this.shader.setDiffuseColor(newColor.r, newColor.g, newColor.b);
+  }
+
+  setSpecularColor(newColor: RGB) {
+    this.shader.setSpecularColor(newColor.r, newColor.g, newColor.b);
   }
 
   static changeMaterial(node: Object3D, newMaterial: string) {
@@ -50,11 +54,31 @@ export class ShaderManager {
 
   static changeDiffuseColor(node: Object3D, newColor: RGB) {
     if (node instanceof Mesh) {
-      node.material.setColor(newColor.r, newColor.g, newColor.b);
+      node.material.setDiffuseColor(newColor.r, newColor.g, newColor.b);
     }
 
     node.children.forEach((child: Object3D) => {
       ShaderManager.changeDiffuseColor(child, newColor);
+    });
+  }
+
+  static changeSpecularColor(node: Object3D, newColor: RGB) {
+    if (node instanceof Mesh) {
+      node.material.setSpecularColor(newColor.r, newColor.g, newColor.b);
+    }
+
+    node.children.forEach((child: Object3D) => {
+      ShaderManager.changeSpecularColor(child, newColor);
+    });
+  }
+
+  static changeBrightness(node: Object3D, brightness: number) {
+    if (node instanceof Mesh) {
+      node.material.setBrightness(brightness);
+    }
+
+    node.children.forEach((child: Object3D) => {
+      ShaderManager.changeBrightness(child, brightness);
     });
   }
 }

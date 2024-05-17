@@ -13,6 +13,7 @@ export class Tweakpane {
   diffuseTextureBinding: BindingApi;
   specularColorBinding: BindingApi;
   specularTextureBinding: BindingApi;
+  brightnessBinding: BindingApi;
   bumpTextureBinding: BindingApi;
   frameBinding: BindingApi;
   fpsBinding: BindingApi;
@@ -157,6 +158,23 @@ export class Tweakpane {
       })
       .on('change', (e) => {
         this.state.changeSpecularTexture(e.value);
+      });
+
+      const brightnessFolder = modelFolder.addFolder({
+        title: 'Brightness',
+        expanded: true
+      });
+
+      this.brightnessBinding = brightnessFolder
+      .addBinding(this.state, 'brightness', {
+        view: 'slider',
+        label: 'brightness',
+        min: 1,
+        max: 128,
+        value: 32
+      })
+      .on('change', (ev) => {
+        this.state.changeBrightness(ev.value);
       });
 
     // Material: Bump

@@ -138,7 +138,6 @@ export class WebGL {
 
       // Bind the geometry
       node.geometry.calculateNormals();
-      console.log(node.geometry.getNormal());
       const normalBuffer = this.gl.createBuffer();
       this.gl.bindBuffer(this.gl.ARRAY_BUFFER, normalBuffer);
       this.gl.bufferData(
@@ -166,7 +165,8 @@ export class WebGL {
       const viewProjectionMatrix = camera.viewProjectionMatrix.flatten();
       const worldMatrix = node.worldMatrix.flatten();
 
-      const color = this.shader.getColor().coords;
+      const diffColor = this.shader.getDiffuseColor().coords;
+      const specColor = this.shader.getSpecularColor().coords;
 
       this.gl.uniformMatrix4fv(
         this.gl.getUniformLocation(
@@ -189,14 +189,28 @@ export class WebGL {
           this.shaderProgram,
           ShaderAttribute.DiffuseColor
         ),
-        color
+        diffColor
+      );
+      this.gl.uniform3fv(
+        this.gl.getUniformLocation(
+          this.shaderProgram,
+          ShaderAttribute.SpecularColor
+        ),
+        specColor
       );
       this.gl.uniform3fv(
         this.gl.getUniformLocation(
           this.shaderProgram,
           ShaderAttribute.ViewPosition
         ),
-        camera.position.coords
+        [camera.position.x, camera.position.y, camera.position.z]
+      );
+      this.gl.uniform1f(
+        this.gl.getUniformLocation(
+          this.shaderProgram,
+          ShaderAttribute.Brightness
+        ),
+        this.shader.getBrightness()
       );
 
       // Draw the geometry

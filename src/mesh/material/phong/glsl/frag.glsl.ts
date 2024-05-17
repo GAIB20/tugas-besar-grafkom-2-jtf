@@ -2,28 +2,28 @@ export default `
 precision highp float;
 //uniform vec3 u_lightPos; 
 uniform vec3 u_viewPos; 
-//uniform vec3 u_lightColor;
+uniform vec3 u_specularColor;
 uniform vec3 u_diffuseColor;
+uniform float u_brightness;
 
 varying lowp vec3 v_fragPos;
 varying lowp vec3 v_normal;
 
 void main() {
-    float ambientStrength = 0.1;
-    vec3 ambient = ambientStrength * vec3(1.0, 1.0, 1.0);
-
-    vec3 norm = normalize(v_normal);
-    vec3 lightDir = normalize(vec3(1.2, 1.0, 2.0) - v_fragPos);
-    float diff = max(dot(norm, lightDir), 0.0);
-    vec3 diffuse = diff * vec3(1.0, 1.0, 1.0);
-
-    float specularStrength = 0.5;
-    vec3 viewDir = normalize(u_viewPos - v_fragPos);
-    vec3 reflectDir = reflect(-lightDir, norm);  
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32.0);
-    vec3 specular = specularStrength * spec * vec3(1.0, 1.0, 1.0);  
+    vec3 N = normalize(v_normal);
+    vec3 L = normalize(vec3(0.0, 0.0, 3.0) - v_fragPos);
+    // Lambert's cosine law
+    float lambertian = max(dot(N, L), 0.0);
+    float specular = 0.0;
+    if(lambertian > 0.0) {
+        vec3 R = reflect(-L, N);      // Reflected light vector
+        vec3 V = normalize(u_viewPos - v_fragPos); // Vector to viewer
+        // Compute the specular term
+        float specAngle = max(dot(R, V), 0.0);
+        specular = pow(specAngle, u_brightness);
+    }
         
-    vec3 result = (ambient + diffuse + specular) * u_diffuseColor;
+    vec3 result = (1.0 * vec3(0, 0, 0) + lambertian * u_diffuseColor + specular * u_specularColor);
     gl_FragColor = vec4(result, 1.0);
 }
 `;
