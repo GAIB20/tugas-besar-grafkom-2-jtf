@@ -271,7 +271,7 @@ export class WebGL {
       
       gl.uniform1f(
         boolLoc,
-        1.0
+        0.5
       );
       render(this.image);
       // Draw the geometry
