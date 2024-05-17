@@ -12,6 +12,7 @@ export class WebGL {
   shaderProgram: WebGLProgram | null;
   uViewMatrixLocation: WebGLUniformLocation | null;
   uColor: WebGLUniformLocation | null;
+  image: any;
 
   uUseTexture: WebGLUniformLocation | null;
   attribSetters: { [name: string]: AttribSetter } = {};
@@ -32,6 +33,9 @@ export class WebGL {
     this.uUseTexture = null;
 
     this.shader = shader;
+
+    this.image = new Image();
+    this.image.src = "./test.png";
     this.createShaderProgram();
   }
 
@@ -220,14 +224,66 @@ export class WebGL {
         ),
         this.shader.getDirectionLight().coords
       );
+      
+      const render = (image: any) => {
+        const textureCoordinates = [
+          // Front
+          0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0,
+          // Back
+          0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0,
+          // Top
+          0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0,
+          // Bottom
+          0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0,
+          // Right
+          0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0,
+          // Left
+          0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0,
+        ];
+    
+        const textBuf = this.gl.createBuffer();
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, textBuf);
+        const textAtLoc = this.gl.getAttribLocation(
+          this.shaderProgram!,
+          ShaderAttribute.TexCoord
+        );
+        this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(textureCoordinates), this.gl.STATIC_DRAW)
+        this.gl.enableVertexAttribArray(textAtLoc);
+        this.gl.vertexAttribPointer(textAtLoc, 2, this.gl.FLOAT, false, 0, 0);
+  
+        const texture = this.gl.createTexture();
+        this.gl.bindTexture(this.gl.TEXTURE_2D, texture);
+  
+        this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_S, this.gl.CLAMP_TO_EDGE);
+        this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_T, this.gl.CLAMP_TO_EDGE);
+        this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MIN_FILTER, this.gl.NEAREST);
+        this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MAG_FILTER, this.gl.NEAREST);
 
+        this.gl.texImage2D(this.gl.TEXTURE_2D, 0, this.gl.RGBA, this.gl.RGBA, this.gl.UNSIGNED_BYTE, image);
+
+      }
+
+      const gl = this.gl
+      const boolLoc = this.gl.getUniformLocation(
+        this.shaderProgram,
+        ShaderAttribute.UseTexture
+      )
+      
+      gl.uniform1f(
+        boolLoc,
+        1.0
+      );
+      render(this.image);
       // Draw the geometry
       this.gl.drawArrays(
         this.gl.TRIANGLES,
         0,
         node.geometry.getPosition().count
       );
+      
+
     }
+
 
     node.children.forEach((child: Object3D) => {
       this.draw(child, camera);
