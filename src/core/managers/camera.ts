@@ -33,7 +33,7 @@ export class CameraManager {
       60,
       0.01,
       canvas.clientWidth / canvas.clientHeight,
-      500,
+      999,
     )
 
     this.camera = this.orthographicCamera;
