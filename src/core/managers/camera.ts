@@ -36,7 +36,7 @@ export class CameraManager {
       500,
     )
 
-    this.camera = this.obliqueCamera;
+    this.camera = this.orthographicCamera;
   }
 
   get() {

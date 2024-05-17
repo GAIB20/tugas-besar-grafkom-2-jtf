@@ -25,6 +25,7 @@ export class StateManager {
   diffuseTexture = 'A';
   specularColor: RGB = { r: 255, g: 0, b: 0 };
   specularTexture = 'A';
+  brightness = 32;
   bumpTexture = 'A';
   frame = '1 of 10';
   fps = '30';
@@ -119,12 +120,18 @@ export class StateManager {
 
     this.isChangingUI = true;
 
-    const diffuseColor = mesh.material.getColor().coords;
+    const diffuseColor = mesh.material.getDiffuseColor().coords;
     this.diffuseColor.r = diffuseColor[0] * 255;
     this.diffuseColor.g = diffuseColor[1] * 255;
     this.diffuseColor.b = diffuseColor[2] * 255;
     this.tweakpane?.diffuseColorBinding.refresh();
 
+    const specularColor = mesh.material.getSpecularColor().coords;
+    this.specularColor.r = specularColor[0] * 255;
+    this.specularColor.g = specularColor[1] * 255;
+    this.specularColor.b = specularColor[2] * 255;
+    this.tweakpane?.specularColorBinding.refresh();
+    
     this.translate.x = mesh.position.x;
     this.translate.y = mesh.position.y;
     this.translate.z = mesh.position.z;
@@ -171,6 +178,12 @@ export class StateManager {
 
   changeSpecularColor(newColor: RGB) {
     console.log(newColor);
+
+    ShaderManager.changeSpecularColor(this.sceneManager.selectedMesh, newColor);
+  }
+
+  changeBrightness(brightness: number) {
+    ShaderManager.changeBrightness(this.sceneManager.selectedMesh, brightness);
   }
 
   changeSpecularTexture(newTexture: string) {
