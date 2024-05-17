@@ -7,6 +7,8 @@ export default class ShaderMaterial {
   public readonly fragmentShaderSource: string;
   private diffuseColor: Vector3;
   private specularColor: Vector3;
+  directionLight: Vector3;
+
   private texture: WebGLTexture | null;
   private useTexture: boolean;
   private attributes: { [name: string]: any } = {};
@@ -20,6 +22,8 @@ export default class ShaderMaterial {
     this.brightness = 32;
     this.texture = null;
     this.useTexture = false;
+    this.directionLight = new Vector3(0, 0, 1);
+
   }
 
   setDiffuseColor(r: number, g: number, b: number) {
@@ -34,6 +38,10 @@ export default class ShaderMaterial {
     this.brightness = brightness;
   }
 
+  setDirectionLight(x: number, y: number, z: number) {
+    this.directionLight.set([x, y, z]);
+  }
+
   setTexture(texture: WebGLTexture) {
     this.texture = texture;
     this.useTexture = true;
@@ -45,6 +53,10 @@ export default class ShaderMaterial {
 
   getSpecularColor(): Vector3 {
     return this.specularColor;
+  }
+
+  getDirectionLight(): Vector3 {
+    return this.directionLight;
   }
 
   getBrightness(): number {

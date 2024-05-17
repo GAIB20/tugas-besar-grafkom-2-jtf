@@ -1,6 +1,6 @@
 export default `
 precision highp float;
-//uniform vec3 u_lightPos; 
+uniform vec3 u_lightPos; 
 uniform vec3 u_viewPos; 
 uniform vec3 u_specularColor;
 uniform vec3 u_diffuseColor;
@@ -11,7 +11,7 @@ varying lowp vec3 v_normal;
 
 void main() {
     vec3 N = normalize(v_normal);
-    vec3 L = normalize(vec3(0.0, 0.0, 3.0) - v_fragPos);
+    vec3 L = normalize(u_lightPos - v_fragPos);
     // Lambert's cosine law
     float lambertian = max(dot(N, L), 0.0);
     float specular = 0.0;
