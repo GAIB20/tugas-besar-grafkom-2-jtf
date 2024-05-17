@@ -168,12 +168,13 @@ export class Matrix4 extends Matrix<Matrix4Type> {
       angle: number,
       scale: number,
     ): Matrix<Matrix4Type> {
+      const cot_angle = 1 / Math.tan(angle);
       angle *= DEG2RAD;
       const orto = this.orthographic(left,right,bottom,top,near,far);
       const rows : Matrix4Type = [
         [1, 0, 0, 0],
         [0, 1, 0, 0],
-        [-scale * Math.cos(angle), scale * Math.sin(angle), 1, 0],
+        [-scale * cot_angle, scale * cot_angle, 1, 0],
         [0, 0, 0, 1]
       ]
       const mat = new Matrix4();
