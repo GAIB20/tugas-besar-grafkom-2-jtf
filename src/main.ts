@@ -39,6 +39,8 @@ const onMounted = () => {
     // time *= 0.001;
     // const deltaTime = time - lastTime;
     // lastTime = time;
+    console.log(state.cameraManager.get().name)
+    orbitControl.camera = state.cameraManager.get();
     orbitControl.update();
     webGL.draw(state.sceneManager.get(), state.cameraManager.get());
 

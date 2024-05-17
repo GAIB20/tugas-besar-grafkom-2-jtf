@@ -5,7 +5,7 @@ import { Vector3 } from "../math/vector/vector3";
 import { Vector3Type } from "../math/vector/vector.d";
 
 export class OrbitControls {
-    private camera : Camera;
+    private _camera : Camera;
     private canvas : HTMLCanvasElement;
     private target : Object3D | null;
     private center : Object3D = new Object3D();
@@ -16,12 +16,11 @@ export class OrbitControls {
     private isMoving : boolean = false;
 
     constructor(camera : Camera, canvas : HTMLCanvasElement, target : Object3D | null = null) {
-        this.camera = camera;
-        console.log(this.camera.name)
+        this._camera = camera;
         this.canvas = canvas;
         this.target = target;
         this.center.name = "Camera";
-        this.center.add(camera);
+        this.center.add(this._camera);
 
         // Binding to mouse event
         this.canvas.addEventListener('mousedown',this.onMouseDown.bind(this));
@@ -31,8 +30,14 @@ export class OrbitControls {
 
     }
 
+    
+    public set camera(v : Camera) {
+        this._camera = v;
+        this.center.add(this._camera);
+    }
+    
+
     private onMouseDown(event: MouseEvent) {
-        console.log("Klik");
         if(event.shiftKey){
             this.isPanning = true;
         }else{
@@ -49,16 +54,12 @@ export class OrbitControls {
         const dx = event.movementX
         const dy = event.movementY;
 
-        console.log(dx,dy);
-
         if(this.isMoving && this.allowRotate){
             const row : Vector3Type = [
                 wrapAngle(this.center.rotation.x - dy),
                 wrapAngle(this.center.rotation.y - dx),
                 0,
             ]
-            console.log(wrapAngle(this.center.rotation.x - dy));
-            console.log(wrapAngle(this.center.rotation.y - dx));
             const rotation = new Vector3();
             rotation.coords = row;
             rotation.x = row[0];
@@ -76,7 +77,7 @@ export class OrbitControls {
     private onMouseWheel(event: WheelEvent){
         if (!this.allowZoom) return;
         const delta = event.deltaY;
-        this.camera.zoom += delta;
+        this._camera.zoom += delta;
     }
 
     public update() {
