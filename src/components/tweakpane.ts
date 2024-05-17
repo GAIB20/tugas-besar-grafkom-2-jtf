@@ -93,7 +93,7 @@ export class Tweakpane {
         options: [
           { text: 'Basic', value: 'basic' },
           { text: 'Phong', value: 'phong' }
-        ],
+        ]
       })
       .on('change', (e) => {
         this.state.changeMaterial(e.value);
@@ -368,10 +368,7 @@ export class Tweakpane {
 
     this.rotateBinding = objectControllerFolder
       .addBinding(this.state, 'rotate', {
-        label: 'rotate(deg)',
-        x: { min: -360, max: 360, step: 5 },
-        y: { min: -360, max: 360, step: 5 },
-        z: { min: -360, max: 360, step: 5 }
+        label: 'rotate(deg)'
       })
       .on('change', (ev) => {
         this.state.onRotateChanged(ev.value);
