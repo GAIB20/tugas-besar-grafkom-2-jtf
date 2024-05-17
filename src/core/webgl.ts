@@ -106,8 +106,10 @@ export class WebGL {
   draw(node: Object3D, camera: Camera) {
     this.gl.enable(this.gl.DEPTH_TEST);
     if (node instanceof Mesh) {
-      this.shader = node.material;
-      this.createShaderProgram();
+      if(this.shader.constructor !== node.material.constructor) {
+        this.shader = node.material;
+        this.createShaderProgram();
+      }
       this.gl.useProgram(this.shaderProgram);
 
       // Bind the geometry
