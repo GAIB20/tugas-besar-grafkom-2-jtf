@@ -91,10 +91,9 @@ export class Tweakpane {
         view: 'list',
         label: 'Material',
         options: [
-          { text: 'Basic', value: 'Basic' },
-          { text: 'Phong', value: 'Phong' }
+          { text: 'Basic', value: 'basic' },
+          { text: 'Phong', value: 'phong' }
         ],
-        value: 'Basic'
       })
       .on('change', (e) => {
         this.state.changeMaterial(e.value);

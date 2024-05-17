@@ -20,7 +20,7 @@ export class StateManager {
 
   // Tweakpane Variables
   model = 'A';
-  material = 'Basic';
+  material = 'basic';
   diffuseColor: RGB = { r: 255, g: 0, b: 0 };
   diffuseTexture = 'A';
   specularColor: RGB = { r: 255, g: 0, b: 0 };
