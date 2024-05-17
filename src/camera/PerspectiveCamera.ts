@@ -2,19 +2,13 @@ import { Matrix4 } from '../core/math/matrix/matrix4';
 import { Camera } from './Camera';
 
 export class PerspectiveCamera extends Camera {
-    fov: number;
-    near: number;
-    aspect: number;
-    far: number;
+  fov: number;
+  near: number;
+  aspect: number;
+  far: number;
 
-  constructor(
-    fov: number,
-    near: number,
-    aspect: number,
-    far: number,
-
-  ) {
-    super(); // Setup Node
+  constructor(fov: number, near: number, aspect: number, far: number) {
+    super('perspective'); // Setup Node
     this.far = far;
     this.fov = fov;
     this.near = near;

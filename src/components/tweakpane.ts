@@ -161,12 +161,12 @@ export class Tweakpane {
         this.state.changeSpecularTexture(e.value);
       });
 
-      const brightnessFolder = modelFolder.addFolder({
-        title: 'Brightness',
-        expanded: true
-      });
+    const brightnessFolder = modelFolder.addFolder({
+      title: 'Brightness',
+      expanded: true
+    });
 
-      this.brightnessBinding = brightnessFolder
+    this.brightnessBinding = brightnessFolder
       .addBinding(this.state, 'brightness', {
         view: 'slider',
         label: 'brightness',
@@ -178,12 +178,12 @@ export class Tweakpane {
         this.state.changeBrightness(ev.value);
       });
 
-      const directionLightFolder = modelFolder.addFolder({
-        title: 'Position',
-        expanded: true
-      });
+    const directionLightFolder = modelFolder.addFolder({
+      title: 'Position',
+      expanded: true
+    });
 
-      this.directionLightBinding = directionLightFolder
+    this.directionLightBinding = directionLightFolder
       .addBinding(this.state.shaderManager.shader, 'directionLight', {
         x: { min: -10, max: 10, step: 0.1 },
         y: { min: -10, max: 10, step: 0.1 },
@@ -292,8 +292,12 @@ export class Tweakpane {
         this.state.onLast();
       });
 
+    /**
+     * Left Tweakpane
+     */
+
     // Camera
-    const cameraFolder = this.pane.addFolder({
+    const cameraFolder = this.leftPane.addFolder({
       title: 'Camera',
       expanded: true
     });
@@ -304,11 +308,11 @@ export class Tweakpane {
         view: 'list',
         label: 'Projection',
         options: [
-          { text: 'Orthographic', value: 'Orthographic' },
-          { text: 'Oblique', value: 'Oblique' },
-          { text: 'Perspective', value: 'Perspective' }
+          { text: 'Orthographic', value: 'orthographic' },
+          { text: 'Oblique', value: 'oblique' },
+          { text: 'Perspective', value: 'perspective' }
         ],
-        value: 'Orthographic'
+        value: 'orthographic'
       })
       .on('change', (e) => {
         this.state.changeProjection(e.value);
@@ -347,9 +351,6 @@ export class Tweakpane {
         this.state.onResetCamera();
       });
 
-    /**
-     * Left Tweakpane
-     */
     const objectControllerFolder = this.leftPane.addFolder({
       title: 'Object Controller',
       expanded: true

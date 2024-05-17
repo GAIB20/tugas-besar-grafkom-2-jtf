@@ -31,7 +31,7 @@ export class StateManager {
   frame = '1 of 10';
   fps = '30';
   controller = { play: true, reverse: false, replay: false };
-  projection = 'Orthographic';
+  projection = 'orthographic';
   cameraPosition = {
     radius: 1,
     coordinate: { x: 0, y: 0, z: 0 } as Coordinate
@@ -132,7 +132,7 @@ export class StateManager {
     this.specularColor.g = specularColor[1] * 255;
     this.specularColor.b = specularColor[2] * 255;
     this.tweakpane?.specularColorBinding.refresh();
-    
+
     this.translate.x = mesh.position.x;
     this.translate.y = mesh.position.y;
     this.translate.z = mesh.position.z;
@@ -235,6 +235,7 @@ export class StateManager {
 
   changeProjection(newProjection: string) {
     console.log(newProjection);
+    this.cameraManager.setCamera(newProjection);
   }
 
   changeRadius(newRadius: number) {
