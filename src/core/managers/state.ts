@@ -1,4 +1,5 @@
 import { Tweakpane } from '../../components/tweakpane';
+import { OrbitControls } from '../control/orbit';
 import { RGB, Coordinate } from '../interface';
 import { Mesh } from '../mesh';
 import { WebGL } from '../webgl';
@@ -46,6 +47,7 @@ export class StateManager {
   shaderManager: ShaderManager;
   sceneManager: SceneManager;
   cameraManager: CameraManager;
+  orbitControl: OrbitControls;
 
   isChangingUI: boolean = false;
 
@@ -53,13 +55,15 @@ export class StateManager {
     webGL: WebGL | null = null,
     shaderManager: ShaderManager | null = null,
     sceneManager: SceneManager | null = null,
-    cameraManager: CameraManager | null = null
+    cameraManager: CameraManager | null = null,
+    orbitControl: OrbitControls | null = null
   ) {
     if (
       webGL === null ||
       shaderManager === null ||
       sceneManager === null ||
-      cameraManager === null
+      cameraManager === null ||
+      orbitControl === null
     ) {
       throw new Error('StateManager must be initialized with all managers');
     }
@@ -68,6 +72,7 @@ export class StateManager {
     this.shaderManager = shaderManager;
     this.sceneManager = sceneManager;
     this.cameraManager = cameraManager;
+    this.orbitControl = orbitControl;
 
     //for emiter
     this.listeners = new Map();
@@ -77,14 +82,17 @@ export class StateManager {
     webGL: WebGL | null = null,
     shaderManager: ShaderManager | null = null,
     sceneManager: SceneManager | null = null,
-    cameraManager: CameraManager | null = null
+    cameraManager: CameraManager | null = null,
+    orbitControl: OrbitControls | null = null
+
   ): StateManager {
     if (!StateManager.instance) {
       StateManager.instance = new StateManager(
         webGL,
         shaderManager,
         sceneManager,
-        cameraManager
+        cameraManager,
+        orbitControl
       );
     }
     return StateManager.instance;
@@ -236,10 +244,14 @@ export class StateManager {
   changeProjection(newProjection: string) {
     console.log(newProjection);
     this.cameraManager.setCamera(newProjection);
+    this.orbitControl.camera = this.cameraManager.get();
+
   }
 
   changeRadius(newRadius: number) {
     console.log(newRadius);
+    this.orbitControl.setDistance(newRadius);
+    this.orbitControl.update()
   }
 
   changeCoordinate(newCoordinate: Coordinate) {

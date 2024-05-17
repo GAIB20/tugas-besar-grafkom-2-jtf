@@ -27,6 +27,7 @@ export class ObliqueCamera extends Camera {
     this.near = near;
     this.far = far;
     this.angle = angle;
+    this._zoom = 0.5
     // Jangan lupa untuk panggil computeProjectionMatrix() setiap
     // kali mengubah nilai left, right, top, bottom, near, atau far.
     this.computeProjectionMatrix();
@@ -43,7 +44,7 @@ export class ObliqueCamera extends Camera {
       this.near,
       this.far,
       this.angle,
-      0.5
+      this._zoom
     );
   }
 }

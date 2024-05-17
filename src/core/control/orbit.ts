@@ -80,6 +80,10 @@ export class OrbitControls {
         this._camera.zoom += delta;
     }
 
+    public setDistance(delta: number){
+        this._camera.zoom += delta;
+    }
+
     public update() {
         if (this.target){
             this.center.position = this.target.position;

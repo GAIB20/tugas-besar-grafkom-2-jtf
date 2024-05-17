@@ -129,7 +129,8 @@ export class Matrix4 extends Matrix<Matrix4Type> {
     bottom: number,
     top: number,
     near: number,
-    far: number
+    far: number,
+    zoom: number,
   ): Matrix<Matrix4Type> {
     const a = 1 / (right - left);
     const b = 1 / (top - bottom);
