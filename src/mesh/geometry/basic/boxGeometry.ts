@@ -1,5 +1,5 @@
-import { BufferAttribute } from './bufferAttribute';
-import { BufferGeometry } from './bufferGeometry';
+import { BufferAttribute } from '../bufferAttribute';
+import { BufferGeometry } from '../bufferGeometry';
 
 export class BoxGeometry extends BufferGeometry {
   constructor(width = 1, height = 1, depth = 1) {

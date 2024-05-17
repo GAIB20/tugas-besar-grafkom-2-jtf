@@ -1,5 +1,5 @@
-import { BoxGeometry } from '../../mesh/geometry/boxGeometry';
-import { PlaneGeometry } from '../../mesh/geometry/planeGeometry';
+import { BoxGeometry } from '../../mesh/geometry/basic/boxGeometry';
+import { PlaneGeometry } from '../../mesh/geometry/basic/planeGeometry';
 import BasicMaterial from '../../mesh/material/basic/BasicMaterial';
 import { Mesh } from '../mesh';
 import { Object3D } from '../object3D';
