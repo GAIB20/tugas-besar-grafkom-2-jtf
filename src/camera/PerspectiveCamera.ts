@@ -19,6 +19,7 @@ export class PerspectiveCamera extends Camera {
     this.fov = fov;
     this.near = near;
     this.aspect = aspect;
+    this.position.z = 400;
     // Jangan lupa untuk panggil computeProjectionMatrix() setiap
     // kali mengubah nilai left, right, top, bottom, near, atau far.
     this.computeProjectionMatrix();
