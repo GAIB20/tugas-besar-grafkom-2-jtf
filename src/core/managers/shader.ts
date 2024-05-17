@@ -1,7 +1,7 @@
 import ShaderMaterial from '../../mesh/material/ShaderMaterial';
 import BasicMaterial from '../../mesh/material/basic/BasicMaterial';
 import PhongMaterial from '../../mesh/material/phong/phongMaterial';
-import { RGB } from '../interface';
+import { Coordinate, RGB } from '../interface';
 import { Mesh } from '../mesh';
 import { Object3D } from '../object3D';
 
@@ -69,6 +69,16 @@ export class ShaderManager {
 
     node.children.forEach((child: Object3D) => {
       ShaderManager.changeSpecularColor(child, newColor);
+    });
+  }
+
+  static changeDirectionLight(node: Object3D, newDirection: Coordinate) {
+    if (node instanceof Mesh) {
+      node.material.setDirectionLight(newDirection.x, newDirection.y, newDirection.z);
+    }
+
+    node.children.forEach((child: Object3D) => {
+      ShaderManager.changeDirectionLight(child, newDirection);
     });
   }
 

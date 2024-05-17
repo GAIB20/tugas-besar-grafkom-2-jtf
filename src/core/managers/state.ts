@@ -26,6 +26,7 @@ export class StateManager {
   specularColor: RGB = { r: 255, g: 0, b: 0 };
   specularTexture = 'A';
   brightness = 32;
+  directionLight = { x: 0, y: 0, z: 0 } as Coordinate
   bumpTexture = 'A';
   frame = '1 of 10';
   fps = '30';
@@ -184,6 +185,10 @@ export class StateManager {
 
   changeBrightness(brightness: number) {
     ShaderManager.changeBrightness(this.sceneManager.selectedMesh, brightness);
+  }
+
+  changeDirLight(direction: Coordinate) {
+    ShaderManager.changeDirectionLight(this.sceneManager.selectedMesh, direction);
   }
 
   changeSpecularTexture(newTexture: string) {
