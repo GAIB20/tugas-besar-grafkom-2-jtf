@@ -1,5 +1,6 @@
 import { BoxGeometry } from '../../mesh/geometry/basic/boxGeometry';
 import { PlaneGeometry } from '../../mesh/geometry/basic/planeGeometry';
+import { HollowBox } from '../../mesh/geometry/hollow/HollowBox';
 import BasicMaterial from '../../mesh/material/basic/BasicMaterial';
 import { Mesh } from '../mesh';
 import { Object3D } from '../object3D';
@@ -10,6 +11,7 @@ export class SceneManager {
   private sceneA: Scene;
   private sceneB: Scene;
   private sceneC: Scene;
+  private sceneD: Scene;
 
   selectedMesh: Object3D;
 
@@ -45,6 +47,11 @@ export class SceneManager {
     boxMesh.rotation.z = 90;
     this.sceneC = new Scene().add(boxMesh);
 
+    // Hollow
+    this.sceneD = new Scene().add(
+      new Mesh(new HollowBox(200, 200, 200), new BasicMaterial())
+    );
+
     this.scene = this.sceneA;
     this.selectedMesh = this.scene;
     this.setSelectedMeshOnScene();
@@ -72,6 +79,8 @@ export class SceneManager {
       this.scene = this.sceneB;
     } else if (newScene == 'C') {
       this.scene = this.sceneC;
+    } else if (newScene == 'D') {
+      this.scene = this.sceneD;
     }
 
     this.setSelectedMeshOnScene();

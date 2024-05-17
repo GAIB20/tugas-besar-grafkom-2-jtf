@@ -72,7 +72,8 @@ export class Tweakpane {
         options: [
           { text: 'A', value: 'A' },
           { text: 'B', value: 'B' },
-          { text: 'C', value: 'C' }
+          { text: 'C', value: 'C' },
+          { text: 'D', value: 'D' }
         ],
         value: 'A'
       })
