@@ -1,6 +1,6 @@
 import { Camera } from "../../camera/Camera";
 import { Object3D } from "../object3D";
-import { wrapAngle } from "../../constants/math";
+import { DEG2RAD, wrapAngle } from "../../constants/math";
 import { Vector3 } from "../math/vector/vector3";
 import { Vector3Type } from "../math/vector/vector.d";
 
@@ -17,6 +17,7 @@ export class OrbitControls {
 
     constructor(camera : Camera, canvas : HTMLCanvasElement, target : Object3D | null = null) {
         this.camera = camera;
+        console.log(this.camera.name)
         this.canvas = canvas;
         this.target = target;
         this.center.name = "Camera";
@@ -31,6 +32,7 @@ export class OrbitControls {
     }
 
     private onMouseDown(event: MouseEvent) {
+        console.log("Klik");
         if(event.shiftKey){
             this.isPanning = true;
         }else{
@@ -47,14 +49,21 @@ export class OrbitControls {
         const dx = event.movementX
         const dy = event.movementY;
 
+        console.log(dx,dy);
+
         if(this.isMoving && this.allowRotate){
             const row : Vector3Type = [
                 wrapAngle(this.center.rotation.x - dy),
                 wrapAngle(this.center.rotation.y - dx),
                 0,
             ]
+            console.log(wrapAngle(this.center.rotation.x - dy));
+            console.log(wrapAngle(this.center.rotation.y - dx));
             const rotation = new Vector3();
             rotation.coords = row;
+            rotation.x = row[0];
+            rotation.y = row[1];
+            rotation.z = row[2];
             this.center.rotation = rotation;
             
         }else if(this.isPanning && this.allowPan){

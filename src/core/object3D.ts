@@ -86,6 +86,7 @@ export class Object3D {
   
   public set rotation(v : Vector3) {
     this._rotation = v;
+    console.log(this._rotation);
   }
   
 
