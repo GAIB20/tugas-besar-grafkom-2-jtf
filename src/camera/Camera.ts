@@ -4,24 +4,25 @@ import { Object3D } from '../core/object3D';
 export class Camera extends Object3D {
   protected _projectionMatrix = new Matrix4().identity();
   private _invWorldMatrix = new Matrix4().identity();
-  protected _zoom : number = 0;
+  protected _zoom: number = 0;
 
+  constructor(type: string) {
+    super();
+    this.name = type + ' camera';
+  }
 
   computeWorldMatrix() {
     super.computeWorldMatrix();
     this._invWorldMatrix = this.worldMatrix.inverse();
   }
 
-  
-  public get zoom() : number {
+  public get zoom(): number {
     return this._zoom;
   }
-  
-   
-  public set zoom(d : number) {
+
+  public set zoom(d: number) {
     this._zoom = d;
   }
-  
 
   get viewProjectionMatrix() {
     this.computeWorldMatrix();

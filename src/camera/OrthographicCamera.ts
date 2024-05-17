@@ -17,7 +17,7 @@ export class OrthographicCamera extends Camera {
     near: number,
     far: number
   ) {
-    super(); // Setup Node
+    super('orthographic'); // Setup Node
     this.left = left;
     this.right = right;
     this.top = top;

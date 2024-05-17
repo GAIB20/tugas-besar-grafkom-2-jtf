@@ -24,7 +24,6 @@ export class WebGL {
 
     this.gl = gl;
     this.gl.viewport(0, 0, canvas.width, canvas.height);
-    
 
     this.shaderProgram = null;
     this.uViewMatrixLocation = null;
@@ -150,7 +149,7 @@ export class WebGL {
         this.shaderProgram,
         ShaderAttribute.Normal
       );
-      
+
       this.gl.enableVertexAttribArray(normalAttributeLocation);
       this.gl.vertexAttribPointer(
         normalAttributeLocation,

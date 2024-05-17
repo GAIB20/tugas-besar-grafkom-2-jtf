@@ -160,12 +160,12 @@ export class Tweakpane {
         this.state.changeSpecularTexture(e.value);
       });
 
-      const brightnessFolder = modelFolder.addFolder({
-        title: 'Brightness',
-        expanded: true
-      });
+    const brightnessFolder = modelFolder.addFolder({
+      title: 'Brightness',
+      expanded: true
+    });
 
-      this.brightnessBinding = brightnessFolder
+    this.brightnessBinding = brightnessFolder
       .addBinding(this.state, 'brightness', {
         view: 'slider',
         label: 'brightness',
@@ -288,11 +288,11 @@ export class Tweakpane {
         view: 'list',
         label: 'Projection',
         options: [
-          { text: 'Orthographic', value: 'Orthographic' },
-          { text: 'Oblique', value: 'Oblique' },
-          { text: 'Perspective', value: 'Perspective' }
+          { text: 'Orthographic', value: 'orthographic' },
+          { text: 'Oblique', value: 'oblique' },
+          { text: 'Perspective', value: 'perspective' }
         ],
-        value: 'Orthographic'
+        value: 'orthographic'
       })
       .on('change', (e) => {
         this.state.changeProjection(e.value);

@@ -17,9 +17,9 @@ export class ObliqueCamera extends Camera {
     top: number,
     near: number,
     far: number,
-    angle: number,
+    angle: number
   ) {
-    super(); // Setup Node
+    super('oblique'); // Setup Node
     this.left = left;
     this.right = right;
     this.top = top;
