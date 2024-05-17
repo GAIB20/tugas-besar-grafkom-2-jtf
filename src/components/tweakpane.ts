@@ -178,12 +178,12 @@ export class Tweakpane {
         this.state.changeBrightness(ev.value);
       });
 
-      const directionLightFolder = modelFolder.addFolder({
-        title: 'Position',
-        expanded: true
-      });
+    const directionLightFolder = modelFolder.addFolder({
+      title: 'Position',
+      expanded: true
+    });
 
-      this.directionLightBinding = directionLightFolder
+    this.directionLightBinding = directionLightFolder
       .addBinding(this.state.shaderManager.shader, 'directionLight', {
         x: { min: -10, max: 10, step: 0.1 },
         y: { min: -10, max: 10, step: 0.1 },
@@ -292,8 +292,12 @@ export class Tweakpane {
         this.state.onLast();
       });
 
+    /**
+     * Left Tweakpane
+     */
+
     // Camera
-    const cameraFolder = this.pane.addFolder({
+    const cameraFolder = this.leftPane.addFolder({
       title: 'Camera',
       expanded: true
     });
@@ -347,9 +351,6 @@ export class Tweakpane {
         this.state.onResetCamera();
       });
 
-    /**
-     * Left Tweakpane
-     */
     const objectControllerFolder = this.leftPane.addFolder({
       title: 'Object Controller',
       expanded: true
