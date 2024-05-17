@@ -14,6 +14,7 @@ export class Tweakpane {
   specularColorBinding: BindingApi;
   specularTextureBinding: BindingApi;
   brightnessBinding: BindingApi;
+  directionLightBinding: BindingApi;
   bumpTextureBinding: BindingApi;
   frameBinding: BindingApi;
   fpsBinding: BindingApi;
@@ -175,6 +176,21 @@ export class Tweakpane {
       })
       .on('change', (ev) => {
         this.state.changeBrightness(ev.value);
+      });
+
+      const directionLightFolder = modelFolder.addFolder({
+        title: 'Position',
+        expanded: true
+      });
+
+      this.directionLightBinding = directionLightFolder
+      .addBinding(this.state.shaderManager.shader, 'directionLight', {
+        x: { min: -10, max: 10, step: 0.1 },
+        y: { min: -10, max: 10, step: 0.1 },
+        z: { min: -10, max: 10, step: 0.1 }
+      })
+      .on('change', (ev) => {
+        this.state.changeDirLight(ev.value);
       });
 
     // Material: Bump

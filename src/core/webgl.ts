@@ -212,6 +212,13 @@ export class WebGL {
         ),
         this.shader.getBrightness()
       );
+      this.gl.uniform3fv(
+        this.gl.getUniformLocation(
+          this.shaderProgram,
+          ShaderAttribute.DirectionLight
+        ),
+        this.shader.getDirectionLight().coords
+      );
 
       // Draw the geometry
       this.gl.drawArrays(
