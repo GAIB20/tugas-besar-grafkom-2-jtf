@@ -34,3 +34,15 @@ export interface IBoxGeometry {
 export interface IMesh extends IObject3D {
   geometry: IBoxGeometry;
 }
+
+export interface IObjectProperties {
+  position?: IVector3;
+  rotation?: IVector3;
+  scale?: IVector3;
+}
+
+export interface IAnimation {
+  [objectName: string]: IObjectProperties | undefined;
+}
+
+export interface IAnimationClip extends Array<IAnimation> {}
