@@ -19,7 +19,7 @@ export class Object3D {
   visible = true;
 
   constructor() {
-    this._name = '';
+    this._name = new Date().getTime().toString();
     this._type = '';
     this._parent = undefined;
     this._position = new Vector3();
