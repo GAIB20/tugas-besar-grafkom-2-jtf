@@ -1,8 +1,9 @@
+import { IBoxGeometry } from '../../../core/interface';
 import { BufferAttribute } from '../bufferAttribute';
 import { BufferGeometry } from '../bufferGeometry';
 
 export class BoxGeometry extends BufferGeometry {
-  constructor(width = 1, height = 1, depth = 1) {
+  constructor(private width = 1, private height = 1, private depth = 1) {
     super();
     const hw = width / 2,
       hh = height / 2,
@@ -125,5 +126,13 @@ export class BoxGeometry extends BufferGeometry {
     ]);
     this.setAttribute('position', new BufferAttribute(vertices, 3));
     this.calculateNormals();
+  }
+
+  toJSON(): IBoxGeometry {
+    return {
+      width: this.width,
+      height: this.height,
+      depth: this.depth
+    };
   }
 }
