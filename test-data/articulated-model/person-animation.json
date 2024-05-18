@@ -1,0 +1,66 @@
+[
+  {
+    "Person": {
+      "position": {
+        "x": 1,
+        "y": 2,
+        "z": 3
+      },
+      "rotation": {
+        "x": 1,
+        "y": 2,
+        "z": 3
+      },
+      "scale": {
+        "x": 1,
+        "y": 2,
+        "z": 3
+      }
+    },
+    "LeftShoulder": {
+      "position": {
+        "x": 1,
+        "y": 2,
+        "z": 3
+      },
+      "rotation": {
+        "x": 1,
+        "y": 2,
+        "z": 3
+      }
+    },
+    "RightArm": {
+      "scale": {
+        "x": 1,
+        "y": 2,
+        "z": 3
+      }
+    }
+  },
+  {
+    "Person": {
+      "rotation": {
+        "x": 1,
+        "y": 2,
+        "z": 3
+      },
+      "scale": {
+        "x": 1,
+        "y": 2,
+        "z": 3
+      }
+    },
+    "LeftShoulder": {
+      "position": {
+        "x": 1,
+        "y": 2,
+        "z": 3
+      },
+      "scale": {
+        "x": 1,
+        "y": 2,
+        "z": 3
+      }
+    }
+  }
+]
