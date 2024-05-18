@@ -73,7 +73,9 @@ export class Tweakpane {
           { text: 'A', value: 'A' },
           { text: 'B', value: 'B' },
           { text: 'C', value: 'C' },
-          { text: 'D', value: 'D' }
+          { text: 'D', value: 'D' },
+          { text: 'E', value: 'E' },
+          { text: 'F', value: 'F' }
         ],
         value: 'A'
       })
@@ -358,9 +360,9 @@ export class Tweakpane {
 
     this.translateBinding = objectControllerFolder
       .addBinding(this.state, 'translate', {
-        x: { min: -400, max: 400, step: 5 },
-        y: { min: -400, max: 400, step: 5 },
-        z: { min: -400, max: 400, step: 5 }
+        x: { min: -400, max: 400, step: 0.5 },
+        y: { min: -400, max: 400, step: 0.5 },
+        z: { min: -400, max: 400, step: 0.5 }
       })
       .on('change', (ev) => {
         this.state.onTranslateChanged(ev.value);
