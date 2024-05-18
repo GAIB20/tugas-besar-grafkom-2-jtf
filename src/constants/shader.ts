@@ -9,6 +9,8 @@ export enum ShaderAttribute {
   DirectionLight = 'u_lightPos',
   Brightness = 'u_brightness',
   DiffuseTexture = 'u_diffuseTexture',
-  UseTexture = 'u_useTexture',
+  UseDiffuseTexture = 'u_useDiffuseTexture',
+  SpecularTexture = 'u_specularTexture',
+  UseSpecularTexture = 'u_useSpecularTexture',
   ViewPosition = 'u_viewPos',
 }

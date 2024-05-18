@@ -13,6 +13,8 @@ export class WebGL {
   uViewMatrixLocation: WebGLUniformLocation | null;
   uColor: WebGLUniformLocation | null;
   image: any;
+  diffuse: any;
+  specular: any;
 
   uUseTexture: WebGLUniformLocation | null;
   attribSetters: { [name: string]: AttribSetter } = {};
@@ -36,6 +38,10 @@ export class WebGL {
 
     this.image = new Image();
     this.image.src = "./test.png";
+    this.diffuse = new Image();
+    this.diffuse.src = "./diffuse.png";
+    this.specular = new Image();
+    this.specular.src = "./specular.png";
     this.createShaderProgram();
   }
 
@@ -266,20 +272,36 @@ export class WebGL {
       const gl = this.gl
       const boolLoc = this.gl.getUniformLocation(
         this.shaderProgram,
-        ShaderAttribute.UseTexture
+        ShaderAttribute.UseDiffuseTexture
+      )
+      const specLoc = this.gl.getUniformLocation(
+        this.shaderProgram,
+        ShaderAttribute.UseSpecularTexture
       )
       
       gl.uniform1f(
         boolLoc,
-        0.5
+        1.0
       );
-      render(this.image);
+      gl.activeTexture(gl.TEXTURE0);
+      render(this.diffuse);
+      gl.uniform1i(gl.getUniformLocation(this.shaderProgram, ShaderAttribute.DiffuseTexture), 0);
+
+      gl.uniform1f(
+        specLoc,
+        1.0
+      );
+
+      gl.activeTexture(gl.TEXTURE1);
+      render(this.specular);
       // Draw the geometry
       this.gl.drawArrays(
         this.gl.TRIANGLES,
         0,
         node.geometry.getPosition().count
       );
+      gl.uniform1i(gl.getUniformLocation(this.shaderProgram, ShaderAttribute.SpecularTexture), 1);
+
       
 
     }
