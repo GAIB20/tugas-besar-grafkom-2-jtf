@@ -6,6 +6,7 @@ import { ShaderManager } from './core/managers/shader.ts';
 import { CameraManager } from './core/managers/camera.ts';
 import { SceneManager } from './core/managers/scene.ts';
 import { SceneGraph } from './components/scenegraph.ts';
+import { OrbitControls } from './core/control/orbit.ts';
 
 document.addEventListener('DOMContentLoaded', function () {
   onMounted();
@@ -19,12 +20,14 @@ const onMounted = () => {
   const sceneManager = new SceneManager();
   const cameraManager = new CameraManager(canvas);
   const webGL = new WebGL(canvas, shaderManager.get());
-
+  const orbitControl = new OrbitControls(cameraManager.get(), canvas);
+  
   const state = StateManager.getInstance(
     webGL,
     shaderManager,
     sceneManager,
-    cameraManager
+    cameraManager,
+    orbitControl,
   );
 
   const tweakpane = new Tweakpane();
@@ -37,7 +40,6 @@ const onMounted = () => {
     // time *= 0.001;
     // const deltaTime = time - lastTime;
     // lastTime = time;
-
     webGL.draw(state.sceneManager.get(), state.cameraManager.get());
 
     requestAnimationFrame(render);

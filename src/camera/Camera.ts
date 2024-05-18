@@ -5,6 +5,7 @@ export class Camera extends Object3D {
   protected _projectionMatrix = new Matrix4().identity();
   private _invWorldMatrix = new Matrix4().identity();
   protected _zoom: number = 0;
+  protected _angle: number = 45;
 
   constructor(type: string) {
     super();

@@ -1,11 +1,11 @@
 import { Camera } from "../../camera/Camera";
 import { Object3D } from "../object3D";
-import { wrapAngle } from "../../constants/math";
+import { DEG2RAD, wrapAngle } from "../../constants/math";
 import { Vector3 } from "../math/vector/vector3";
 import { Vector3Type } from "../math/vector/vector.d";
 
 export class OrbitControls {
-    private camera : Camera;
+    private _camera : Camera;
     private canvas : HTMLCanvasElement;
     private target : Object3D | null;
     private center : Object3D = new Object3D();
@@ -16,11 +16,11 @@ export class OrbitControls {
     private isMoving : boolean = false;
 
     constructor(camera : Camera, canvas : HTMLCanvasElement, target : Object3D | null = null) {
-        this.camera = camera;
+        this._camera = camera;
         this.canvas = canvas;
         this.target = target;
         this.center.name = "Camera";
-        this.center.add(camera);
+        this.center.add(this._camera);
 
         // Binding to mouse event
         this.canvas.addEventListener('mousedown',this.onMouseDown.bind(this));
@@ -29,6 +29,13 @@ export class OrbitControls {
         this.canvas.addEventListener('wheel',this.onMouseWheel.bind(this));
 
     }
+
+    
+    public set camera(v : Camera) {
+        this._camera = v;
+        this.center.add(this._camera);
+    }
+    
 
     private onMouseDown(event: MouseEvent) {
         if(event.shiftKey){
@@ -55,6 +62,9 @@ export class OrbitControls {
             ]
             const rotation = new Vector3();
             rotation.coords = row;
+            rotation.x = row[0];
+            rotation.y = row[1];
+            rotation.z = row[2];
             this.center.rotation = rotation;
             
         }else if(this.isPanning && this.allowPan){
@@ -67,7 +77,11 @@ export class OrbitControls {
     private onMouseWheel(event: WheelEvent){
         if (!this.allowZoom) return;
         const delta = event.deltaY;
-        this.camera.zoom += delta;
+        this._camera.zoom += delta;
+    }
+
+    public setDistance(delta: number){
+        this._camera.zoom += delta;
     }
 
     public update() {

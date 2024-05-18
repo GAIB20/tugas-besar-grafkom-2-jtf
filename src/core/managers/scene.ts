@@ -49,7 +49,7 @@ export class SceneManager {
 
     // Hollow
     this.sceneD = new Scene().add(
-      new Mesh(new HollowBox(200, 200, 200), new BasicMaterial())
+      new Mesh(new HollowBox(400, 200, 200), new BasicMaterial())
     );
 
     this.scene = this.sceneA;

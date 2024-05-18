@@ -129,7 +129,8 @@ export class Matrix4 extends Matrix<Matrix4Type> {
     bottom: number,
     top: number,
     near: number,
-    far: number
+    far: number,
+    zoom: number | null = null,
   ): Matrix<Matrix4Type> {
     const a = 1 / (right - left);
     const b = 1 / (top - bottom);
@@ -169,7 +170,6 @@ export class Matrix4 extends Matrix<Matrix4Type> {
       scale: number,
     ): Matrix<Matrix4Type> {
       const cot_angle = 1 / Math.tan(angle);
-      angle *= DEG2RAD;
       const orto = this.orthographic(left,right,bottom,top,near,far);
       const rows : Matrix4Type = [
         [1, 0, 0, 0],
