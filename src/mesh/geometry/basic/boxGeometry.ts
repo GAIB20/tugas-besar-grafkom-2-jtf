@@ -10,119 +10,52 @@ export class BoxGeometry extends BufferGeometry {
       hd = depth / 2;
     const vertices = new Float32Array([
       // Front face
-      -hw,
-      -hh,
-      hd,
-      hw,
-      -hh,
-      hd,
-      hw,
-      hh,
-      hd,
-      -hw,
-      -hh,
-      hd,
-      hw,
-      hh,
-      hd,
-      -hw,
-      hh,
-      hd,
-      // Back face
-      -hw,
-      -hh,
-      -hd,
-      hw,
-      hh,
-      -hd,
-      hw,
-      -hh,
-      -hd,
-      -hw,
-      -hh,
-      -hd,
-      -hw,
-      hh,
-      -hd,
-      hw,
-      hh,
-      -hd,
-      // Top face
-      -hw,
-      hh,
-      -hd,
-      -hw,
-      hh,
-      hd,
-      hw,
-      hh,
-      hd,
-      -hw,
-      hh,
-      -hd,
-      hw,
-      hh,
-      hd,
-      hw,
-      hh,
-      -hd,
-      // Bottom face
-      hw,
-      -hh,
-      hd,
-      -hw,
-      -hh,
-      -hd,
-      hw,
-      -hh,
-      -hd,
-      -hw,
-      -hh,
-      hd,
-      -hw,
-      -hh,
-      -hd,
-      hw,
-      -hh,
-      hd,
-      // Right face
-      hw,
-      -hh,
-      -hd,
-      hw,
-      hh,
-      hd,
-      hw,
-      -hh,
-      hd,
-      hw,
-      -hh,
-      -hd,
-      hw,
-      hh,
-      -hd,
-      hw,
-      hh,
-      hd,
-      // Left face
-      -hw,
-      -hh,
-      -hd,
-      -hw,
-      -hh,
-      hd,
-      -hw,
-      hh,
-      hd,
-      -hw,
-      -hh,
-      -hd,
-      -hw,
-      hh,
-      hd,
-      -hw,
-      hh,
-      -hd
+      -hw, -hh,  hd, // bottom left corner
+      hw, -hh,  hd,// bottom right corner
+      hw,  hh,  hd, // top right corner
+     -hw,  hh,  hd, // top left corner
+     -hw, -hh,  hd,  // bottom left corner
+      hw,  hh,  hd,  // top right corner
+ 
+     // Back face
+     hw,  hh, -hd,  // top right corner
+     hw, -hh, -hd,   // bottom right corner
+     -hw, -hh, -hd,  // bottom left corner
+      -hw,  hh, -hd,  // top left corner
+      hw,  hh, -hd,  // top right corner
+      -hw, -hh, -hd,  // bottom left corner
+ 
+     // Left face
+     -hw, -hh, -hd,  // bottom left corner
+     -hw, -hh,  hd,  // bottom right corner
+     -hw,  hh,  hd,  // top right corner
+     -hw,  hh, -hd,  // top left corner
+     -hw, -hh, -hd,  // bottom left corner
+     -hw,  hh,  hd,  // top right corner
+ 
+     // Right face
+     hw,  hh,  hd,  // top right corner
+     hw, -hh,  hd,  // bottom right corner
+     hw, -hh, -hd,  // bottom left corner
+     hw,  hh, -hd,   // top left corner
+     hw,  hh,  hd,  // top right corner
+     hw, -hh, -hd,  // bottom left corner
+ 
+     // Top face
+     -hw,  hh,  hd,  // bottom left corner
+      hw,  hh,  hd,  // bottom right corner
+      hw,  hh, -hd,  // top right corner
+     -hw,  hh, -hd,  // top left corner
+     -hw,  hh,  hd,  // bottom left corner
+      hw,  hh, -hd,  // top right corner
+ 
+     // Bottom face
+     hw, -hh, -hd,  // top right corner
+     hw, -hh,  hd,  // bottom right corner
+     -hw, -hh,  hd,  // bottom left corner
+     -hw, -hh, -hd,  // top left corner
+      hw, -hh, -hd,  // top right corner
+      -hw, -hh,  hd,  // bottom left corner
     ]);
     this.setAttribute('position', new BufferAttribute(vertices, 3));
     this.calculateNormals();
