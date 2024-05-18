@@ -1,6 +1,7 @@
 import { ButtonApi, Pane } from 'tweakpane';
 import { BindingApi } from '@tweakpane/core';
 import { StateManager } from '../core/managers/state';
+import { Model } from '../constants/model';
 
 export class Tweakpane {
   pane: Pane;
@@ -70,14 +71,14 @@ export class Tweakpane {
         view: 'list',
         label: 'Model',
         options: [
+          { text: 'Person', value: Model.Person },
           { text: 'A', value: 'A' },
           { text: 'B', value: 'B' },
           { text: 'C', value: 'C' },
           { text: 'D', value: 'D' },
-          { text: 'E', value: 'E' },
-          { text: 'F', value: 'F' }
+          { text: 'E', value: 'E' }
         ],
-        value: 'A'
+        value: Model.Person
       })
       .on('change', (e) => {
         this.state.changeModel(e.value);

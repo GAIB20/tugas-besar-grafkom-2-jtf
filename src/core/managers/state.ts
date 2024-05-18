@@ -1,4 +1,5 @@
 import { Tweakpane } from '../../components/tweakpane';
+import { Model } from '../../constants/model';
 import { OrbitControls } from '../control/orbit';
 import { RGB, Coordinate } from '../interface';
 import { Mesh } from '../mesh';
@@ -20,14 +21,14 @@ export class StateManager {
   tweakpane?: Tweakpane;
 
   // Tweakpane Variables
-  model = 'A';
+  model = Model.Person;
   material = 'basic';
   diffuseColor: RGB = { r: 255, g: 0, b: 0 };
   diffuseTexture = 'A';
   specularColor: RGB = { r: 255, g: 0, b: 0 };
   specularTexture = 'A';
   brightness = 32;
-  directionLight = { x: 0, y: 0, z: 0 } as Coordinate
+  directionLight = { x: 0, y: 0, z: 0 } as Coordinate;
   bumpTexture = 'A';
   frame = '1 of 10';
   fps = '30';
@@ -84,7 +85,6 @@ export class StateManager {
     sceneManager: SceneManager | null = null,
     cameraManager: CameraManager | null = null,
     orbitControl: OrbitControls | null = null
-
   ): StateManager {
     if (!StateManager.instance) {
       StateManager.instance = new StateManager(
@@ -196,7 +196,10 @@ export class StateManager {
   }
 
   changeDirLight(direction: Coordinate) {
-    ShaderManager.changeDirectionLight(this.sceneManager.selectedMesh, direction);
+    ShaderManager.changeDirectionLight(
+      this.sceneManager.selectedMesh,
+      direction
+    );
   }
 
   changeSpecularTexture(newTexture: string) {
@@ -245,13 +248,12 @@ export class StateManager {
     console.log(newProjection);
     this.cameraManager.setCamera(newProjection);
     this.orbitControl.camera = this.cameraManager.get();
-
   }
 
   changeRadius(newRadius: number) {
     console.log(newRadius);
     this.orbitControl.setDistance(newRadius);
-    this.orbitControl.update()
+    this.orbitControl.update();
   }
 
   changeCoordinate(newCoordinate: Coordinate) {

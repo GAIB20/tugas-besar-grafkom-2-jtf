@@ -7,15 +7,16 @@ import { Object3D } from '../object3D';
 import { Scene } from '../scene';
 import { IMesh, IObject3D } from '../interface';
 import PersonJSON from '../../../test-data/articulated-model/person.json';
+import { Model } from '../../constants/model';
 
 export class SceneManager {
   scene: Scene;
+  private person: Scene;
   private sceneA: Scene;
   private sceneB: Scene;
   private sceneC: Scene;
   private sceneD: Scene;
   private sceneE: Scene;
-  private sceneF: Scene;
 
   selectedMesh: Object3D;
 
@@ -122,9 +123,9 @@ export class SceneManager {
     this.sceneE.name = 'Person';
 
     // Articulated Person: from JSON
-    this.sceneF = SceneManager.loadJSON(PersonJSON);
+    this.person = SceneManager.loadJSON(PersonJSON);
 
-    this.scene = this.sceneA;
+    this.scene = this.person;
     this.selectedMesh = this.scene;
     this.setSelectedMeshOnScene();
   }
@@ -145,7 +146,9 @@ export class SceneManager {
   }
 
   setScene(newScene: string) {
-    if (newScene == 'A') {
+    if (newScene == Model.Person) {
+      this.scene = this.person;
+    } else if (newScene == 'A') {
       this.scene = this.sceneA;
     } else if (newScene == 'B') {
       this.scene = this.sceneB;
@@ -155,8 +158,6 @@ export class SceneManager {
       this.scene = this.sceneD;
     } else if (newScene == 'E') {
       this.scene = this.sceneE;
-    } else if (newScene == 'F') {
-      this.scene = this.sceneF;
     }
 
     this.setSelectedMeshOnScene();
