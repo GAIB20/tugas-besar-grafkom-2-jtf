@@ -37,11 +37,11 @@ export class WebGL {
     this.shader = shader;
 
     this.image = new Image();
-    this.image.src = "./test.png";
+    this.image.src = './test.png';
     this.diffuse = new Image();
-    this.diffuse.src = "./diffuse.png";
+    this.diffuse.src = './diffuse.png';
     this.specular = new Image();
-    this.specular.src = "./specular.png";
+    this.specular.src = './specular.png';
     this.createShaderProgram();
   }
 
@@ -115,7 +115,7 @@ export class WebGL {
   draw(node: Object3D, camera: Camera) {
     this.gl.enable(this.gl.DEPTH_TEST);
     if (node instanceof Mesh) {
-      if(this.shader.constructor !== node.material.constructor) {
+      if (this.shader.constructor !== node.material.constructor) {
         this.shader = node.material;
         this.createShaderProgram();
       }
@@ -162,15 +162,17 @@ export class WebGL {
         ShaderAttribute.Normal
       );
 
-      this.gl.enableVertexAttribArray(normalAttributeLocation);
-      this.gl.vertexAttribPointer(
-        normalAttributeLocation,
-        node.geometry.getNormal().size,
-        this.gl.FLOAT,
-        false,
-        0,
-        0
-      );
+      if (normalAttributeLocation != -1) {
+        this.gl.enableVertexAttribArray(normalAttributeLocation);
+        this.gl.vertexAttribPointer(
+          normalAttributeLocation,
+          node.geometry.getNormal().size,
+          this.gl.FLOAT,
+          false,
+          0,
+          0
+        );
+      }
 
       // Set the uniforms
       const viewProjectionMatrix = camera.viewProjectionMatrix.flatten();
@@ -230,7 +232,7 @@ export class WebGL {
         ),
         this.shader.getDirectionLight().coords
       );
-      
+
       const render = (image: any) => {
         const textureCoordinates = [
           // Front
@@ -244,53 +246,79 @@ export class WebGL {
           // Right
           0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0,
           // Left
-          0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0,
+          0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0
         ];
-    
+
         const textBuf = this.gl.createBuffer();
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, textBuf);
         const textAtLoc = this.gl.getAttribLocation(
           this.shaderProgram!,
           ShaderAttribute.TexCoord
         );
-        this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(textureCoordinates), this.gl.STATIC_DRAW)
+        this.gl.bufferData(
+          this.gl.ARRAY_BUFFER,
+          new Float32Array(textureCoordinates),
+          this.gl.STATIC_DRAW
+        );
         this.gl.enableVertexAttribArray(textAtLoc);
         this.gl.vertexAttribPointer(textAtLoc, 2, this.gl.FLOAT, false, 0, 0);
-  
+
         const texture = this.gl.createTexture();
         this.gl.bindTexture(this.gl.TEXTURE_2D, texture);
-  
-        this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_S, this.gl.CLAMP_TO_EDGE);
-        this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_T, this.gl.CLAMP_TO_EDGE);
-        this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MIN_FILTER, this.gl.NEAREST);
-        this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MAG_FILTER, this.gl.NEAREST);
 
-        this.gl.texImage2D(this.gl.TEXTURE_2D, 0, this.gl.RGBA, this.gl.RGBA, this.gl.UNSIGNED_BYTE, image);
+        this.gl.texParameteri(
+          this.gl.TEXTURE_2D,
+          this.gl.TEXTURE_WRAP_S,
+          this.gl.CLAMP_TO_EDGE
+        );
+        this.gl.texParameteri(
+          this.gl.TEXTURE_2D,
+          this.gl.TEXTURE_WRAP_T,
+          this.gl.CLAMP_TO_EDGE
+        );
+        this.gl.texParameteri(
+          this.gl.TEXTURE_2D,
+          this.gl.TEXTURE_MIN_FILTER,
+          this.gl.NEAREST
+        );
+        this.gl.texParameteri(
+          this.gl.TEXTURE_2D,
+          this.gl.TEXTURE_MAG_FILTER,
+          this.gl.NEAREST
+        );
 
-      }
+        this.gl.texImage2D(
+          this.gl.TEXTURE_2D,
+          0,
+          this.gl.RGBA,
+          this.gl.RGBA,
+          this.gl.UNSIGNED_BYTE,
+          image
+        );
+      };
 
-      const gl = this.gl
+      const gl = this.gl;
       const boolLoc = this.gl.getUniformLocation(
         this.shaderProgram,
         ShaderAttribute.UseDiffuseTexture
-      )
+      );
       const specLoc = this.gl.getUniformLocation(
         this.shaderProgram,
         ShaderAttribute.UseSpecularTexture
-      )
-      
-      gl.uniform1f(
-        boolLoc,
-        1.0
       );
+
+      gl.uniform1f(boolLoc, 1.0);
       gl.activeTexture(gl.TEXTURE0);
       render(this.diffuse);
-      gl.uniform1i(gl.getUniformLocation(this.shaderProgram, ShaderAttribute.DiffuseTexture), 0);
-
-      gl.uniform1f(
-        specLoc,
-        1.0
+      gl.uniform1i(
+        gl.getUniformLocation(
+          this.shaderProgram,
+          ShaderAttribute.DiffuseTexture
+        ),
+        0
       );
+
+      gl.uniform1f(specLoc, 1.0);
 
       gl.activeTexture(gl.TEXTURE1);
       render(this.specular);
@@ -300,12 +328,14 @@ export class WebGL {
         0,
         node.geometry.getPosition().count
       );
-      gl.uniform1i(gl.getUniformLocation(this.shaderProgram, ShaderAttribute.SpecularTexture), 1);
-
-      
-
+      gl.uniform1i(
+        gl.getUniformLocation(
+          this.shaderProgram,
+          ShaderAttribute.SpecularTexture
+        ),
+        1
+      );
     }
-
 
     node.children.forEach((child: Object3D) => {
       this.draw(child, camera);
