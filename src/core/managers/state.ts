@@ -4,6 +4,7 @@ import { OrbitControls } from '../control/orbit';
 import { RGB, Coordinate } from '../interface';
 import { Mesh } from '../mesh';
 import { WebGL } from '../webgl';
+import { AnimationManager } from './animation';
 import { CameraManager } from './camera';
 import { SceneManager } from './scene';
 import { ShaderManager } from './shader';
@@ -30,9 +31,7 @@ export class StateManager {
   brightness = 32;
   directionLight = { x: 0, y: 0, z: 0 } as Coordinate;
   bumpTexture = 'A';
-  frame = '1 of 10';
-  fps = '30';
-  controller = { play: true, reverse: false, replay: false };
+
   projection = 'orthographic';
   cameraPosition = {
     radius: 1,
@@ -49,6 +48,7 @@ export class StateManager {
   sceneManager: SceneManager;
   cameraManager: CameraManager;
   orbitControl: OrbitControls;
+  animationManager: AnimationManager;
 
   isChangingUI: boolean = false;
 
@@ -57,14 +57,16 @@ export class StateManager {
     shaderManager: ShaderManager | null = null,
     sceneManager: SceneManager | null = null,
     cameraManager: CameraManager | null = null,
-    orbitControl: OrbitControls | null = null
+    orbitControl: OrbitControls | null = null,
+    animationManager: AnimationManager | null = null
   ) {
     if (
       webGL === null ||
       shaderManager === null ||
       sceneManager === null ||
       cameraManager === null ||
-      orbitControl === null
+      orbitControl === null ||
+      animationManager === null
     ) {
       throw new Error('StateManager must be initialized with all managers');
     }
@@ -74,6 +76,7 @@ export class StateManager {
     this.sceneManager = sceneManager;
     this.cameraManager = cameraManager;
     this.orbitControl = orbitControl;
+    this.animationManager = animationManager;
 
     //for emiter
     this.listeners = new Map();
@@ -84,7 +87,8 @@ export class StateManager {
     shaderManager: ShaderManager | null = null,
     sceneManager: SceneManager | null = null,
     cameraManager: CameraManager | null = null,
-    orbitControl: OrbitControls | null = null
+    orbitControl: OrbitControls | null = null,
+    animationManager: AnimationManager | null = null
   ): StateManager {
     if (!StateManager.instance) {
       StateManager.instance = new StateManager(
@@ -92,7 +96,8 @@ export class StateManager {
         shaderManager,
         sceneManager,
         cameraManager,
-        orbitControl
+        orbitControl,
+        animationManager
       );
     }
     return StateManager.instance;
@@ -156,6 +161,8 @@ export class StateManager {
     this.scale.z = mesh.scale.z;
     this.tweakpane?.scaleBinding.refresh();
 
+    this.tweakpane?.frameBinding.refresh();
+
     this.isChangingUI = false;
   }
 
@@ -166,6 +173,7 @@ export class StateManager {
 
   changeModel(newModel: string) {
     this.sceneManager.setScene(newModel);
+    this.animationManager.setAnimation(newModel);
     this.setUIWithSelectedMeshData();
     this.emit('sceneChange', this.sceneManager.get());
   }
@@ -179,16 +187,19 @@ export class StateManager {
     if (this.isChangingUI) return;
 
     ShaderManager.changeDiffuseColor(this.sceneManager.selectedMesh, newColor);
+    this.webGL.diffuseTexture = null;
   }
 
   changeDiffuseTexture(newTexture: string) {
     console.log(newTexture);
+    this.webGL.diffuseTexture = null;
   }
 
   changeSpecularColor(newColor: RGB) {
     console.log(newColor);
 
     ShaderManager.changeSpecularColor(this.sceneManager.selectedMesh, newColor);
+    this.webGL.specularTexture = null;
   }
 
   changeBrightness(brightness: number) {
@@ -204,6 +215,7 @@ export class StateManager {
 
   changeSpecularTexture(newTexture: string) {
     console.log(newTexture);
+    this.webGL.specularTexture = null;
   }
 
   changeBumpTexture(newTexture: string) {
@@ -212,36 +224,28 @@ export class StateManager {
 
   onPlay() {
     console.log('play');
-    this.controller.play = true;
+    this.animationManager.play = true;
   }
 
   onPause() {
     console.log('Pause');
-    this.controller.play = false;
-  }
-
-  onReverse() {
-    console.log('Reverse');
-  }
-
-  onReplay() {
-    console.log('Replay');
+    this.animationManager.play = false;
   }
 
   onNext() {
-    console.log('Next');
+    this.animationManager.onNext();
   }
 
   onPrev() {
-    console.log('Prev');
+    this.animationManager.onPrev();
   }
 
   onFirst() {
-    console.log('First');
+    this.animationManager.onFirst();
   }
 
   onLast() {
-    console.log('Last');
+    this.animationManager.onLast();
   }
 
   changeProjection(newProjection: string) {
