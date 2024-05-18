@@ -21,13 +21,13 @@ const onMounted = () => {
   const cameraManager = new CameraManager(canvas);
   const webGL = new WebGL(canvas, shaderManager.get());
   const orbitControl = new OrbitControls(cameraManager.get(), canvas);
-  
+
   const state = StateManager.getInstance(
     webGL,
     shaderManager,
     sceneManager,
     cameraManager,
-    orbitControl,
+    orbitControl
   );
 
   const tweakpane = new Tweakpane();
@@ -35,12 +35,20 @@ const onMounted = () => {
 
   const scenegraph = new SceneGraph();
 
+  let lastTime = 0;
+
   function render(time: number) {
-    // TODO: Animation
-    // time *= 0.001;
-    // const deltaTime = time - lastTime;
-    // lastTime = time;
-    webGL.draw(state.sceneManager.get(), state.cameraManager.get());
+    // Run of 30FPS
+    time *= 0.001;
+    const deltaTime = time - lastTime;
+
+    if (deltaTime >= 1 / 30) {
+      lastTime = time;
+
+      if (!webGL.gl.isContextLost()) {
+        webGL.draw(state.sceneManager.get(), state.cameraManager.get());
+      }
+    }
 
     requestAnimationFrame(render);
   }
