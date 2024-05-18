@@ -1,7 +1,7 @@
 import { Camera } from '../camera/Camera';
 import { ShaderAttribute } from '../constants/shader';
 import { BufferAttribute } from '../mesh/geometry/bufferAttribute';
-import ShaderMaterial from '../mesh/material/ShaderMaterial';
+import ShaderMaterial from '../mesh/material/shaderMaterial';
 import { Mesh } from './mesh';
 import { Object3D } from './object3D';
 
