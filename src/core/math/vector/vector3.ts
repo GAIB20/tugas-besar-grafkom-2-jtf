@@ -1,5 +1,6 @@
 import { Vector3Type } from './vector.d';
 import { Vector } from './vector';
+import { IVector3 } from '../../interface';
 
 /**
  * Vector3 class represents a 3D vector in a Cartesian coordinate system.
@@ -12,7 +13,11 @@ export class Vector3 extends Vector<Vector3Type> {
    * @param y - The y-coordinate of the vector.
    * @param z - The z-coordinate of the vector.
    */
-  constructor(public x: number = 0, public y: number = 0, public z: number = 0) {
+  constructor(
+    public x: number = 0,
+    public y: number = 0,
+    public z: number = 0
+  ) {
     super([x, y, z]);
   }
 
@@ -36,5 +41,13 @@ export class Vector3 extends Vector<Vector3Type> {
     ] as Vector3Type;
 
     return this.createVector(crossProduct);
+  }
+
+  toJSON(): IVector3 {
+    return {
+      x: this.x,
+      y: this.y,
+      z: this.z
+    };
   }
 }
