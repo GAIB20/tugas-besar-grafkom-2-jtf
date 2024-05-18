@@ -224,14 +224,22 @@ export class Tweakpane {
     });
 
     // Animation: Frame
-    this.frameBinding = animationFolder.addBinding(this.state, 'frame', {
-      readonly: true
-    });
+    this.frameBinding = animationFolder.addBinding(
+      this.state.animationManager,
+      'status',
+      {
+        readonly: true
+      }
+    );
 
     // Animation: FPS
-    this.fpsBinding = animationFolder.addBinding(this.state, 'fps', {
-      readonly: true
-    });
+    this.fpsBinding = animationFolder.addBinding(
+      this.state.animationManager,
+      'fps',
+      {
+        readonly: true
+      }
+    );
 
     // Animation: Controller
     const controllerFolder = animationFolder.addFolder({
@@ -254,18 +262,16 @@ export class Tweakpane {
       });
 
     // Controller: Reverse
-    this.reverseBtn = controllerFolder
-      .addBinding(this.state.controller, 'reverse')
-      .on('change', () => {
-        this.state.onReverse();
-      });
+    this.reverseBtn = controllerFolder.addBinding(
+      this.state.animationManager,
+      'reverse'
+    );
 
     // Controller: Auto-replay
-    this.replayBtn = controllerFolder
-      .addBinding(this.state.controller, 'replay')
-      .on('change', () => {
-        this.state.onReplay();
-      });
+    this.replayBtn = controllerFolder.addBinding(
+      this.state.animationManager,
+      'replay'
+    );
 
     // Controller: Next
     this.nextBtn = controllerFolder
