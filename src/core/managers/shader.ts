@@ -1,4 +1,4 @@
-import ShaderMaterial from '../../mesh/material/ShaderMaterial';
+import ShaderMaterial from '../../mesh/material/shaderMaterial';
 import BasicMaterial from '../../mesh/material/basic/BasicMaterial';
 import PhongMaterial from '../../mesh/material/phong/phongMaterial';
 import { Coordinate, RGB } from '../interface';
@@ -74,7 +74,11 @@ export class ShaderManager {
 
   static changeDirectionLight(node: Object3D, newDirection: Coordinate) {
     if (node instanceof Mesh) {
-      node.material.setDirectionLight(newDirection.x, newDirection.y, newDirection.z);
+      node.material.setDirectionLight(
+        newDirection.x,
+        newDirection.y,
+        newDirection.z
+      );
     }
 
     node.children.forEach((child: Object3D) => {
