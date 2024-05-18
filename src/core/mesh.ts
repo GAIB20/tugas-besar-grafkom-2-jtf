@@ -10,7 +10,6 @@ export class Mesh extends Object3D {
 
   constructor(geometry: BufferGeometry, material: ShaderMaterial) {
     super();
-    this.name = 'Mesh';
     this.type = 'mesh';
     this.geometry = geometry;
     this.material = material;
