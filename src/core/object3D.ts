@@ -3,6 +3,7 @@ import { Matrix } from './math/matrix/matrix';
 import { Vector3 } from './math/vector/vector3';
 import { Vector4 } from './math/vector/vector4';
 import { Matrix4Type } from './math/matrix/matrix.d';
+import { IObject3D } from './interface';
 
 export class Object3D {
   private _position: Vector3;
@@ -14,10 +15,12 @@ export class Object3D {
   private _parent?: Object3D;
   private _children: Object3D[];
   private _name: string;
+  private _type: string;
   visible = true;
 
   constructor() {
     this._name = '';
+    this._type = '';
     this._parent = undefined;
     this._position = new Vector3();
     this._quaternion = new Vector4();
@@ -35,15 +38,21 @@ export class Object3D {
     return this._name;
   }
 
+  public set type(type: string) {
+    this._type = type;
+  }
+
+  public get type(): string {
+    return this._type;
+  }
+
   public get position(): Vector3 {
     return this._position;
   }
 
-  
-  public set position(v : Vector3) {
+  public set position(v: Vector3) {
     this._position = v;
   }
-  
 
   public get rotation(): Vector3 {
     return this._rotation;
@@ -83,12 +92,11 @@ export class Object3D {
       this.computeWorldMatrix(false, true);
     }
   }
-  
-  public set rotation(v : Vector3) {
+
+  public set rotation(v: Vector3) {
     this._rotation = v;
     console.log(this._rotation);
   }
-  
 
   /**
    * computeLocalMatrix
@@ -147,5 +155,31 @@ export class Object3D {
   removeFromParent() {
     if (this.parent) this.parent.remove(this);
     return this;
+  }
+
+  toJSON(): IObject3D {
+    return {
+      name: this._name,
+      type: this._type,
+      position: this._position.toJSON(),
+      rotation: this._rotation.toJSON(),
+      scale: this._scale.toJSON(),
+      children: this._children.map((child: Object3D) => child.toJSON())
+    };
+  }
+
+  fromJSON(object: IObject3D) {
+    this.name = object.name;
+    this._position = new Vector3(
+      object.position.x,
+      object.position.y,
+      object.position.z
+    );
+    this._rotation = new Vector3(
+      object.rotation.x,
+      object.rotation.y,
+      object.rotation.z
+    );
+    this._scale = new Vector3(object.scale.x, object.scale.y, object.scale.z);
   }
 }
