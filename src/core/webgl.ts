@@ -421,7 +421,7 @@ export class WebGL {
         1
       );
 
-      gl.uniform1f(normLoc, 0.0);
+      gl.uniform1f(normLoc, 1.0);
 
       if (!this.normalTexture) {
         this.normalTexture = this.gl.createTexture();
