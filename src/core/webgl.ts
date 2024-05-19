@@ -276,7 +276,7 @@ export class WebGL {
           // Right
           0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0,
           // Left
-          0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0
+          0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0,
         ];
 
         node.geometry.setAttribute('uv', new BufferAttribute(new Float32Array(textureCoordinates), 2))
