@@ -15,6 +15,7 @@ export class WebGL {
   image: any;
   diffuse: any;
   specular: any;
+  parallax: any;
 
   uUseTexture: WebGLUniformLocation | null;
   attribSetters: { [name: string]: AttribSetter } = {};
@@ -28,6 +29,7 @@ export class WebGL {
   diffuseTexture: WebGLTexture | null = null;
   specularTexture: WebGLTexture | null = null;
   normalTexture: WebGLTexture | null = null;
+  parallaxTexture: WebGLTexture | null = null;
 
   constructor(canvas: HTMLCanvasElement, shader: ShaderMaterial) {
     const gl = canvas.getContext('webgl');
@@ -50,6 +52,8 @@ export class WebGL {
     this.diffuse.src = './diffuse.png';
     this.specular = new Image();
     this.specular.src = './specular.png';
+    this.parallax = new Image();
+    this.parallax.src = './parallax.png';
     this.createShaderProgram();
   }
 
@@ -382,6 +386,10 @@ export class WebGL {
         this.shaderProgram,
         ShaderAttribute.UseNormalTexture
       );
+      const paraLoc = this.gl.getUniformLocation(
+        this.shaderProgram,
+        ShaderAttribute.UseParallaxTexture
+      );
 
       gl.uniform1f(boolLoc, 1.0);
 
@@ -413,7 +421,7 @@ export class WebGL {
         1
       );
 
-      gl.uniform1f(normLoc, 1.0);
+      gl.uniform1f(normLoc, 0.0);
 
       if (!this.normalTexture) {
         this.normalTexture = this.gl.createTexture();
@@ -426,6 +434,21 @@ export class WebGL {
           ShaderAttribute.NormalTexture
         ),
         2
+      );
+
+      gl.uniform1f(paraLoc, 0.1);
+
+      if (!this.normalTexture) {
+        this.normalTexture = this.gl.createTexture();
+      }
+      gl.activeTexture(gl.TEXTURE3);
+      render(this.parallax, this.parallaxTexture);
+      gl.uniform1i(
+        gl.getUniformLocation(
+          this.shaderProgram,
+          ShaderAttribute.ParallaxTexture
+        ),
+        3
       );
 
       // Draw the geometry

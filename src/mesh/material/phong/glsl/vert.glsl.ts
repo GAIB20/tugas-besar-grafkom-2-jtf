@@ -10,6 +10,7 @@ uniform mat4 u_viewProjectionMatrix;
 varying lowp vec3 v_fragPos;
 varying lowp vec3 v_normal;
 varying lowp mat3 TBN;
+varying lowp mat3 pTBN;
 
 varying vec2 v_texcoord;
 
@@ -57,6 +58,11 @@ void main() {
     T = normalize(T - dot(T, N) * N);
     vec3 B = cross(N, T);
     TBN = transpose(mat3(T, B, N));
+    vec3 pN = normalize(mat3(u_worldMatrix) * a_normal);
+    vec3 pT = normalize(mat3(u_worldMatrix) * a_tangent);
+    pT = normalize(pT - dot(pT, pN) * pN);
+    vec3 pB = cross(pN, pT);
+    pTBN = transpose(mat3(pT, pB, pN));
     v_fragPos = gl_Position.xyz / gl_Position.w;
     v_texcoord = a_texcoord;
 }

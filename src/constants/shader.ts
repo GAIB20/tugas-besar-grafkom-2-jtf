@@ -15,5 +15,7 @@ export enum ShaderAttribute {
   UseSpecularTexture = 'u_useSpecularTexture',
   NormalTexture = 'u_normalTexture',
   UseNormalTexture = 'u_useNormalTexture',
+  ParallaxTexture = 'u_parallaxTexture',
+  UseParallaxTexture = 'u_useParallaxTexture',
   ViewPosition = 'u_viewPos',
 }
