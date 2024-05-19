@@ -50,6 +50,14 @@ export class BufferGeometry {
     return this.getAttribute('normal');
   }
 
+  getUV() {
+    return this.getAttribute('uv');
+  }
+
+  getTangent() {
+    return this.getAttribute('tangent');
+  }
+
   calculateNormals(forceNewAttribute = false) {
     const positionAttribute = this.getPosition();
     if (!positionAttribute) return;
@@ -77,5 +85,49 @@ export class BufferGeometry {
       }
     }
     this.setAttribute('normal', normalAttribute);
+  }
+
+  calculateTangent() {
+    const positionAttribute = this.getPosition();
+    if (!positionAttribute) return;
+    const uvAttribute = this.getUV();
+    if (!uvAttribute) return;
+    const tangentAttribute = new BufferAttribute(
+      new Float32Array(positionAttribute.length),
+      positionAttribute.size
+    );
+
+    // Assume the positions are ordered as triangle faces
+    for (let i = 0; i < positionAttribute.count; i += 3) {
+      const p0 = new Vector3(...(positionAttribute.get(i) as Vector3Type));
+      const p1 = new Vector3(...(positionAttribute.get(i + 1) as Vector3Type));
+      const p2 = new Vector3(...(positionAttribute.get(i + 2) as Vector3Type));
+
+      const uv0 = new Vector3(...(uvAttribute.get(i) as Vector3Type));
+      const uv1 = new Vector3(...(uvAttribute.get(i + 1) as Vector3Type));
+      const uv2 = new Vector3(...(uvAttribute.get(i + 2) as Vector3Type));
+
+      const edge1 = p1.subtract(p0) as Vector3;
+      const edge2 = p2.subtract(p0) as Vector3;
+      const dUV1 = uv1.subtract(uv0) as Vector3;
+      const dUV2 = uv2.subtract(uv0) as Vector3;
+
+      const tangent: Vector3 = new Vector3();
+
+      const f = 1.0 / (dUV1.x * dUV2.y - dUV2.x * dUV1.y);
+
+      tangent.x = f * (dUV2.y * edge1.x - dUV1.y * edge2.x);
+      tangent.y = f * (dUV2.y * edge1.y - dUV1.y * edge2.y);
+      tangent.z = f * (dUV2.y * edge1.z - dUV1.y * edge2.z);
+      
+      const normalizedTangent = new Vector3(tangent.x, tangent.y, tangent.z).normalize() as Vector3;
+
+
+      // Set the tangent for each vertex in the face to the face tangent
+      for (let j = 0; j < 3; j++) {
+        tangentAttribute.set(i + j, [normalizedTangent.x, normalizedTangent.y, normalizedTangent.z]);
+      }
+    }
+    this.setAttribute('tangent', tangentAttribute);
   }
 }

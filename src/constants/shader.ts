@@ -1,6 +1,7 @@
 export enum ShaderAttribute {
   Position = 'a_position',
   Normal = 'a_normal',
+  Tangent = 'a_tangent',
   TexCoord = 'a_texcoord',
   ViewProjectionMatrix = 'u_viewProjectionMatrix',
   WorldMatrix = 'u_worldMatrix',
@@ -12,5 +13,7 @@ export enum ShaderAttribute {
   UseDiffuseTexture = 'u_useDiffuseTexture',
   SpecularTexture = 'u_specularTexture',
   UseSpecularTexture = 'u_useSpecularTexture',
+  NormalTexture = 'u_normalTexture',
+  UseNormalTexture = 'u_useNormalTexture',
   ViewPosition = 'u_viewPos',
 }
