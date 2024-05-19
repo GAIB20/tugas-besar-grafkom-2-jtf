@@ -23,9 +23,11 @@ export class WebGL {
 
   positionBuffers: Map<string, WebGLBuffer> = new Map();
   normalBuffers: Map<string, WebGLBuffer> = new Map();
+  tangentBuffers: Map<string, WebGLBuffer> = new Map();
 
   diffuseTexture: WebGLTexture | null = null;
   specularTexture: WebGLTexture | null = null;
+  normalTexture: WebGLTexture | null = null;
 
   constructor(canvas: HTMLCanvasElement, shader: ShaderMaterial) {
     const gl = canvas.getContext('webgl');
@@ -277,6 +279,46 @@ export class WebGL {
           0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0
         ];
 
+        node.geometry.setAttribute('uv', new BufferAttribute(new Float32Array(textureCoordinates), 2))
+        node.geometry.calculateTangent();
+
+        if (!this.tangentBuffers.has(node.name)) {
+          const buffer = this.gl.createBuffer();
+          if (buffer) {
+            this.tangentBuffers.set(node.name, buffer);
+          } else {
+            console.error('Failed to create buffer');
+            return;
+          }
+        }
+        const tangentBuffer = this.tangentBuffers.get(node.name);
+        if (tangentBuffer) {
+          this.gl.bindBuffer(this.gl.ARRAY_BUFFER, tangentBuffer);
+          this.gl.bufferData(
+            this.gl.ARRAY_BUFFER,
+            new Float32Array(node.geometry.getTangent().data),
+            this.gl.STATIC_DRAW
+          );
+        }
+
+        const tangentAttributeLocation = this.gl.getAttribLocation(
+          this.shaderProgram!,
+          ShaderAttribute.Tangent
+        );
+  
+        if (tangentAttributeLocation != -1) {
+          this.gl.enableVertexAttribArray(tangentAttributeLocation);
+          this.gl.vertexAttribPointer(
+            tangentAttributeLocation,
+            node.geometry.getTangent().size,
+            this.gl.FLOAT,
+            false,
+            0,
+            0
+          );
+        }
+        // console.log(node.geometry.getTangent().data);
+
         const textBuf = this.gl.createBuffer();
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, textBuf);
         const textAtLoc = this.gl.getAttribLocation(
@@ -336,6 +378,10 @@ export class WebGL {
         this.shaderProgram,
         ShaderAttribute.UseSpecularTexture
       );
+      const normLoc = this.gl.getUniformLocation(
+        this.shaderProgram,
+        ShaderAttribute.UseNormalTexture
+      );
 
       gl.uniform1f(boolLoc, 1.0);
 
@@ -365,6 +411,21 @@ export class WebGL {
           ShaderAttribute.SpecularTexture
         ),
         1
+      );
+
+      gl.uniform1f(normLoc, 1.0);
+
+      if (!this.normalTexture) {
+        this.normalTexture = this.gl.createTexture();
+      }
+      gl.activeTexture(gl.TEXTURE2);
+      render(this.image, this.normalTexture);
+      gl.uniform1i(
+        gl.getUniformLocation(
+          this.shaderProgram,
+          ShaderAttribute.NormalTexture
+        ),
+        2
       );
 
       // Draw the geometry
