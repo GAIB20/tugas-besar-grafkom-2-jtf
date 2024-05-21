@@ -9,7 +9,7 @@ export class AnimationManager {
   animation?: IAnimationClip;
   private personAnimation: IAnimationClip;
 
-  fps: number = 10;
+  fps: number = 30;
 
   status: string = '';
   frame: number = 0;
