@@ -366,14 +366,14 @@ export class WebGL {
           this.gl.NEAREST
         );
 
-        // this.gl.texImage2D(
-        //   this.gl.TEXTURE_2D,
-        //   0,
-        //   this.gl.RGBA,
-        //   this.gl.RGBA,
-        //   this.gl.UNSIGNED_BYTE,
-        //   image
-        // );
+        this.gl.texImage2D(
+          this.gl.TEXTURE_2D,
+          0,
+          this.gl.RGBA,
+          this.gl.RGBA,
+          this.gl.UNSIGNED_BYTE,
+          image
+        );
       };
 
       const gl = this.gl;
