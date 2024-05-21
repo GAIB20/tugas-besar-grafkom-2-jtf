@@ -38,24 +38,19 @@ const onMounted = () => {
 
   const scenegraph = new SceneGraph();
 
-  let lastTime = 0;
+  let lastFrameTime: number;
 
-  function render(time: number) {
-    // Run of 30FPS
-    time *= 0.001;
-    const deltaTime = time - lastTime;
+  function runAnim(currentTime?: number) {
+    if (!currentTime) currentTime = 0;
+    if (lastFrameTime === undefined) lastFrameTime = currentTime;
+    const deltaSecond = (currentTime - lastFrameTime) / 1000;
 
-    if (deltaTime >= 1 / 30) {
-      lastTime = time;
+    animationManager.animate(deltaSecond);
+    webGL.draw(state.sceneManager.get(), state.cameraManager.get());
 
-      if (!webGL.gl.isContextLost()) {
-        webGL.draw(state.sceneManager.get(), state.cameraManager.get());
-      }
-    }
-
-    requestAnimationFrame(render);
+    lastFrameTime = currentTime;
+    requestAnimationFrame(runAnim);
   }
 
-  requestAnimationFrame(render);
-  // webGL.draw(state.sceneManager.get(), state.cameraManager.get());
+  runAnim();
 };

@@ -1,7 +1,7 @@
 import { Tweakpane } from '../../components/tweakpane';
 import { Model } from '../../constants/model';
 import { OrbitControls } from '../control/orbit';
-import { RGB, Coordinate } from '../interface';
+import { RGB, Coordinate, IVector3 } from '../interface';
 import { Mesh } from '../mesh';
 import { WebGL } from '../webgl';
 import { AnimationManager } from './animation';
@@ -234,6 +234,7 @@ export class StateManager {
 
   onNext() {
     this.animationManager.onNext();
+    // this.setUIWithSelectedMeshData();
   }
 
   onPrev() {
@@ -268,7 +269,9 @@ export class StateManager {
     console.log('Reset Camera');
   }
 
-  onTranslateChanged(newTranslate: Coordinate) {
+  onTranslateChanged(newTranslate?: Coordinate | IVector3) {
+    if (!newTranslate) return;
+
     this.sceneManager.selectedMesh.position.x = newTranslate.x;
     this.sceneManager.selectedMesh.position.y = newTranslate.y;
     this.sceneManager.selectedMesh.position.z = newTranslate.z;
@@ -276,7 +279,9 @@ export class StateManager {
     this.sceneManager.selectedMesh.computeWorldMatrix();
   }
 
-  onRotateChanged(newRotate: Coordinate) {
+  onRotateChanged(newRotate?: Coordinate | IVector3) {
+    if (!newRotate) return;
+
     this.sceneManager.selectedMesh.rotation.x = newRotate.x;
     this.sceneManager.selectedMesh.rotation.y = newRotate.y;
     this.sceneManager.selectedMesh.rotation.z = newRotate.z;
@@ -284,7 +289,9 @@ export class StateManager {
     this.sceneManager.selectedMesh.computeWorldMatrix();
   }
 
-  onScaleChanged(newScale: Coordinate) {
+  onScaleChanged(newScale?: Coordinate | IVector3) {
+    if (!newScale) return;
+
     this.sceneManager.selectedMesh.scale.x = newScale.x;
     this.sceneManager.selectedMesh.scale.y = newScale.y;
     this.sceneManager.selectedMesh.scale.z = newScale.z;

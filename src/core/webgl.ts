@@ -280,10 +280,13 @@ export class WebGL {
           // Right
           0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0,
           // Left
-          0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0,
+          0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0
         ];
 
-        node.geometry.setAttribute('uv', new BufferAttribute(new Float32Array(textureCoordinates), 2))
+        node.geometry.setAttribute(
+          'uv',
+          new BufferAttribute(new Float32Array(textureCoordinates), 2)
+        );
         node.geometry.calculateTangent();
 
         if (!this.tangentBuffers.has(node.name)) {
@@ -309,7 +312,7 @@ export class WebGL {
           this.shaderProgram!,
           ShaderAttribute.Tangent
         );
-  
+
         if (tangentAttributeLocation != -1) {
           this.gl.enableVertexAttribArray(tangentAttributeLocation);
           this.gl.vertexAttribPointer(
@@ -363,14 +366,14 @@ export class WebGL {
           this.gl.NEAREST
         );
 
-        this.gl.texImage2D(
-          this.gl.TEXTURE_2D,
-          0,
-          this.gl.RGBA,
-          this.gl.RGBA,
-          this.gl.UNSIGNED_BYTE,
-          image
-        );
+        // this.gl.texImage2D(
+        //   this.gl.TEXTURE_2D,
+        //   0,
+        //   this.gl.RGBA,
+        //   this.gl.RGBA,
+        //   this.gl.UNSIGNED_BYTE,
+        //   image
+        // );
       };
 
       const gl = this.gl;

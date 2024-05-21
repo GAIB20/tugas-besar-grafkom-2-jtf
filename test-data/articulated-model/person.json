@@ -113,7 +113,7 @@
           }
         },
         {
-          "name": "LeftShoulder",
+          "name": "RightShoulder",
           "type": "mesh",
           "position": {
             "x": 125,

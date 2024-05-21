@@ -2,64 +2,620 @@
   {
     "Person": {
       "position": {
-        "x": 1,
-        "y": 2,
-        "z": 3
+        "x": 0,
+        "y": 0,
+        "z": 0
       },
       "rotation": {
-        "x": 1,
-        "y": 2,
-        "z": 3
+        "x": 0,
+        "y": 0,
+        "z": 0
       },
       "scale": {
         "x": 1,
-        "y": 2,
-        "z": 3
+        "y": 1,
+        "z": 1
+      }
+    },
+    "Body": {
+      "position": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    "Head": {
+      "position": {
+        "x": 0,
+        "y": 150,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
       }
     },
     "LeftShoulder": {
       "position": {
-        "x": 1,
-        "y": 2,
-        "z": 3
+        "x": -125,
+        "y": 90,
+        "z": 0
       },
       "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
         "x": 1,
-        "y": 2,
-        "z": 3
+        "y": 1,
+        "z": 1
+      }
+    },
+    "LeftArm": {
+      "position": {
+        "x": -12.5,
+        "y": -87.5,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    "RightShoulder": {
+      "position": {
+        "x": 125,
+        "y": 90,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
       }
     },
     "RightArm": {
+      "position": {
+        "x": 12.5,
+        "y": -87.5,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
       "scale": {
         "x": 1,
-        "y": 2,
-        "z": 3
+        "y": 1,
+        "z": 1
+      }
+    },
+    "LeftFoot": {
+      "position": {
+        "x": -40,
+        "y": -200,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    "RightFoot": {
+      "position": {
+        "x": 40,
+        "y": -200,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
       }
     }
   },
   {
     "Person": {
+      "position": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
       "rotation": {
-        "x": 1,
-        "y": 2,
-        "z": 3
+        "x": 0,
+        "y": 0,
+        "z": 0
       },
       "scale": {
         "x": 1,
-        "y": 2,
-        "z": 3
+        "y": 1,
+        "z": 1
+      }
+    },
+    "Body": {
+      "position": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    "Head": {
+      "position": {
+        "x": 0,
+        "y": 150,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
       }
     },
     "LeftShoulder": {
       "position": {
-        "x": 1,
-        "y": 2,
-        "z": 3
+        "x": -125,
+        "y": 90,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
       },
       "scale": {
         "x": 1,
-        "y": 2,
-        "z": 3
+        "y": 1,
+        "z": 1
+      }
+    },
+    "LeftArm": {
+      "position": {
+        "x": -12.5,
+        "y": -65.5,
+        "z": 30
+      },
+      "rotation": {
+        "x": -30,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    "RightShoulder": {
+      "position": {
+        "x": 125,
+        "y": 90,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    "RightArm": {
+      "position": {
+        "x": 12.5,
+        "y": -87.5,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    "LeftFoot": {
+      "position": {
+        "x": -40,
+        "y": -200,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    "RightFoot": {
+      "position": {
+        "x": 40,
+        "y": -180,
+        "z": 50
+      },
+      "rotation": {
+        "x": -30,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    }
+  },
+  {
+    "Person": {
+      "position": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    "Body": {
+      "position": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    "Head": {
+      "position": {
+        "x": 0,
+        "y": 150,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    "LeftShoulder": {
+      "position": {
+        "x": -125,
+        "y": 90,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    "LeftArm": {
+      "position": {
+        "x": -12.5,
+        "y": -65.5,
+        "z": -30
+      },
+      "rotation": {
+        "x": 30,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    "RightShoulder": {
+      "position": {
+        "x": 125,
+        "y": 90,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    "RightArm": {
+      "position": {
+        "x": 12.5,
+        "y": -65.5,
+        "z": 30
+      },
+      "rotation": {
+        "x": -30,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    "LeftFoot": {
+      "position": {
+        "x": -40,
+        "y": -180,
+        "z": 50
+      },
+      "rotation": {
+        "x": -30,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    "RightFoot": {
+      "position": {
+        "x": 40,
+        "y": -180,
+        "z": -50
+      },
+      "rotation": {
+        "x": 30,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    }
+  },
+  {
+    "Person": {
+      "position": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    "Body": {
+      "position": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    "Head": {
+      "position": {
+        "x": 0,
+        "y": 150,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    "LeftShoulder": {
+      "position": {
+        "x": -125,
+        "y": 90,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    "LeftArm": {
+      "position": {
+        "x": -12.5,
+        "y": -87.5,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    "RightShoulder": {
+      "position": {
+        "x": 125,
+        "y": 90,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    "RightArm": {
+      "position": {
+        "x": 12.5,
+        "y": -87.5,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    "LeftFoot": {
+      "position": {
+        "x": -40,
+        "y": -200,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    "RightFoot": {
+      "position": {
+        "x": 40,
+        "y": -200,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
       }
     }
   }

@@ -5,9 +5,10 @@ import BasicMaterial from '../../mesh/material/basic/BasicMaterial';
 import { Mesh } from '../mesh';
 import { Object3D } from '../object3D';
 import { Scene } from '../scene';
-import { IMesh, IObject3D } from '../interface';
+import { IAnimation, IMesh, IObject3D } from '../interface';
 import PersonJSON from '../../../test-data/articulated-model/person.json';
 import { Model } from '../../constants/model';
+import PhongMaterial from '../../mesh/material/phong/phongMaterial';
 
 export class SceneManager {
   scene: Scene;
@@ -58,57 +59,65 @@ export class SceneManager {
     );
 
     // Articulated: Person
-    const head = new Mesh(new BoxGeometry(50, 50, 50), new BasicMaterial());
+    const head = new Mesh(new BoxGeometry(50, 50, 50), new PhongMaterial());
     head.name = 'Head';
     head.position.y = 150;
 
-    const body = new Mesh(new BoxGeometry(200, 250, 50), new BasicMaterial());
+    const body = new Mesh(new BoxGeometry(200, 250, 50), new PhongMaterial());
     body.name = 'Body';
 
     const leftShoulder = new Mesh(
       new BoxGeometry(50, 25, 50),
-      new BasicMaterial()
+      new PhongMaterial()
     );
     leftShoulder.name = 'LeftShoulder';
     leftShoulder.position.x = -125;
     leftShoulder.position.y = 90;
 
-    const leftArm = new Mesh(new BoxGeometry(25, 150, 50), new BasicMaterial());
+    const leftArm = new Mesh(new BoxGeometry(25, 150, 50), new PhongMaterial());
     leftArm.name = 'LeftArm';
     leftArm.position.x = -12.5;
-    leftArm.position.y = -87.5;
+    leftArm.position.y = -65.5;
+    leftArm.position.z = -30;
+    leftArm.rotation.x = 30;
 
     const rightShoulder = new Mesh(
       new BoxGeometry(50, 25, 50),
-      new BasicMaterial()
+      new PhongMaterial()
     );
-    rightShoulder.name = 'LeftShoulder';
+    rightShoulder.name = 'RightShoulder';
     rightShoulder.position.x = 125;
     rightShoulder.position.y = 90;
 
     const rightArm = new Mesh(
       new BoxGeometry(25, 150, 50),
-      new BasicMaterial()
+      new PhongMaterial()
     );
     rightArm.name = 'RightArm';
     rightArm.position.x = 12.5;
-    rightArm.position.y = -87.5;
+    rightArm.position.y = -65.5;
+    rightArm.position.z = 30;
+    rightArm.rotation.x = -30;
 
     const leftFoot = new Mesh(
       new BoxGeometry(30, 200, 50),
-      new BasicMaterial()
+      new PhongMaterial()
     );
     leftFoot.name = 'LeftFoot';
     leftFoot.position.x = -40;
-    leftFoot.position.y = -200;
+    leftFoot.position.y = -180;
+    leftFoot.position.z = 50;
+    leftFoot.rotation.x = -30;
 
     const rightFoot = new Mesh(
       new BoxGeometry(30, 200, 50),
-      new BasicMaterial()
+      new PhongMaterial()
     );
     rightFoot.name = 'RightFoot';
     rightFoot.position.x = 40;
-    rightFoot.position.y = -200;
+    rightFoot.position.y = -180;
+    rightFoot.position.z = -50;
+    rightFoot.rotation.x = 30;
 
     leftShoulder.add(leftArm);
     rightShoulder.add(rightArm);
@@ -121,6 +130,11 @@ export class SceneManager {
 
     this.sceneE = new Scene().add(body);
     this.sceneE.name = 'Person';
+    // this.sceneE.position.z = 25;
+
+    // let animation = {};
+    // SceneManager.toAnimation(this.sceneE, animation);
+    // console.log(animation);
 
     // Articulated Person: from JSON
     this.person = SceneManager.loadJSON(PersonJSON);
@@ -128,6 +142,9 @@ export class SceneManager {
     this.scene = this.person;
     this.selectedMesh = this.scene;
     this.setSelectedMeshOnScene();
+
+    console.log(this.scene);
+    console.log(this.selectedMesh);
   }
 
   get() {
@@ -199,5 +216,19 @@ export class SceneManager {
       default:
         throw new Error(`Unsupported object type: ${object.type}`);
     }
+  }
+
+  static toAnimation(node: Object3D, animation: IAnimation) {
+    if (node instanceof Scene || node instanceof Mesh) {
+      animation[node.name] = {
+        position: node.position.toJSON(),
+        rotation: node.rotation.toJSON(),
+        scale: node.scale.toJSON()
+      };
+    }
+
+    node.children.forEach((child: Object3D) => {
+      SceneManager.toAnimation(child, animation);
+    });
   }
 }
