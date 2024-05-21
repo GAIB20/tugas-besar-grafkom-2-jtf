@@ -438,8 +438,8 @@ export class WebGL {
 
       gl.uniform1f(paraLoc, 0.1);
 
-      if (!this.normalTexture) {
-        this.normalTexture = this.gl.createTexture();
+      if (!this.parallaxTexture) {
+        this.parallaxTexture = this.gl.createTexture();
       }
       gl.activeTexture(gl.TEXTURE3);
       render(this.parallax, this.parallaxTexture);

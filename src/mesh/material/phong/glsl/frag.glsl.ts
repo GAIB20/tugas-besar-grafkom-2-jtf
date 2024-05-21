@@ -20,10 +20,40 @@ varying lowp mat3 TBN;
 varying lowp mat3 pTBN;
 varying vec2 v_texcoord;
 
-vec2 parallaxMapping(vec2 texCoords, vec3 viewDir)
-{ 
-    float height =  1.0 - texture2D(u_parallaxTexture, v_texcoord).r;     
-    return v_texcoord - viewDir.xy * (height * u_useParallaxTexture);        
+vec2 parallaxMapping(vec2 texCoords, vec3 viewDir) { 
+    const float minLayers = 8.0;
+    const float maxLayers = 32.0;
+    float numLayers = mix(maxLayers, minLayers, abs(dot(vec3(0.0, 0.0, 1.0), viewDir)));  
+    float layerDepth = 1.0 / numLayers;
+    float currentLayerDepth = 0.0;
+    vec2 P = viewDir.xy / viewDir.z * u_useParallaxTexture; 
+    vec2 deltaTexCoords = P / numLayers;
+
+    vec2 currentTexCoords = texCoords;
+    float currentDepthMapValue = 1.0 - texture2D(u_parallaxTexture, currentTexCoords).r;
+
+    vec2 prevTexCoords = currentTexCoords;
+    float prevDepthMapValue = currentDepthMapValue;
+
+    for (int i = 0; i < int(maxLayers); i++) {
+        currentTexCoords -= deltaTexCoords;
+        currentDepthMapValue = 1.0 - texture2D(u_parallaxTexture, currentTexCoords).r;
+        currentLayerDepth += layerDepth;
+
+        if (currentLayerDepth > currentDepthMapValue) {
+            prevTexCoords = currentTexCoords + deltaTexCoords;
+            prevDepthMapValue = 1.0 - texture2D(u_parallaxTexture, prevTexCoords).r;
+            break;
+        }
+    }
+
+    float afterDepth  = currentDepthMapValue - currentLayerDepth;
+    float beforeDepth = prevDepthMapValue - (currentLayerDepth - layerDepth);
+
+    float weight = afterDepth / (afterDepth - beforeDepth);
+    vec2 finalTexCoords = prevTexCoords * weight + currentTexCoords * (1.0 - weight);
+
+    return finalTexCoords;
 }
 
 void main() {
