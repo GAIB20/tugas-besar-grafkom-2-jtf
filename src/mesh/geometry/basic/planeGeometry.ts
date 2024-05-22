@@ -28,5 +28,15 @@ export class PlaneGeometry extends BufferGeometry {
     ]);
     this.setAttribute('position', new BufferAttribute(vertices, 3));
     this.calculateNormals();
+
+    const textureCoordinates = [
+      // Front
+      0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0,
+    ];
+    this.setAttribute(
+      'uv',
+      new BufferAttribute(new Float32Array(textureCoordinates), 2)
+    );
+    this.calculateTangent();
   }
 }
