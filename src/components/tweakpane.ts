@@ -2,6 +2,7 @@ import { ButtonApi, Pane } from 'tweakpane';
 import { BindingApi } from '@tweakpane/core';
 import { StateManager } from '../core/managers/state';
 import { Model } from '../constants/model';
+import { Ease } from '../constants/animation';
 
 export class Tweakpane {
   pane: Pane;
@@ -36,6 +37,8 @@ export class Tweakpane {
   swapFrameAfter: ButtonApi;
   saveFrame: ButtonApi;
   saveAnimation: ButtonApi;
+
+  ease: BindingApi;
 
   projectionBinding: BindingApi;
   radiusBinding: BindingApi;
@@ -242,6 +245,25 @@ export class Tweakpane {
         readonly: true
       }
     );
+
+    // Animation: Ease
+    this.ease = animationFolder
+      .addBinding(this.state.animationManager, 'ease', {
+        view: 'list',
+        label: 'Ease',
+        options: [
+          { text: Ease.Sine, value: Ease.Sine },
+          { text: Ease.Quad, value: Ease.Quad },
+          { text: Ease.Cubic, value: Ease.Cubic },
+          { text: Ease.Quart, value: Ease.Quart },
+          { text: Ease.Expo, value: Ease.Expo },
+          { text: Ease.Circ, value: Ease.Circ }
+        ],
+        value: Ease.Sine
+      })
+      .on('change', (e) => {
+        this.state.animationManager.changeEase(e.value);
+      });
 
     // Animation: Controller
     const controllerFolder = animationFolder.addFolder({
