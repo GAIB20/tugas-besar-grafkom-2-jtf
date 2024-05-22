@@ -257,8 +257,7 @@ export class StateManager {
 
   changeRadius(newRadius: number) {
     console.log(newRadius);
-    this.orbitControl.setDistance(newRadius);
-    this.orbitControl.update();
+    this.cameraManager.zoomCamera(newRadius);
   }
 
   changeCoordinate(newCoordinate: Coordinate) {

@@ -39,7 +39,7 @@ export class OrthographicCamera extends Camera {
       this.top,
       this.near,
       this.far,
-      this._zoom,
+      this.zoom,
     );
   }
 }

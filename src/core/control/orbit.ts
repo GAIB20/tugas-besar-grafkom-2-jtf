@@ -77,11 +77,17 @@ export class OrbitControls {
     private onMouseWheel(event: WheelEvent){
         if (!this.allowZoom) return;
         const delta = event.deltaY;
-        this._camera.zoom += delta;
+        this.camera.zoom += delta;
     }
 
     public setDistance(delta: number){
-        this._camera.zoom += delta;
+        console.log(this._camera.name);
+        console.log(delta);
+        if(this._camera.name === 'perspective camera'){
+            console.log("yes")
+        }else{
+            this._camera.zoom += delta;
+        }
     }
 
     public update() {

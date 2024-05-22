@@ -52,4 +52,9 @@ export class CameraManager {
       this.camera = this.perspectiveCamera;
     }
   }
+
+  zoomCamera(delta: number){
+    this.camera.zoom = delta;
+    this.camera.computeProjectionMatrix();
+  }
 }

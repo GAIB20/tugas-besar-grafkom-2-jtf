@@ -130,16 +130,17 @@ export class Matrix4 extends Matrix<Matrix4Type> {
     top: number,
     near: number,
     far: number,
-    zoom: number | null = null,
+    zoom : number = 1,
   ): Matrix<Matrix4Type> {
     const a = 1 / (right - left);
     const b = 1 / (top - bottom);
     const c = 1 / (near - far);
+    console.log(zoom)
     const rows: Matrix4Type = [
-      [2 * a, 0, 0, 0],
-      [0, 2 * b, 0, 0],
-      [0, 0, 2 * c, 0],
-      [(left + right) * -a, (top + bottom) * -b, (far + near) * c, 1]
+      [2 * a * zoom, 0, 0, 0],
+      [0, 2 * b * zoom, 0, 0],
+      [0, 0, 2 * c * zoom, 0],
+      [(left + right) * -a * zoom, (top + bottom) * -b * zoom, (far + near) * c * zoom, 1]
     ];
     const mat = new Matrix4();
     mat.rows = rows;
@@ -170,7 +171,7 @@ export class Matrix4 extends Matrix<Matrix4Type> {
       scale: number,
     ): Matrix<Matrix4Type> {
       const cot_angle = 1 / Math.tan(angle);
-      const orto = this.orthographic(left,right,bottom,top,near,far);
+      const orto = this.orthographic(left,right,bottom,top,near,far,scale);
       const rows : Matrix4Type = [
         [1, 0, 0, 0],
         [0, 1, 0, 0],

@@ -343,6 +343,7 @@ export class Tweakpane {
         value: 1
       })
       .on('change', (ev) => {
+        console.log(ev.value);
         this.state.changeRadius(ev.value);
       });
 
