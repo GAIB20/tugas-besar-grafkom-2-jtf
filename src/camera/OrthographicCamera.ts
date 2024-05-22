@@ -24,6 +24,7 @@ export class OrthographicCamera extends Camera {
     this.bottom = bottom;
     this.near = near;
     this.far = far;
+    this.position.z = this._zoom;
     // Jangan lupa untuk panggil computeProjectionMatrix() setiap
     // kali mengubah nilai left, right, top, bottom, near, atau far.
     this.computeProjectionMatrix();
@@ -39,7 +40,7 @@ export class OrthographicCamera extends Camera {
       this.top,
       this.near,
       this.far,
-      this._zoom,
+      this.zoom,
     );
   }
 }

@@ -20,6 +20,15 @@ export class PerspectiveCamera extends Camera {
     this.computeProjectionMatrix();
   }
 
+  public get zoom(): number {
+      return this._zoom;
+  }
+  public set zoom(d: number) {
+    this._zoom = d;
+    const zoomFactor = 400 - (this._zoom-1)/4 * 300
+    this.position.z = zoomFactor;
+  }
+
   computeProjectionMatrix() {
     // M4.orthographic() menghasilkan proyeksi matriks ortografik
     // dengan 6 tupel left, right, bottom, top, near, dan far.

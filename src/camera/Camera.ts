@@ -4,7 +4,7 @@ import { Object3D } from '../core/object3D';
 export class Camera extends Object3D {
   protected _projectionMatrix = new Matrix4().identity();
   private _invWorldMatrix = new Matrix4().identity();
-  protected _zoom: number = 0;
+  protected _zoom: number = 1;
   protected _angle: number = 45;
 
   constructor(type: string) {
