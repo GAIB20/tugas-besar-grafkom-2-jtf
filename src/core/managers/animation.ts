@@ -3,6 +3,7 @@ import PersonAnimation from '../../../test-data/articulated-model/person-animati
 import { Model } from '../../constants/model';
 import { StateManager } from './state';
 import { Object3D } from '../object3D';
+import { SceneManager } from './scene';
 
 export class AnimationManager {
   state?: StateManager;
@@ -24,6 +25,7 @@ export class AnimationManager {
     this.personAnimation = PersonAnimation;
 
     this.animation = this.personAnimation;
+
     this.resetStatus();
   }
 
@@ -31,11 +33,15 @@ export class AnimationManager {
     return this.animation![this.frame];
   }
 
-  animate(deltaSecond: number) {
-    if (!this.play) return;
+  private getState() {
     if (!this.state) {
       this.state = StateManager.getInstance();
     }
+  }
+
+  animate(deltaSecond: number) {
+    if (!this.play) return;
+    this.getState();
 
     this.deltaFrame += deltaSecond * this.fps;
     if (this.deltaFrame < 1) return;
@@ -88,6 +94,12 @@ export class AnimationManager {
     this.status = this.frame + 1 + ' of ' + this.getAnimationLength();
   }
 
+  private updateAll() {
+    this.updateStatus();
+    this.updateScene(this.state?.sceneManager.get());
+    this.state?.setUIWithSelectedMeshData();
+  }
+
   resetStatus() {
     this.frame = 0;
     this.play = false;
@@ -107,17 +119,13 @@ export class AnimationManager {
         return;
     }
 
-    if (!this.state) {
-      this.state = StateManager.getInstance();
-    }
+    this.getState();
 
     this.resetStatus();
   }
 
   onNext() {
-    if (!this.state) {
-      this.state = StateManager.getInstance();
-    }
+    this.getState();
 
     if (this.reverse) {
       if (this.frame < 1) {
@@ -129,15 +137,11 @@ export class AnimationManager {
       this.frame = (this.frame + 1) % this.getAnimationLength();
     }
 
-    this.updateStatus();
-    this.updateScene(this.state?.sceneManager.get());
-    this.state?.setUIWithSelectedMeshData();
+    this.updateAll();
   }
 
   onPrev() {
-    if (!this.state) {
-      this.state = StateManager.getInstance();
-    }
+    this.getState();
 
     if (!this.reverse) {
       if (this.frame < 1) {
@@ -149,34 +153,111 @@ export class AnimationManager {
       this.frame = (this.frame + 1) % this.getAnimationLength();
     }
 
-    this.updateStatus();
-    this.updateScene(this.state?.sceneManager.get());
-    this.state?.setUIWithSelectedMeshData();
+    this.updateAll();
   }
 
   onFirst() {
-    if (!this.state) {
-      this.state = StateManager.getInstance();
-    }
+    this.getState();
 
     this.frame = 0;
-    this.updateStatus();
-    this.updateScene(this.state?.sceneManager.get());
-    this.state?.setUIWithSelectedMeshData();
+    this.updateAll();
   }
 
   onLast() {
-    if (!this.state) {
-      this.state = StateManager.getInstance();
-    }
+    this.getState();
 
     this.frame = this.getAnimationLength() - 1;
-    this.updateStatus();
-    this.updateScene(this.state?.sceneManager.get());
-    this.state?.setUIWithSelectedMeshData();
+    this.updateAll();
   }
 
   getAnimationLength() {
     return this.animation ? this.animation.length : 0;
+  }
+
+  private getCurrentAnimationClip() {
+    this.getState();
+
+    const currentScene = this.state?.sceneManager.get();
+
+    if (!currentScene) return;
+
+    let animation = {};
+    SceneManager.toAnimation(currentScene, animation);
+    console.log(animation);
+
+    return animation;
+  }
+
+  addFirst() {
+    if (!this.animation) return;
+
+    const clip = this.getCurrentAnimationClip();
+    if (!clip) return;
+
+    this.animation?.unshift(clip);
+    this.onFirst();
+  }
+
+  addLast() {
+    if (!this.animation) return;
+
+    const clip = this.getCurrentAnimationClip();
+    if (!clip) return;
+
+    this.animation?.push(clip);
+    this.onLast();
+  }
+
+  deleteFrame() {
+    if (!this.animation) return;
+
+    this.animation.splice(this.frame, 1);
+    if (this.frame >= this.getAnimationLength()) {
+      this.frame = this.getAnimationLength() - 1;
+    }
+
+    this.updateAll();
+  }
+
+  swapFrameBefore() {
+    if (!this.animation || this.frame <= 0) return;
+
+    const temp = this.animation[this.frame];
+    this.animation[this.frame] = this.animation[this.frame - 1];
+    this.animation[this.frame - 1] = temp;
+    this.frame--;
+    this.updateAll();
+  }
+
+  swapFrameAfter() {
+    if (!this.animation || this.frame >= this.animation.length - 1) return;
+
+    const temp = this.animation[this.frame];
+    this.animation[this.frame] = this.animation[this.frame + 1];
+    this.animation[this.frame + 1] = temp;
+    this.frame++;
+    this.updateAll();
+  }
+
+  saveFrame() {
+    if (!this.animation) return;
+
+    const clip = this.getCurrentAnimationClip();
+    if (!clip) return;
+
+    this.animation[this.frame] = clip;
+  }
+
+  saveAnimation() {
+    const json = JSON.stringify(this.animation);
+    const blob = new Blob([json], { type: 'application/json' });
+    const link = document.createElement('a');
+
+    link.href = URL.createObjectURL(blob);
+    link.download = 'animation.json';
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   }
 }

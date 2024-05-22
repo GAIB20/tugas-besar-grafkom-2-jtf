@@ -8,7 +8,6 @@ import { Scene } from '../scene';
 import { IAnimation, IMesh, IObject3D } from '../interface';
 import PersonJSON from '../../../test-data/articulated-model/person.json';
 import { Model } from '../../constants/model';
-import PhongMaterial from '../../mesh/material/phong/phongMaterial';
 
 export class SceneManager {
   scene: Scene;
@@ -59,22 +58,22 @@ export class SceneManager {
     );
 
     // Articulated: Person
-    const head = new Mesh(new BoxGeometry(50, 50, 50), new PhongMaterial());
+    const head = new Mesh(new BoxGeometry(50, 50, 50), new BasicMaterial());
     head.name = 'Head';
     head.position.y = 150;
 
-    const body = new Mesh(new BoxGeometry(200, 250, 50), new PhongMaterial());
+    const body = new Mesh(new BoxGeometry(200, 250, 50), new BasicMaterial());
     body.name = 'Body';
 
     const leftShoulder = new Mesh(
       new BoxGeometry(50, 25, 50),
-      new PhongMaterial()
+      new BasicMaterial()
     );
     leftShoulder.name = 'LeftShoulder';
     leftShoulder.position.x = -125;
     leftShoulder.position.y = 90;
 
-    const leftArm = new Mesh(new BoxGeometry(25, 150, 50), new PhongMaterial());
+    const leftArm = new Mesh(new BoxGeometry(25, 150, 50), new BasicMaterial());
     leftArm.name = 'LeftArm';
     leftArm.position.x = -12.5;
     leftArm.position.y = -65.5;
@@ -83,7 +82,7 @@ export class SceneManager {
 
     const rightShoulder = new Mesh(
       new BoxGeometry(50, 25, 50),
-      new PhongMaterial()
+      new BasicMaterial()
     );
     rightShoulder.name = 'RightShoulder';
     rightShoulder.position.x = 125;
@@ -91,7 +90,7 @@ export class SceneManager {
 
     const rightArm = new Mesh(
       new BoxGeometry(25, 150, 50),
-      new PhongMaterial()
+      new BasicMaterial()
     );
     rightArm.name = 'RightArm';
     rightArm.position.x = 12.5;
@@ -101,7 +100,7 @@ export class SceneManager {
 
     const leftFoot = new Mesh(
       new BoxGeometry(30, 200, 50),
-      new PhongMaterial()
+      new BasicMaterial()
     );
     leftFoot.name = 'LeftFoot';
     leftFoot.position.x = -40;
@@ -111,7 +110,7 @@ export class SceneManager {
 
     const rightFoot = new Mesh(
       new BoxGeometry(30, 200, 50),
-      new PhongMaterial()
+      new BasicMaterial()
     );
     rightFoot.name = 'RightFoot';
     rightFoot.position.x = 40;
