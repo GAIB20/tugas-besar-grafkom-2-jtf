@@ -78,6 +78,15 @@ export class StateManager {
     this.orbitControl = orbitControl;
     this.animationManager = animationManager;
 
+    webGL.createTextureDiffuse('./diffuse.png');
+    webGL.enableTextureDiffuse(1.0);
+    webGL.createTextureSpecular('./specular.png');
+    webGL.enableTextureSpecular(1.0);
+    webGL.createTextureNormal('./test.png');
+    webGL.enableTextureNormal(1.0);
+    webGL.createTextureParallax('./parallax.png');
+    webGL.enableTextureParallax(0.1);
+
     //for emiter
     this.listeners = new Map();
   }

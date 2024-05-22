@@ -6,17 +6,17 @@ import { Mesh } from './mesh';
 import { Object3D } from './object3D';
 
 type AttribSetter = (v: BufferAttribute) => void;
-type Texture = {texture: WebGLTexture | null, isDirty: boolean};
+type Texture = {texture: WebGLTexture | null, value: number, isDirty: boolean};
 
 export class WebGL {
   gl: WebGLRenderingContext;
   shaderProgram: WebGLProgram | null;
   uViewMatrixLocation: WebGLUniformLocation | null;
   uColor: WebGLUniformLocation | null;
-  image: any;
-  diffuse: any;
-  specular: any;
-  parallax: any;
+  normal: HTMLImageElement;
+  diffuse: HTMLImageElement;
+  specular: HTMLImageElement;
+  parallax: HTMLImageElement;
 
   uUseTexture: WebGLUniformLocation | null;
   attribSetters: { [name: string]: AttribSetter } = {};
@@ -47,15 +47,63 @@ export class WebGL {
 
     this.shader = shader;
 
-    this.image = new Image();
-    this.image.src = './test.png';
+    this.normal = new Image();
+    this.normalTexture = {texture: this.gl.createTexture(), value: 0.0, isDirty: true};
+
     this.diffuse = new Image();
-    this.diffuse.src = './diffuse.png';
+    this.diffuseTexture = {texture: this.gl.createTexture(), value: 0.0, isDirty: true};
+
     this.specular = new Image();
-    this.specular.src = './specular.png';
+    this.specularTexture = {texture: this.gl.createTexture(), value: 0.0, isDirty: true};
+
     this.parallax = new Image();
-    this.parallax.src = './parallax.png';
+    this.parallaxTexture = {texture: this.gl.createTexture(), value: 0.0, isDirty: true};
+
     this.createShaderProgram();
+  }
+
+  createTextureDiffuse(image: string) {
+    this.diffuse.src = image;
+    this.diffuse.onload = () => {
+      this.diffuseTexture!.isDirty = true;
+    }
+  }
+
+  enableTextureDiffuse(value: number) {
+    this.diffuseTexture!.value = value;
+  }
+
+  createTextureSpecular(image: string) {
+    this.specular.src = image;
+    this.specular.onload = () => {
+      this.specularTexture!.isDirty = true;
+    }
+  }
+
+  enableTextureSpecular(value: number) {
+    this.specularTexture!.value = value;
+  }
+
+  createTextureNormal(image: string) {
+    this.normal.src = image;
+    this.normal.onload = () => {
+      this.normalTexture!.isDirty = true;
+    }
+  }
+
+  enableTextureNormal(value: number) {
+    this.normalTexture!.value = value;
+  }
+
+  createTextureParallax(image: string) {
+    this.parallax.src = image;
+    this.parallax.onload = () => {
+      this.parallaxTexture!.isDirty = true;
+    }
+  }
+
+  enableTextureParallax(value: number) {
+    this.parallaxTexture!.value = value;
   }
 
   createShaderProgram() {
@@ -253,6 +301,8 @@ export class WebGL {
         ),
         [camera.position.x, camera.position.y, camera.position.z]
       );
+      // console.log([camera.position.x, camera.position.y, camera.position.z])
+      // console.log(camera.position.coords);
       this.gl.uniform1f(
         this.gl.getUniformLocation(
           this.shaderProgram,
@@ -268,7 +318,7 @@ export class WebGL {
         this.shader.getDirectionLight().coords
       );
 
-      const render = (image: any, texture: Texture | null) => {
+      const render = (normal: any, texture: Texture | null) => {
         if (!this.tangentBuffers.has(node.name)) {
           const buffer = this.gl.createBuffer();
           if (buffer) {
@@ -351,14 +401,14 @@ export class WebGL {
             this.gl.RGBA,
             this.gl.RGBA,
             this.gl.UNSIGNED_BYTE,
-            image
+            normal
           );
           texture.isDirty = false;
         }
       };
 
       const gl = this.gl;
-      const boolLoc = this.gl.getUniformLocation(
+      const diffLoc = this.gl.getUniformLocation(
         this.shaderProgram,
         ShaderAttribute.UseDiffuseTexture
       );
@@ -375,13 +425,13 @@ export class WebGL {
         ShaderAttribute.UseParallaxTexture
       );
 
-      gl.uniform1f(boolLoc, 1.0);
-
+      
       if (!this.diffuseTexture?.texture) {
-        this.diffuseTexture = {texture: this.gl.createTexture(), isDirty: true};
+        this.diffuseTexture = {texture: this.gl.createTexture(), value: 0.0, isDirty: true};
       }
       gl.activeTexture(gl.TEXTURE0);
       render(this.diffuse, this.diffuseTexture);
+      gl.uniform1f(diffLoc, this.diffuseTexture.value);
       gl.uniform1i(
         gl.getUniformLocation(
           this.shaderProgram,
@@ -390,13 +440,13 @@ export class WebGL {
         0
       );
 
-      gl.uniform1f(specLoc, 1.0);
-
+      
       if (!this.specularTexture?.texture) {
-        this.specularTexture = {texture: this.gl.createTexture(), isDirty: true};
+        this.specularTexture = {texture: this.gl.createTexture(), value: 0.0, isDirty: true};
       }
       gl.activeTexture(gl.TEXTURE1);
       render(this.specular, this.specularTexture);
+      gl.uniform1f(specLoc, this.specularTexture.value);
       gl.uniform1i(
         gl.getUniformLocation(
           this.shaderProgram,
@@ -405,13 +455,13 @@ export class WebGL {
         1
       );
 
-      gl.uniform1f(normLoc, 1.0);
-
+      
       if (!this.normalTexture?.texture) {
-        this.normalTexture = {texture: this.gl.createTexture(), isDirty: true};
+        this.normalTexture = {texture: this.gl.createTexture(), value: 0.0, isDirty: true};
       }
       gl.activeTexture(gl.TEXTURE2);
-      render(this.image, this.normalTexture);
+      render(this.normal, this.normalTexture);
+      gl.uniform1f(normLoc, this.normalTexture.value);
       gl.uniform1i(
         gl.getUniformLocation(
           this.shaderProgram,
@@ -420,13 +470,13 @@ export class WebGL {
         2
       );
 
-      gl.uniform1f(paraLoc, 0.1);
-
+      
       if (!this.parallaxTexture?.texture) {
-        this.parallaxTexture = {texture: this.gl.createTexture(), isDirty: true};
+        this.parallaxTexture = {texture: this.gl.createTexture(), value: 0.0, isDirty: true};
       }
       gl.activeTexture(gl.TEXTURE3);
       render(this.parallax, this.parallaxTexture);
+      gl.uniform1f(paraLoc, this.parallaxTexture.value);
       gl.uniform1i(
         gl.getUniformLocation(
           this.shaderProgram,
@@ -569,7 +619,7 @@ export class WebGL {
   //       this.shader.getDirectionLight().coords
   //     );
 
-  //     const render = (image: any) => {
+  //     const render = (normal: any) => {
   //       const textureCoordinates = [
   //         // Front
   //         0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0,
@@ -629,7 +679,7 @@ export class WebGL {
   //         this.gl.RGBA,
   //         this.gl.RGBA,
   //         this.gl.UNSIGNED_BYTE,
-  //         image
+  //         normal
   //       );
   //     };
 
