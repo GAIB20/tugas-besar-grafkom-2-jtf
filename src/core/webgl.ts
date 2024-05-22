@@ -6,6 +6,7 @@ import { Mesh } from './mesh';
 import { Object3D } from './object3D';
 
 type AttribSetter = (v: BufferAttribute) => void;
+type Texture = {texture: WebGLTexture | null, isDirty: boolean};
 
 export class WebGL {
   gl: WebGLRenderingContext;
@@ -26,10 +27,10 @@ export class WebGL {
   normalBuffers: Map<string, WebGLBuffer> = new Map();
   tangentBuffers: Map<string, WebGLBuffer> = new Map();
 
-  diffuseTexture: WebGLTexture | null = null;
-  specularTexture: WebGLTexture | null = null;
-  normalTexture: WebGLTexture | null = null;
-  parallaxTexture: WebGLTexture | null = null;
+  diffuseTexture: Texture | null = null;
+  specularTexture: Texture | null = null;
+  normalTexture: Texture | null = null;
+  parallaxTexture: Texture | null = null;
 
   constructor(canvas: HTMLCanvasElement, shader: ShaderMaterial) {
     const gl = canvas.getContext('webgl');
@@ -267,28 +268,7 @@ export class WebGL {
         this.shader.getDirectionLight().coords
       );
 
-      const render = (image: any, texture: WebGLTexture | null) => {
-        const textureCoordinates = [
-          // Front
-          0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0,
-          // Back
-          0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0,
-          // Top
-          0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0,
-          // Bottom
-          0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0,
-          // Right
-          0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0,
-          // Left
-          0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0
-        ];
-
-        node.geometry.setAttribute(
-          'uv',
-          new BufferAttribute(new Float32Array(textureCoordinates), 2)
-        );
-        node.geometry.calculateTangent();
-
+      const render = (image: any, texture: Texture | null) => {
         if (!this.tangentBuffers.has(node.name)) {
           const buffer = this.gl.createBuffer();
           if (buffer) {
@@ -334,16 +314,14 @@ export class WebGL {
         );
         this.gl.bufferData(
           this.gl.ARRAY_BUFFER,
-          new Float32Array(textureCoordinates),
+          new Float32Array(node.geometry.getUV().data),
           this.gl.STATIC_DRAW
         );
         this.gl.enableVertexAttribArray(textAtLoc);
         this.gl.vertexAttribPointer(textAtLoc, 2, this.gl.FLOAT, false, 0, 0);
 
-        if (!texture) {
-          texture = this.gl.createTexture();
-        }
-        this.gl.bindTexture(this.gl.TEXTURE_2D, texture);
+        if(!texture?.texture) return;
+        this.gl.bindTexture(this.gl.TEXTURE_2D, texture?.texture);
 
         this.gl.texParameteri(
           this.gl.TEXTURE_2D,
@@ -366,14 +344,17 @@ export class WebGL {
           this.gl.NEAREST
         );
 
-        this.gl.texImage2D(
-          this.gl.TEXTURE_2D,
-          0,
-          this.gl.RGBA,
-          this.gl.RGBA,
-          this.gl.UNSIGNED_BYTE,
-          image
-        );
+        if(texture?.isDirty) {
+          this.gl.texImage2D(
+            this.gl.TEXTURE_2D,
+            0,
+            this.gl.RGBA,
+            this.gl.RGBA,
+            this.gl.UNSIGNED_BYTE,
+            image
+          );
+          texture.isDirty = false;
+        }
       };
 
       const gl = this.gl;
@@ -396,8 +377,8 @@ export class WebGL {
 
       gl.uniform1f(boolLoc, 1.0);
 
-      if (!this.diffuseTexture) {
-        this.diffuseTexture = this.gl.createTexture();
+      if (!this.diffuseTexture?.texture) {
+        this.diffuseTexture = {texture: this.gl.createTexture(), isDirty: true};
       }
       gl.activeTexture(gl.TEXTURE0);
       render(this.diffuse, this.diffuseTexture);
@@ -411,8 +392,8 @@ export class WebGL {
 
       gl.uniform1f(specLoc, 1.0);
 
-      if (!this.specularTexture) {
-        this.specularTexture = this.gl.createTexture();
+      if (!this.specularTexture?.texture) {
+        this.specularTexture = {texture: this.gl.createTexture(), isDirty: true};
       }
       gl.activeTexture(gl.TEXTURE1);
       render(this.specular, this.specularTexture);
@@ -426,8 +407,8 @@ export class WebGL {
 
       gl.uniform1f(normLoc, 1.0);
 
-      if (!this.normalTexture) {
-        this.normalTexture = this.gl.createTexture();
+      if (!this.normalTexture?.texture) {
+        this.normalTexture = {texture: this.gl.createTexture(), isDirty: true};
       }
       gl.activeTexture(gl.TEXTURE2);
       render(this.image, this.normalTexture);
@@ -441,8 +422,8 @@ export class WebGL {
 
       gl.uniform1f(paraLoc, 0.1);
 
-      if (!this.parallaxTexture) {
-        this.parallaxTexture = this.gl.createTexture();
+      if (!this.parallaxTexture?.texture) {
+        this.parallaxTexture = {texture: this.gl.createTexture(), isDirty: true};
       }
       gl.activeTexture(gl.TEXTURE3);
       render(this.parallax, this.parallaxTexture);

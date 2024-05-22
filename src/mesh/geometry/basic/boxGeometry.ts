@@ -59,6 +59,26 @@ export class BoxGeometry extends BufferGeometry {
     ]);
     this.setAttribute('position', new BufferAttribute(vertices, 3));
     this.calculateNormals();
+
+    const textureCoordinates = [
+      // Front
+      0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0,
+      // Back
+      0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0,
+      // Top
+      0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0,
+      // Bottom
+      0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0,
+      // Right
+      0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0,
+      // Left
+      0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0
+    ];
+    this.setAttribute(
+      'uv',
+      new BufferAttribute(new Float32Array(textureCoordinates), 2)
+    );
+    this.calculateTangent();
   }
 
   toJSON(): IBoxGeometry {
