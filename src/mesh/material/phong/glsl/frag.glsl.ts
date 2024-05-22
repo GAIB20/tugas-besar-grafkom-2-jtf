@@ -61,11 +61,8 @@ void main() {
     vec3 L = normalize(u_lightPos - v_fragPos);
     vec3 V = normalize(u_viewPos - v_fragPos);
     vec2 TexCoord = v_texcoord;
-    vec3 HV;
-    // if(u_useDiffuseTexture > 0.0) {
-    //     vec3 texNormal = 2.0 * texture2D(u_diffuseTexture, TexCoord).rgb - 1.0;
-    //     N = normalize(N + normalize(texNormal));
-    // }
+    vec3 HV = V;
+
     if(u_useNormalTexture > 0.0) {
         vec3 tangentLightPos = TBN * u_lightPos;
         vec3 tangentViewPos = TBN * u_viewPos;
@@ -94,6 +91,7 @@ void main() {
         L = normalize(tangentLightPos - tangentFragPos);
         HV = normalize(L + V);
     }
+    
     // Lambert's cosine law
     float lambertian = max(dot(N, L), 0.0);
     float specular = 0.0;
