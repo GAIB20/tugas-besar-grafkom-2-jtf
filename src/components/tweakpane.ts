@@ -2,6 +2,7 @@ import { ButtonApi, Pane } from 'tweakpane';
 import { BindingApi } from '@tweakpane/core';
 import { StateManager } from '../core/managers/state';
 import { Model } from '../constants/model';
+import { Ease } from '../constants/animation';
 
 export class Tweakpane {
   pane: Pane;
@@ -29,6 +30,16 @@ export class Tweakpane {
   prevBtn: ButtonApi;
   firstBtn: ButtonApi;
   lastBtn: ButtonApi;
+
+  addLast: ButtonApi;
+  addFirst: ButtonApi;
+  deleteFrame: ButtonApi;
+  swapFrameBefore: ButtonApi;
+  swapFrameAfter: ButtonApi;
+  saveFrame: ButtonApi;
+  saveAnimation: ButtonApi;
+
+  ease: BindingApi;
 
   projectionBinding: BindingApi;
   radiusBinding: BindingApi;
@@ -111,10 +122,7 @@ export class Tweakpane {
 
     // Diffuse: Color
     this.diffuseColorBinding = diffuseFolder
-      .addBinding(this.state, 'diffuseColor', {
-        picker: 'inline',
-        expanded: true
-      })
+      .addBinding(this.state, 'diffuseColor', {})
       .on('change', (e) => {
         this.state.changeDiffuseColor(e.value);
       });
@@ -142,10 +150,7 @@ export class Tweakpane {
 
     // Specular: Color
     this.specularColorBinding = specularFolder
-      .addBinding(this.state, 'specularColor', {
-        picker: 'inline',
-        expanded: true
-      })
+      .addBinding(this.state, 'specularColor', {})
       .on('change', (e) => {
         this.state.changeSpecularColor(e.value);
       });
@@ -256,6 +261,25 @@ export class Tweakpane {
       }
     );
 
+    // Animation: Ease
+    this.ease = animationFolder
+      .addBinding(this.state.animationManager, 'ease', {
+        view: 'list',
+        label: 'Ease',
+        options: [
+          { text: Ease.Sine, value: Ease.Sine },
+          { text: Ease.Quad, value: Ease.Quad },
+          { text: Ease.Cubic, value: Ease.Cubic },
+          { text: Ease.Quart, value: Ease.Quart },
+          { text: Ease.Expo, value: Ease.Expo },
+          { text: Ease.Circ, value: Ease.Circ }
+        ],
+        value: Ease.Sine
+      })
+      .on('change', (e) => {
+        this.state.animationManager.changeEase(e.value);
+      });
+
     // Animation: Controller
     const controllerFolder = animationFolder.addFolder({
       title: 'Controller',
@@ -314,6 +338,54 @@ export class Tweakpane {
       .addButton({ title: 'Last' })
       .on('click', () => {
         this.state.onLast();
+      });
+
+    // Animation: Editor
+    const editorFolder = animationFolder.addFolder({
+      title: 'Editor',
+      expanded: true
+    });
+
+    this.addFirst = editorFolder
+      .addButton({ title: 'Add First' })
+      .on('click', () => {
+        this.state.animationManager.addFirst();
+      });
+
+    this.addLast = editorFolder
+      .addButton({ title: 'Add Last' })
+      .on('click', () => {
+        this.state.animationManager.addLast();
+      });
+
+    this.deleteFrame = editorFolder
+      .addButton({ title: 'Delete Frame' })
+      .on('click', () => {
+        this.state.animationManager.deleteFrame();
+      });
+
+    this.swapFrameBefore = editorFolder
+      .addButton({ title: 'Swap Frame Before' })
+      .on('click', () => {
+        this.state.animationManager.swapFrameBefore();
+      });
+
+    this.swapFrameAfter = editorFolder
+      .addButton({ title: 'Swap Frame After' })
+      .on('click', () => {
+        this.state.animationManager.swapFrameAfter();
+      });
+
+    this.saveFrame = editorFolder
+      .addButton({ title: 'Save Frame' })
+      .on('click', () => {
+        this.state.animationManager.saveFrame();
+      });
+
+    this.saveAnimation = editorFolder
+      .addButton({ title: 'Save Animation' })
+      .on('click', () => {
+        this.state.animationManager.saveAnimation();
       });
 
     /**
@@ -401,9 +473,9 @@ export class Tweakpane {
 
     this.scaleBinding = objectControllerFolder
       .addBinding(this.state, 'scale', {
-        x: { min: 0.1, max: 3, step: 0.1 },
-        y: { min: 0.1, max: 3, step: 0.1 },
-        z: { min: 0.1, max: 3, step: 0.1 }
+        x: { min: 0.1, max: 3, step: 0.05 },
+        y: { min: 0.1, max: 3, step: 0.05 },
+        z: { min: 0.1, max: 3, step: 0.05 }
       })
       .on('change', (ev) => {
         this.state.onScaleChanged(ev.value);

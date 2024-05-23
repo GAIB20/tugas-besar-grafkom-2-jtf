@@ -1,6 +1,6 @@
 import { Camera } from "../../camera/Camera";
 import { Object3D } from "../object3D";
-import { DEG2RAD, wrapAngle } from "../../constants/math";
+import { wrapAngle } from "../../constants/math";
 import { Vector3 } from "../math/vector/vector3";
 import { Vector3Type } from "../math/vector/vector.d";
 
@@ -36,7 +36,6 @@ export class OrbitControls {
         this.center.add(this._camera);
     }
     
-
     private onMouseDown(event: MouseEvent) {
         if(event.shiftKey){
             this.isPanning = true;
@@ -66,35 +65,30 @@ export class OrbitControls {
             rotation.y = row[1];
             rotation.z = row[2];
             this.center.rotation = rotation;
+
             
         }else if(this.isPanning && this.allowPan){
             this.center.position.x -= dx;
             this.center.position.y += dy;
         }
+        console.log(this.center.position);
 
     }
 
     private onMouseWheel(event: WheelEvent){
         if (!this.allowZoom) return;
-        const delta = event.deltaY;
-        this.camera.zoom += delta;
-    }
+        const delta = event.deltaY * -0.01; //
+        const newZoom = this._camera.zoom + delta;
 
-    public setDistance(delta: number){
-        console.log(this._camera.name);
-        console.log(delta);
-        if(this._camera.name === 'perspective camera'){
-            console.log("yes")
-        }else{
-            this._camera.zoom += delta;
-        }
+        this._camera.zoom = Math.min(Math.max(newZoom, 0), 2);
+        this._camera.computeProjectionMatrix();
     }
 
     public update() {
         if (this.target){
             this.center.position = this.target.position;
         }
-        this.center.computeLocalMatrix();
+        console.log(this._camera.position.x,this._camera.position.y, this._camera.position.z)
     }
 
     public destroy(){
