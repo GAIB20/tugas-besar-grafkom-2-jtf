@@ -2,6 +2,8 @@ import { Camera } from '../camera/Camera';
 import { ShaderAttribute } from '../constants/shader';
 import { BufferAttribute } from '../mesh/geometry/bufferAttribute';
 import ShaderMaterial from '../mesh/material/shaderMaterial';
+import { Matrix4 } from './math/matrix/matrix4';
+import { Vector4 } from './math/vector/vector4';
 import { Mesh } from './mesh';
 import { Object3D } from './object3D';
 
@@ -310,15 +312,14 @@ export class WebGL {
         ),
         specColor
       );
+          
       this.gl.uniform3fv(
         this.gl.getUniformLocation(
           this.shaderProgram,
           ShaderAttribute.ViewPosition
         ),
-        [camera.position.x, camera.position.y, camera.position.z]
+        camera.position.rotate(camera.orbitRotation.x, camera.orbitRotation.y, camera.orbitRotation.z).coords
       );
-      // console.log([camera.position.x, camera.position.y, camera.position.z])
-      // console.log(camera.position.coords);
       this.gl.uniform1f(
         this.gl.getUniformLocation(
           this.shaderProgram,
