@@ -4,6 +4,7 @@ import PhongMaterial from '../../mesh/material/phong/phongMaterial';
 import { Coordinate, RGB } from '../interface';
 import { Mesh } from '../mesh';
 import { Object3D } from '../object3D';
+import ReflectiveMaterial from '../../mesh/material/reflective/reflectiveMaterial';
 
 export class ShaderManager {
   shader: ShaderMaterial;
@@ -41,8 +42,10 @@ export class ShaderManager {
       let material;
       if (newMaterial == 'basic') {
         material = new BasicMaterial();
-      } else {
+      } else if (newMaterial == 'phong') {
         material = new PhongMaterial();
+      } else {
+        material = new ReflectiveMaterial();
       }
       node.material = material;
     }
