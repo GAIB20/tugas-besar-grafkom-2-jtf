@@ -1,5 +1,6 @@
 import { IAnimationClip } from '../interface';
 import PersonAnimation from '../../../test-data/articulated-model/person-animation.json';
+import BarneyAnimation from '../../../test-data/articulated-model/barney-animation.json';
 import { Model } from '../../constants/model';
 import { StateManager } from './state';
 import { Object3D } from '../object3D';
@@ -116,6 +117,9 @@ export class AnimationManager {
     switch (model) {
       case Model.Person:
         this.animation = this.personAnimation;
+        break;
+      case Model.Barney:
+        this.animation = BarneyAnimation;
         break;
       default:
         this.status = 'No Animation';

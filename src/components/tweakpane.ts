@@ -84,6 +84,7 @@ export class Tweakpane {
         label: 'Model',
         options: [
           { text: 'Person', value: Model.Person },
+          { text: 'Barney', value: Model.Barney },
           { text: 'A', value: 'A' },
           { text: 'B', value: 'B' },
           { text: 'C', value: 'C' },

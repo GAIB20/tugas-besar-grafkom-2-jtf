@@ -7,11 +7,13 @@ import { Object3D } from '../object3D';
 import { Scene } from '../scene';
 import { IAnimation, IMesh, IObject3D } from '../interface';
 import PersonJSON from '../../../test-data/articulated-model/person.json';
+import BarneyJSON from '../../../test-data/articulated-model/barney.json';
 import { Model } from '../../constants/model';
 
 export class SceneManager {
   scene: Scene;
   private person: Scene;
+  private barney: Scene;
   private sceneA: Scene;
   private sceneB: Scene;
   private sceneC: Scene;
@@ -58,12 +60,40 @@ export class SceneManager {
     );
 
     // Articulated: Person
-    const head = new Mesh(new BoxGeometry(50, 50, 50), new BasicMaterial());
-    head.name = 'Head';
-    head.position.y = 150;
+    const neck = new Mesh(new BoxGeometry(50, 50, 50), new BasicMaterial());
+    neck.name = 'Neck';
+    neck.position.y = 150;
 
-    const body = new Mesh(new BoxGeometry(200, 250, 50), new BasicMaterial());
+    const head = new Mesh(new BoxGeometry(70, 70, 180), new BasicMaterial());
+    head.name = 'Head';
+    head.position.y = 40;
+    head.position.z += 60;
+
+    const jaw = new Mesh(new BoxGeometry(60, 20, 130), new BasicMaterial());
+    jaw.name = 'Jaw';
+    jaw.position.y = -40;
+    jaw.position.z += -10;
+    jaw.rotation.x += 30;
+
+    head.add(jaw);
+
+    const body = new Mesh(new BoxGeometry(200, 250, 100), new BasicMaterial());
     body.name = 'Body';
+
+    const tail = new Mesh(new BoxGeometry(100, 100, 200), new BasicMaterial());
+    tail.name = 'Tail';
+    tail.position.z = -70;
+    tail.position.y = -90;
+    tail.rotation.x -= 30;
+
+    const tailtip = new Mesh(new BoxGeometry(50, 50, 200), new BasicMaterial());
+    tailtip.name = 'Tail Tip';
+    tailtip.position.z = -150;
+    tailtip.position.y = 30;
+    tailtip.rotation.x = 30;
+
+    body.add(tail);
+    tail.add(tailtip);
 
     const leftShoulder = new Mesh(
       new BoxGeometry(50, 25, 50),
@@ -118,17 +148,19 @@ export class SceneManager {
     rightFoot.position.z = -50;
     rightFoot.rotation.x = 30;
 
+    neck.add(head);
     leftShoulder.add(leftArm);
     rightShoulder.add(rightArm);
     body
-      .add(head)
+      .add(neck)
       .add(leftShoulder)
       .add(rightShoulder)
       .add(leftFoot)
       .add(rightFoot);
 
     this.sceneE = new Scene().add(body);
-    this.sceneE.name = 'Person';
+    this.sceneE.name = 'Barney';
+    console.log(this.sceneE)
     // this.sceneE.position.z = 25;
 
     // let animation = {};
@@ -137,6 +169,7 @@ export class SceneManager {
 
     // Articulated Person: from JSON
     this.person = SceneManager.loadJSON(PersonJSON);
+    this.barney = SceneManager.loadJSON(BarneyJSON);
 
     this.scene = this.person;
     this.selectedMesh = this.scene;
@@ -164,6 +197,8 @@ export class SceneManager {
   setScene(newScene: string) {
     if (newScene == Model.Person) {
       this.scene = this.person;
+    } else if (newScene == Model.Barney) {
+      this.scene = this.barney;
     } else if (newScene == 'A') {
       this.scene = this.sceneA;
     } else if (newScene == 'B') {
