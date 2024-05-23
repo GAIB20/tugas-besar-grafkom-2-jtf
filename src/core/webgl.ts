@@ -20,7 +20,6 @@ export class WebGL {
   specular: HTMLImageElement;
   parallax: HTMLImageElement;
 
-  uUseTexture: WebGLUniformLocation | null;
   attribSetters: { [name: string]: AttribSetter } = {};
 
   shader: ShaderMaterial;
@@ -33,6 +32,7 @@ export class WebGL {
   specularTexture: Texture | null = null;
   normalTexture: Texture | null = null;
   parallaxTexture: Texture | null = null;
+  reflectiveTexture: Texture | null = null;
 
   constructor(canvas: HTMLCanvasElement, shader: ShaderMaterial) {
     const gl = canvas.getContext('webgl');
@@ -44,8 +44,6 @@ export class WebGL {
     this.shaderProgram = null;
     this.uViewMatrixLocation = null;
     this.uColor = null;
-
-    this.uUseTexture = null;
 
     this.shader = shader;
 
@@ -60,6 +58,8 @@ export class WebGL {
 
     this.parallax = new Image();
     this.parallaxTexture = {texture: this.gl.createTexture(), value: 0.0, isDirty: true};
+
+    this.reflectiveTexture = {texture: this.gl.createTexture(), value: 0.0, isDirty: true};
 
     this.createShaderProgram();
   }
@@ -385,8 +385,10 @@ export class WebGL {
           new Float32Array(node.geometry.getUV().data),
           this.gl.STATIC_DRAW
         );
-        this.gl.enableVertexAttribArray(textAtLoc);
-        this.gl.vertexAttribPointer(textAtLoc, 2, this.gl.FLOAT, false, 0, 0);
+        if(textAtLoc != -1) {
+          this.gl.enableVertexAttribArray(textAtLoc);
+          this.gl.vertexAttribPointer(textAtLoc, 2, this.gl.FLOAT, false, 0, 0);
+        }
 
         if(!texture?.texture) return;
         this.gl.bindTexture(this.gl.TEXTURE_2D, texture?.texture);
@@ -424,6 +426,67 @@ export class WebGL {
           texture.isDirty = false;
         }
       };
+
+      const renderReflective = (texture: Texture | null) => {
+        if(!texture?.texture) return;
+        gl.bindTexture(gl.TEXTURE_CUBE_MAP, texture.texture);
+        const faceInfos = [
+          {
+            target: gl.TEXTURE_CUBE_MAP_POSITIVE_X, 
+            url: './test-data/textures/reflective/pos-x.jpg',
+          },
+          {
+            target: gl.TEXTURE_CUBE_MAP_NEGATIVE_X, 
+            url: './test-data/textures/reflective/neg-x.jpg',
+          },
+          {
+            target: gl.TEXTURE_CUBE_MAP_POSITIVE_Y, 
+            url: './test-data/textures/reflective/pos-y.jpg',
+          },
+          {
+            target: gl.TEXTURE_CUBE_MAP_NEGATIVE_Y, 
+            url: './test-data/textures/reflective/neg-y.jpg',
+          },
+          {
+            target: gl.TEXTURE_CUBE_MAP_POSITIVE_Z, 
+            url: './test-data/textures/reflective/pos-z.jpg',
+          },
+          {
+            target: gl.TEXTURE_CUBE_MAP_NEGATIVE_Z, 
+            url: './test-data/textures/reflective/neg-z.jpg',
+          },
+        ];
+        if(texture?.isDirty) {
+          faceInfos.forEach((faceInfo) => {
+            const {target, url} = faceInfo;
+          
+            // Upload the canvas to the cubemap face.
+            const level = 0;
+            const internalFormat = gl.RGBA;
+            const width = 512;
+            const height = 512;
+            const format = gl.RGBA;
+            const type = gl.UNSIGNED_BYTE;
+            
+            // setup each face so it's immediately renderable
+            gl.texImage2D(target, level, internalFormat, width, height, 0, format, type, null);
+          
+            // Asynchronously load an image
+            const image = new Image();
+            image.src = url;
+            image.addEventListener('load', function() {
+              // Now that the image has loaded upload it to the texture.
+              gl.bindTexture(gl.TEXTURE_CUBE_MAP, texture.texture);
+              gl.texImage2D(target, level, internalFormat, format, type, image);
+              gl.generateMipmap(gl.TEXTURE_CUBE_MAP);
+            });
+          });
+
+          texture.isDirty = false;
+        }
+        gl.generateMipmap(gl.TEXTURE_CUBE_MAP);
+        gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+      }
 
       const gl = this.gl;
       const diffLoc = this.gl.getUniformLocation(
@@ -502,6 +565,21 @@ export class WebGL {
         ),
         3
       );
+
+      if (!this.reflectiveTexture?.texture) {
+        this.reflectiveTexture = {texture: this.gl.createTexture(), value: 0.0, isDirty: true};
+      }
+      if(this.reflectiveTexture.value <= 0.0) {
+        gl.activeTexture(gl.TEXTURE4);
+        renderReflective(this.reflectiveTexture);
+        gl.uniform1i(
+          gl.getUniformLocation(
+            this.shaderProgram,
+            ShaderAttribute.ReflectiveTexture
+          ),
+          4
+        );
+      }
 
       // Draw the geometry
       this.gl.drawArrays(

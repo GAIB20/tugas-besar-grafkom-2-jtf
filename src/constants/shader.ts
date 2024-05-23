@@ -18,4 +18,5 @@ export enum ShaderAttribute {
   ParallaxTexture = 'u_parallaxTexture',
   UseParallaxTexture = 'u_useParallaxTexture',
   ViewPosition = 'u_viewPos',
+  ReflectiveTexture = 'u_reflectiveTexture',
 }
