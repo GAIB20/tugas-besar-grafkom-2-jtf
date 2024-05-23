@@ -8,6 +8,7 @@ import { Scene } from '../scene';
 import { IAnimation, IMesh, IObject3D } from '../interface';
 import PersonJSON from '../../../test-data/articulated-model/person.json';
 import BarneyJSON from '../../../test-data/articulated-model/barney.json';
+import BunnyJSON from '../../../test-data/articulated-model/bunny.json';
 import { Model } from '../../constants/model';
 import { HollowTriangle } from '../../mesh/geometry/hollow/HollowTriangle';
 
@@ -15,6 +16,7 @@ export class SceneManager {
   scene: Scene;
   private person: Scene;
   private barney: Scene;
+  private bunny: Scene;
   private sceneA: Scene;
   private sceneB: Scene;
   private sceneC: Scene;
@@ -67,109 +69,184 @@ export class SceneManager {
 
     this.sceneF.name = 'Hollow Triangle';
 
-    // Articulated: Person
-    const neck = new Mesh(new BoxGeometry(50, 50, 50), new BasicMaterial());
-    neck.name = 'Neck';
-    neck.position.y = 150;
-
-    const head = new Mesh(new BoxGeometry(70, 70, 180), new BasicMaterial());
-    head.name = 'Head';
-    head.position.y = 40;
-    head.position.z += 60;
-
-    const jaw = new Mesh(new BoxGeometry(60, 20, 130), new BasicMaterial());
-    jaw.name = 'Jaw';
-    jaw.position.y = -40;
-    jaw.position.z += -10;
-    jaw.rotation.x += 30;
-
-    head.add(jaw);
-
-    const body = new Mesh(new BoxGeometry(200, 250, 100), new BasicMaterial());
+    const body = new Mesh(new BoxGeometry(200, 200, 200), new BasicMaterial());
     body.name = 'Body';
 
-    const tail = new Mesh(new BoxGeometry(100, 100, 200), new BasicMaterial());
+    const head = new Mesh(new BoxGeometry(150, 150, 50), new BasicMaterial());
+    head.name = 'Head';
+    head.position.y = 80;
+    head.position.z += 120;
+
+    const nose = new Mesh(new BoxGeometry(50, 50, 30), new BasicMaterial());
+    nose.name = 'Nose';
+    nose.position.z += 40;
+    
+    const earLeft = new Mesh(new BoxGeometry(30, 150, 30), new BasicMaterial());
+    earLeft.name = 'Ear Left';
+    earLeft.position.y = 125;
+    earLeft.position.x = -44;
+    earLeft.rotation.z = 24;
+
+    const earRight = new Mesh(new BoxGeometry(30, 150, 30), new BasicMaterial());
+    earRight.name = 'Ear Right';
+    earRight.position.y = 125;
+    earRight.position.x = 44;
+    earRight.rotation.z = -24;
+
+    head.add(nose)
+        .add(earLeft)
+        .add(earRight)
+
+    const leftFrontLeg = new Mesh(new BoxGeometry(30, 150, 30), new BasicMaterial());
+    leftFrontLeg.name = 'Left Front Leg';
+    leftFrontLeg.position.x = -110;
+    leftFrontLeg.position.y = -100;
+    leftFrontLeg.position.z = 50;
+
+
+    const leftBottomLeg = new Mesh(new BoxGeometry(30, 150, 30), new BasicMaterial());
+    leftBottomLeg.name = 'Left Bottom Leg';
+    leftBottomLeg.position.x = -110;
+    leftBottomLeg.position.y = -100;
+    leftBottomLeg.position.z = -50;
+
+
+    const rightFrontLeg = new Mesh(new BoxGeometry(30, 150, 30), new BasicMaterial());
+    rightFrontLeg.name = 'Right Front Leg';
+    rightFrontLeg.position.x = 110;
+    rightFrontLeg.position.y = -100;
+    rightFrontLeg.position.z = 50;
+
+    const rightBottomLeg = new Mesh(new BoxGeometry(30, 150, 30), new BasicMaterial());
+    rightBottomLeg.name = 'Right Bottom Leg';
+    rightBottomLeg.position.x = 110;
+    rightBottomLeg.position.y = -100;
+    rightBottomLeg.position.z = -50;
+
+    const tail = new Mesh(new BoxGeometry(60, 60, 60), new BasicMaterial());
     tail.name = 'Tail';
-    tail.position.z = -70;
-    tail.position.y = -90;
-    tail.rotation.x -= 30;
+    tail.position.z = -110
 
-    const tailtip = new Mesh(new BoxGeometry(50, 50, 200), new BasicMaterial());
-    tailtip.name = 'Tail Tip';
-    tailtip.position.z = -150;
-    tailtip.position.y = 30;
-    tailtip.rotation.x = 30;
+    body.add(head)
+        .add(leftFrontLeg)
+        .add(leftBottomLeg)
+        .add(rightFrontLeg)
+        .add(rightBottomLeg)
+        .add(tail)
 
-    body.add(tail);
-    tail.add(tailtip);
+    // // Articulated: Bunny
+    // this.bunny = new Scene().add(
+    //   body
+    // );
+    // this.bunny.name = 'Bunny'; 
 
-    const leftShoulder = new Mesh(
-      new BoxGeometry(50, 25, 50),
-      new BasicMaterial()
+    // Articulated: Person
+    // const neck = new Mesh(new BoxGeometry(50, 50, 50), new BasicMaterial());
+    // neck.name = 'Neck';
+    // neck.position.y = 150;
+
+    // const head = new Mesh(new BoxGeometry(70, 70, 180), new BasicMaterial());
+    // head.name = 'Head';
+    // head.position.y = 40;
+    // head.position.z += 60;
+
+    // const jaw = new Mesh(new BoxGeometry(60, 20, 130), new BasicMaterial());
+    // jaw.name = 'Jaw';
+    // jaw.position.y = -40;
+    // jaw.position.z += -10;
+    // jaw.rotation.x += 30;
+
+    // head.add(jaw);
+
+    // console.log(head.toJSON)
+    // const body = new Mesh(new BoxGeometry(200, 250, 100), new BasicMaterial());
+    // body.name = 'Body';
+
+    // const tail = new Mesh(new BoxGeometry(100, 100, 200), new BasicMaterial());
+    // tail.name = 'Tail';
+    // tail.position.z = -70;
+    // tail.position.y = -90;
+    // tail.rotation.x -= 30;
+
+    // const tailtip = new Mesh(new BoxGeometry(50, 50, 200), new BasicMaterial());
+    // tailtip.name = 'Tail Tip';
+    // tailtip.position.z = -150;
+    // tailtip.position.y = 30;
+    // tailtip.rotation.x = 30;
+
+    // body.add(tail);
+    // tail.add(tailtip);
+
+    // const leftShoulder = new Mesh(
+    //   new BoxGeometry(50, 25, 50),
+    //   new BasicMaterial()
+    // );
+    // leftShoulder.name = 'LeftShoulder';
+    // leftShoulder.position.x = -125;
+    // leftShoulder.position.y = 90;
+
+    // const leftArm = new Mesh(new BoxGeometry(25, 150, 50), new BasicMaterial());
+    // leftArm.name = 'LeftArm';
+    // leftArm.position.x = -12.5;
+    // leftArm.position.y = -65.5;
+    // leftArm.position.z = -30;
+    // leftArm.rotation.x = 30;
+
+    // const rightShoulder = new Mesh(
+    //   new BoxGeometry(50, 25, 50),
+    //   new BasicMaterial()
+    // );
+    // rightShoulder.name = 'RightShoulder';
+    // rightShoulder.position.x = 125;
+    // rightShoulder.position.y = 90;
+
+    // const rightArm = new Mesh(
+    //   new BoxGeometry(25, 150, 50),
+    //   new BasicMaterial()
+    // );
+    // rightArm.name = 'RightArm';
+    // rightArm.position.x = 12.5;
+    // rightArm.position.y = -65.5;
+    // rightArm.position.z = 30;
+    // rightArm.rotation.x = -30;
+
+    // const leftFoot = new Mesh(
+    //   new BoxGeometry(30, 200, 50),
+    //   new BasicMaterial()
+    // );
+    // leftFoot.name = 'LeftFoot';
+    // leftFoot.position.x = -40;
+    // leftFoot.position.y = -180;
+    // leftFoot.position.z = 50;
+    // leftFoot.rotation.x = -30;
+
+    // const rightFoot = new Mesh(
+    //   new BoxGeometry(30, 200, 50),
+    //   new BasicMaterial()
+    // );
+    // rightFoot.name = 'RightFoot';
+    // rightFoot.position.x = 40;
+    // rightFoot.position.y = -180;
+    // rightFoot.position.z = -50;
+    // rightFoot.rotation.x = 30;
+
+    // neck.add(head);
+    // leftShoulder.add(leftArm);
+    // rightShoulder.add(rightArm);
+    // body
+    //   .add(neck)
+    //   .add(leftShoulder)
+    //   .add(rightShoulder)
+    //   .add(leftFoot)
+    //   .add(rightFoot);
+
+
+    this.sceneE = new Scene().add(
+      new Mesh(new HollowTriangle(400, 400, 200), new BasicMaterial())
     );
-    leftShoulder.name = 'LeftShoulder';
-    leftShoulder.position.x = -125;
-    leftShoulder.position.y = 90;
-
-    const leftArm = new Mesh(new BoxGeometry(25, 150, 50), new BasicMaterial());
-    leftArm.name = 'LeftArm';
-    leftArm.position.x = -12.5;
-    leftArm.position.y = -65.5;
-    leftArm.position.z = -30;
-    leftArm.rotation.x = 30;
-
-    const rightShoulder = new Mesh(
-      new BoxGeometry(50, 25, 50),
-      new BasicMaterial()
-    );
-    rightShoulder.name = 'RightShoulder';
-    rightShoulder.position.x = 125;
-    rightShoulder.position.y = 90;
-
-    const rightArm = new Mesh(
-      new BoxGeometry(25, 150, 50),
-      new BasicMaterial()
-    );
-    rightArm.name = 'RightArm';
-    rightArm.position.x = 12.5;
-    rightArm.position.y = -65.5;
-    rightArm.position.z = 30;
-    rightArm.rotation.x = -30;
-
-    const leftFoot = new Mesh(
-      new BoxGeometry(30, 200, 50),
-      new BasicMaterial()
-    );
-    leftFoot.name = 'LeftFoot';
-    leftFoot.position.x = -40;
-    leftFoot.position.y = -180;
-    leftFoot.position.z = 50;
-    leftFoot.rotation.x = -30;
-
-    const rightFoot = new Mesh(
-      new BoxGeometry(30, 200, 50),
-      new BasicMaterial()
-    );
-    rightFoot.name = 'RightFoot';
-    rightFoot.position.x = 40;
-    rightFoot.position.y = -180;
-    rightFoot.position.z = -50;
-    rightFoot.rotation.x = 30;
-
-    neck.add(head);
-    leftShoulder.add(leftArm);
-    rightShoulder.add(rightArm);
-    body
-      .add(neck)
-      .add(leftShoulder)
-      .add(rightShoulder)
-      .add(leftFoot)
-      .add(rightFoot);
-
-    this.sceneE = new Scene().add(body);
     this.sceneE.name = 'Barney';
-    console.log(this.sceneE)
-    // this.sceneE.position.z = 25;
+    // console.log(this.sceneE)
+    // // this.sceneE.position.z = 25;
 
     // let animation = {};
     // SceneManager.toAnimation(this.sceneE, animation);
@@ -178,6 +255,7 @@ export class SceneManager {
     // Articulated Person: from JSON
     this.person = SceneManager.loadJSON(PersonJSON);
     this.barney = SceneManager.loadJSON(BarneyJSON);
+    this.bunny = SceneManager.loadJSON(BunnyJSON);
 
     this.scene = this.person;
     this.selectedMesh = this.scene;
@@ -207,6 +285,8 @@ export class SceneManager {
       this.scene = this.person;
     } else if (newScene == Model.Barney) {
       this.scene = this.barney;
+    } else if (newScene == Model.Bunny){
+      this.scene = this.bunny;
     } else if (newScene == 'A') {
       this.scene = this.sceneA;
     } else if (newScene == 'B') {

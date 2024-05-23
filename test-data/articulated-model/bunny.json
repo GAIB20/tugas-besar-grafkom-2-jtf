@@ -1,0 +1,274 @@
+{
+    "name": "Bunny",
+    "type": "scene",
+    "position": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+    },
+    "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+    },
+    "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+    },
+    "children": [
+        {
+            "name": "Body",
+            "type": "mesh",
+            "position": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+            "rotation": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+            "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+            },
+            "children": [
+                {
+                    "name": "Head",
+                    "type": "mesh",
+                    "position": {
+                        "x": 0,
+                        "y": 80,
+                        "z": 120
+                    },
+                    "rotation": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                    },
+                    "scale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                    },
+                    "children": [
+                        {
+                            "name": "Nose",
+                            "type": "mesh",
+                            "position": {
+                                "x": 0,
+                                "y": 0,
+                                "z": 40
+                            },
+                            "rotation": {
+                                "x": 0,
+                                "y": 0,
+                                "z": 0
+                            },
+                            "scale": {
+                                "x": 1,
+                                "y": 1,
+                                "z": 1
+                            },
+                            "children": [],
+                            "geometry": {
+                                "width": 50,
+                                "height": 50,
+                                "depth": 30
+                            }
+                        },
+                        {
+                            "name": "Ear Left",
+                            "type": "mesh",
+                            "position": {
+                                "x": -44,
+                                "y": 125,
+                                "z": 0
+                            },
+                            "rotation": {
+                                "x": 0,
+                                "y": 0,
+                                "z": 24
+                            },
+                            "scale": {
+                                "x": 1,
+                                "y": 1,
+                                "z": 1
+                            },
+                            "children": [],
+                            "geometry": {
+                                "width": 30,
+                                "height": 150,
+                                "depth": 30
+                            }
+                        },
+                        {
+                            "name": "Ear Right",
+                            "type": "mesh",
+                            "position": {
+                                "x": 44,
+                                "y": 125,
+                                "z": 0
+                            },
+                            "rotation": {
+                                "x": 0,
+                                "y": 0,
+                                "z": -24
+                            },
+                            "scale": {
+                                "x": 1,
+                                "y": 1,
+                                "z": 1
+                            },
+                            "children": [],
+                            "geometry": {
+                                "width": 30,
+                                "height": 150,
+                                "depth": 30
+                            }
+                        }
+                    ],
+                    "geometry": {
+                        "width": 150,
+                        "height": 150,
+                        "depth": 50
+                    }
+                },
+                {
+                    "name": "Left Front Leg",
+                    "type": "mesh",
+                    "position": {
+                        "x": -110,
+                        "y": -100,
+                        "z": 50
+                    },
+                    "rotation": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                    },
+                    "scale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                    },
+                    "children": [],
+                    "geometry": {
+                        "width": 30,
+                        "height": 150,
+                        "depth": 30
+                    }
+                },
+                {
+                    "name": "Left Bottom Leg",
+                    "type": "mesh",
+                    "position": {
+                        "x": -110,
+                        "y": -100,
+                        "z": -50
+                    },
+                    "rotation": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                    },
+                    "scale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                    },
+                    "children": [],
+                    "geometry": {
+                        "width": 30,
+                        "height": 150,
+                        "depth": 30
+                    }
+                },
+                {
+                    "name": "Right Front Leg",
+                    "type": "mesh",
+                    "position": {
+                        "x": 110,
+                        "y": -100,
+                        "z": 50
+                    },
+                    "rotation": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                    },
+                    "scale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                    },
+                    "children": [],
+                    "geometry": {
+                        "width": 30,
+                        "height": 150,
+                        "depth": 30
+                    }
+                },
+                {
+                    "name": "Right Bottom Leg",
+                    "type": "mesh",
+                    "position": {
+                        "x": 110,
+                        "y": -100,
+                        "z": -50
+                    },
+                    "rotation": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                    },
+                    "scale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                    },
+                    "children": [],
+                    "geometry": {
+                        "width": 30,
+                        "height": 150,
+                        "depth": 30
+                    }
+                },
+                {
+                    "name": "Tail",
+                    "type": "mesh",
+                    "position": {
+                        "x": 0,
+                        "y": 0,
+                        "z": -110
+                    },
+                    "rotation": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                    },
+                    "scale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                    },
+                    "children": [],
+                    "geometry": {
+                        "width": 60,
+                        "height": 60,
+                        "depth": 60
+                    }
+                }
+            ],
+            "geometry": {
+                "width": 200,
+                "height": 200,
+                "depth": 200
+            }
+        }
+    ]
+}
+
