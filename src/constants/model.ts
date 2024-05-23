@@ -1,4 +1,5 @@
 export enum Model {
   Person = 'person',
-  HollowBox = 'hollowBox'
+  HollowBox = 'hollowBox',
+  Barney = 'barney',
 }
