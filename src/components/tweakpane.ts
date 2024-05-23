@@ -108,7 +108,8 @@ export class Tweakpane {
         label: 'Material',
         options: [
           { text: 'Basic', value: 'basic' },
-          { text: 'Phong', value: 'phong' }
+          { text: 'Phong', value: 'phong' },
+          { text: 'Reflective', value: 'reflective' },
         ]
       })
       .on('change', (e) => {
