@@ -134,7 +134,8 @@ export class Tweakpane {
         label: 'Texture',
         options: [
           { text: 'No Texture', value: 'noTexture' },
-          { text: 'Brick Wall', value: './test-data/textures/brick-wall/diffuse.png' }
+          { text: 'Brick Wall', value: './test-data/textures/brick-wall/diffuse.png' },
+          { text: 'Barrel', value: './test-data/textures/barrel/diffuse.png' }
         ],
         value: 'A'
       })
@@ -162,7 +163,8 @@ export class Tweakpane {
       label: 'Specular',
       options: [
         { text: 'No Texture', value: 'noTexture' },
-        { text: 'Brick Wall', value: './test-data/textures/brick-wall/specular.png' }
+        { text: 'Brick Wall', value: './test-data/textures/brick-wall/specular.png' },
+        { text: 'Barrel', value: './test-data/textures/barrel/specular.png' }
       ],
       value: 'A'
     })
@@ -215,7 +217,8 @@ export class Tweakpane {
         label: 'Normal',
         options: [
           { text: 'No Texture', value: 'noTexture' },
-          { text: 'Brick Wall', value: './test-data/textures/brick-wall/normal.png' }
+          { text: 'Brick Wall', value: './test-data/textures/brick-wall/normal.png' },
+          { text: 'Sofa', value: './test-data/textures/sofa/normal.png' }
         ],
         value: 'A'
       })
@@ -229,7 +232,8 @@ export class Tweakpane {
         label: 'Displacement',
         options: [
           { text: 'No Texture', value: 'noTexture' },
-          { text: 'Brick Wall', value: './test-data/textures/brick-wall/parallax.png' }
+          { text: 'Brick Wall', value: './test-data/textures/brick-wall/parallax.png' },
+          { text: 'Conblock', value: './test-data/textures/conblock/parallax.png' }
         ],
         value: 'A'
       })

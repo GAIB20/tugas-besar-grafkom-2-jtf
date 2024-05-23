@@ -83,12 +83,14 @@ void main() {
         TexCoord = parallaxMapping(v_texcoord, V);
         if(TexCoord.x > 1.0 || TexCoord.y > 1.0 || TexCoord.x < 0.0 || TexCoord.y < 0.0)
             discard;
-
+        
+        L = normalize(tangentLightPos - tangentFragPos);
         if(u_useNormalTexture > 0.0) {
             N = texture2D(u_normalTexture, TexCoord).rgb;
             N = normalize(N * 2.0 - 1.0);
+        } else {
+            L = normalize(u_lightPos - v_fragPos);
         }
-        L = normalize(tangentLightPos - tangentFragPos);
         HV = normalize(L + V);
     }
     
