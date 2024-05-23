@@ -73,6 +73,10 @@ export class WebGL {
     this.diffuseTexture!.value = value;
   }
 
+  disableTextureDiffuse() {
+    this.diffuseTexture!.value = 0.0;
+  }
+
   createTextureSpecular(image: string) {
     this.specular.src = image;
     this.specular.onload = () => {
@@ -84,11 +88,19 @@ export class WebGL {
     this.specularTexture!.value = value;
   }
 
+  disableTextureSpecular() {
+    this.specularTexture!.value = 0.0;
+  }
+
   createTextureNormal(image: string) {
     this.normal.src = image;
     this.normal.onload = () => {
       this.normalTexture!.isDirty = true;
     }
+  }
+
+  disableTextureNormal() {
+    this.normalTexture!.value = 0.0;
   }
 
   enableTextureNormal(value: number) {
@@ -104,6 +116,10 @@ export class WebGL {
 
   enableTextureParallax(value: number) {
     this.parallaxTexture!.value = value;
+  }
+
+  disableTextureParallax() {
+    this.parallaxTexture!.value = 0.0;
   }
 
   createShaderProgram() {
@@ -318,7 +334,7 @@ export class WebGL {
         this.shader.getDirectionLight().coords
       );
 
-      const render = (normal: any, texture: Texture | null) => {
+      const render = (image: any, texture: Texture | null) => {
         if (!this.tangentBuffers.has(node.name)) {
           const buffer = this.gl.createBuffer();
           if (buffer) {
@@ -401,7 +417,7 @@ export class WebGL {
             this.gl.RGBA,
             this.gl.RGBA,
             this.gl.UNSIGNED_BYTE,
-            normal
+            image
           );
           texture.isDirty = false;
         }

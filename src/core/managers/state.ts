@@ -25,9 +25,11 @@ export class StateManager {
   model = Model.Person;
   material = 'basic';
   diffuseColor: RGB = { r: 255, g: 0, b: 0 };
-  diffuseTexture = 'A';
+  diffuseTexture = 'noTexture';
   specularColor: RGB = { r: 255, g: 0, b: 0 };
-  specularTexture = 'A';
+  specularTexture = 'noTexture';
+  normalTexture = 'noTexture';
+  parallaxTexture = 'noTexture';
   brightness = 32;
   directionLight = { x: 0, y: 0, z: 0 } as Coordinate;
   bumpTexture = 'A';
@@ -77,15 +79,6 @@ export class StateManager {
     this.cameraManager = cameraManager;
     this.orbitControl = orbitControl;
     this.animationManager = animationManager;
-
-    webGL.createTextureDiffuse('./diffuse.png');
-    webGL.enableTextureDiffuse(1.0);
-    webGL.createTextureSpecular('./specular.png');
-    webGL.enableTextureSpecular(1.0);
-    webGL.createTextureNormal('./test.png');
-    webGL.enableTextureNormal(1.0);
-    webGL.createTextureParallax('./parallax.png');
-    webGL.enableTextureParallax(0.1);
 
     //for emiter
     this.listeners = new Map();
@@ -200,15 +193,18 @@ export class StateManager {
   }
 
   changeDiffuseTexture(newTexture: string) {
-    console.log(newTexture);
-    this.webGL.diffuseTexture = null;
+    if(newTexture === 'noTexture') {
+      this.webGL.disableTextureDiffuse();
+      return;
+    }
+    this.webGL.createTextureDiffuse(newTexture);
+    this.webGL.enableTextureDiffuse(1.0);
   }
 
   changeSpecularColor(newColor: RGB) {
     console.log(newColor);
 
     ShaderManager.changeSpecularColor(this.sceneManager.selectedMesh, newColor);
-    this.webGL.specularTexture = null;
   }
 
   changeBrightness(brightness: number) {
@@ -223,12 +219,30 @@ export class StateManager {
   }
 
   changeSpecularTexture(newTexture: string) {
-    console.log(newTexture);
-    this.webGL.specularTexture = null;
+    if(newTexture === 'noTexture') {
+      this.webGL.disableTextureSpecular();
+      return;
+    }
+    this.webGL.createTextureSpecular(newTexture);
+    this.webGL.enableTextureSpecular(1.0);
   }
 
-  changeBumpTexture(newTexture: string) {
-    console.log(newTexture);
+  changeNormalTexture(newTexture: string) {
+    if(newTexture === 'noTexture') {
+      this.webGL.disableTextureNormal();
+      return;
+    }
+    this.webGL.createTextureNormal(newTexture);
+    this.webGL.enableTextureNormal(1.0);
+  }
+
+  changeParallaxTexture(newTexture: string) {
+    if(newTexture === 'noTexture') {
+      this.webGL.disableTextureParallax();
+      return;
+    }
+    this.webGL.createTextureParallax(newTexture);
+    this.webGL.enableTextureParallax(0.1);
   }
 
   onPlay() {

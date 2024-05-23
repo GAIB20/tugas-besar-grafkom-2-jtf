@@ -14,9 +14,10 @@ export class Tweakpane {
   diffuseTextureBinding: BindingApi;
   specularColorBinding: BindingApi;
   specularTextureBinding: BindingApi;
+  normalTextureBinding: BindingApi;
+  parallaxTextureBinding: BindingApi;
   brightnessBinding: BindingApi;
   directionLightBinding: BindingApi;
-  bumpTextureBinding: BindingApi;
   frameBinding: BindingApi;
   fpsBinding: BindingApi;
   playBtn: ButtonApi;
@@ -124,8 +125,8 @@ export class Tweakpane {
         view: 'list',
         label: 'Texture',
         options: [
-          { text: 'A', value: 'A' },
-          { text: 'B', value: 'B' }
+          { text: 'No Texture', value: 'noTexture' },
+          { text: 'Brick Wall', value: './test-data/textures/brick-wall/diffuse.png' }
         ],
         value: 'A'
       })
@@ -151,18 +152,18 @@ export class Tweakpane {
 
     // Specular: Texture
     this.specularTextureBinding = specularFolder
-      .addBinding(this.state, 'specularTexture', {
-        view: 'list',
-        label: 'Texture',
-        options: [
-          { text: 'A', value: 'A' },
-          { text: 'B', value: 'B' }
-        ],
-        value: 'A'
-      })
-      .on('change', (e) => {
-        this.state.changeSpecularTexture(e.value);
-      });
+    .addBinding(this.state, 'specularTexture', {
+      view: 'list',
+      label: 'Specular',
+      options: [
+        { text: 'No Texture', value: 'noTexture' },
+        { text: 'Brick Wall', value: './test-data/textures/brick-wall/specular.png' }
+      ],
+      value: 'A'
+    })
+    .on('change', (e) => {
+      this.state.changeSpecularTexture(e.value);
+    });
 
     const brightnessFolder = modelFolder.addFolder({
       title: 'Brightness',
@@ -203,18 +204,32 @@ export class Tweakpane {
     });
 
     // Bump: Texture
-    this.bumpTextureBinding = bumpFolder
-      .addBinding(this.state, 'bumpTexture', {
+      this.normalTextureBinding = bumpFolder
+      .addBinding(this.state, 'normalTexture', {
         view: 'list',
-        label: 'Texture',
+        label: 'Normal',
         options: [
-          { text: 'A', value: 'A' },
-          { text: 'B', value: 'B' }
+          { text: 'No Texture', value: 'noTexture' },
+          { text: 'Brick Wall', value: './test-data/textures/brick-wall/normal.png' }
         ],
         value: 'A'
       })
       .on('change', (e) => {
-        this.state.changeBumpTexture(e.value);
+        this.state.changeNormalTexture(e.value);
+      });
+
+      this.parallaxTextureBinding = bumpFolder
+      .addBinding(this.state, 'parallaxTexture', {
+        view: 'list',
+        label: 'Displacement',
+        options: [
+          { text: 'No Texture', value: 'noTexture' },
+          { text: 'Brick Wall', value: './test-data/textures/brick-wall/parallax.png' }
+        ],
+        value: 'A'
+      })
+      .on('change', (e) => {
+        this.state.changeParallaxTexture(e.value);
       });
 
     // Model : Animation
