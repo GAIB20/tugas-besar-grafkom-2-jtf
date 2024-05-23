@@ -336,6 +336,7 @@ export class WebGL {
       );
 
       const render = (image: any, texture: Texture | null) => {
+        if(!node.geometry.getUV()) return;
         if (!this.tangentBuffers.has(node.name)) {
           const buffer = this.gl.createBuffer();
           if (buffer) {
