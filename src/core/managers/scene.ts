@@ -9,6 +9,7 @@ import { IAnimation, IMesh, IObject3D } from '../interface';
 import PersonJSON from '../../../test-data/articulated-model/person.json';
 import BarneyJSON from '../../../test-data/articulated-model/barney.json';
 import { Model } from '../../constants/model';
+import { HollowTriangle } from '../../mesh/geometry/hollow/HollowTriangle';
 
 export class SceneManager {
   scene: Scene;
@@ -19,6 +20,7 @@ export class SceneManager {
   private sceneC: Scene;
   private sceneD: Scene;
   private sceneE: Scene;
+  private sceneF: Scene;
 
   selectedMesh: Object3D;
 
@@ -53,11 +55,17 @@ export class SceneManager {
     boxMesh.scale.x = 1.6;
     boxMesh.rotation.z = 90;
     this.sceneC = new Scene().add(boxMesh);
-
+    
     // Hollow
     this.sceneD = new Scene().add(
       new Mesh(new HollowBox(400, 200, 200), new BasicMaterial())
     );
+
+    this.sceneF = new Scene().add(
+      new Mesh(new HollowTriangle(400, 400, 200), new BasicMaterial())
+    );
+
+    this.sceneF.name = 'Hollow Triangle';
 
     // Articulated: Person
     const neck = new Mesh(new BoxGeometry(50, 50, 50), new BasicMaterial());
@@ -209,6 +217,8 @@ export class SceneManager {
       this.scene = this.sceneD;
     } else if (newScene == 'E') {
       this.scene = this.sceneE;
+    } else if (newScene == 'F') {
+      this.scene = this.sceneF
     }
 
     this.setSelectedMeshOnScene();
