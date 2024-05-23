@@ -28,7 +28,7 @@ export class ObliqueCamera extends Camera {
     this.far = far;
     this.angle = angle;
     this._zoom = 0.5
-    this.position.z = this._zoom;
+    this.position.z = far/2;
     // Jangan lupa untuk panggil computeProjectionMatrix() setiap
     // kali mengubah nilai left, right, top, bottom, near, atau far.
     this.computeProjectionMatrix();
