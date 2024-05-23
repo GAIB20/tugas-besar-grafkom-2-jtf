@@ -43,6 +43,33 @@ export class Vector3 extends Vector<Vector3Type> {
     return this.createVector(crossProduct);
   }
 
+  rotate(angleX: number, angleY: number, angleZ: number): Vector3 {
+    const radX = (angleX * Math.PI) / 180;
+    const radY = (angleY * Math.PI) / 180;
+    const radZ = (angleZ * Math.PI) / 180;
+
+    const cosX = Math.cos(radX);
+    const sinX = Math.sin(radX);
+    const cosY = Math.cos(radY);
+    const sinY = Math.sin(radY);
+    const cosZ = Math.cos(radZ);
+    const sinZ = Math.sin(radZ);
+
+    // Rotation around X-axis
+    const y1 = this.y * cosX - this.z * sinX;
+    const z1 = this.y * sinX + this.z * cosX;
+
+    // Rotation around Y-axis
+    const x2 = this.x * cosY + z1 * sinY;
+    const z2 = z1 * cosY - this.x * sinY;
+
+    // Rotation around Z-axis
+    const x3 = x2 * cosZ - y1 * sinZ;
+    const y3 = x2 * sinZ + y1 * cosZ;
+
+    return new Vector3(x3, y3, z2);
+  }
+
   toJSON(): IVector3 {
     return {
       x: this.x,

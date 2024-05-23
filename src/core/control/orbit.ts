@@ -65,14 +65,12 @@ export class OrbitControls {
             rotation.y = row[1];
             rotation.z = row[2];
             this.center.rotation = rotation;
-
-            
+            this._camera.orbitRotation = rotation;
+            // console.log(this._camera.orbitRotation);
         }else if(this.isPanning && this.allowPan){
             this.center.position.x -= dx;
             this.center.position.y += dy;
         }
-        console.log(this.center.position);
-
     }
 
     private onMouseWheel(event: WheelEvent){
@@ -88,7 +86,6 @@ export class OrbitControls {
         if (this.target){
             this.center.position = this.target.position;
         }
-        console.log(this._camera.position.x,this._camera.position.y, this._camera.position.z)
     }
 
     public destroy(){

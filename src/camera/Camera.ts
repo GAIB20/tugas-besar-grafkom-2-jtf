@@ -1,4 +1,5 @@
 import { Matrix4 } from '../core/math/matrix/matrix4';
+import { Vector3 } from '../core/math/vector/vector3';
 import { Object3D } from '../core/object3D';
 
 export class Camera extends Object3D {
@@ -6,6 +7,7 @@ export class Camera extends Object3D {
   private _invWorldMatrix = new Matrix4().identity();
   protected _zoom: number = 1;
   protected _angle: number = 45;
+  protected _orbitRotaion = new Vector3();
 
   constructor(type: string) {
     super();
@@ -23,6 +25,14 @@ export class Camera extends Object3D {
 
   public set zoom(d: number) {
     this._zoom = d;
+  }
+
+  public get orbitRotation(): Vector3 {
+    return this._orbitRotaion;
+  }
+
+  public set orbitRotation(rotation: Vector3) {
+    this._orbitRotaion = rotation;
   }
 
   get viewProjectionMatrix() {
