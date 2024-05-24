@@ -7,7 +7,7 @@ export class HollowTriangle extends BufferGeometry {
     const hw = width / 2,
       hh = height / 2,
       hd = depth / 2,
-      sw = Math.min(width, height, depth) / 20;
+      sw = Math.min(width, height, depth) / 15;
 
     // prettier-ignore
     const vertices = new Float32Array([

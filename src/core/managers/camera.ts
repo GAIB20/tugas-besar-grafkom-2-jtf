@@ -57,4 +57,8 @@ export class CameraManager {
     this.camera.zoom = delta;
     this.camera.computeProjectionMatrix();
   }
+
+  resetCamera(){
+    
+  }
 }
