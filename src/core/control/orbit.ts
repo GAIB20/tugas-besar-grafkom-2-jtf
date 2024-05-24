@@ -82,10 +82,26 @@ export class OrbitControls {
         this._camera.computeProjectionMatrix();
     }
 
+    public setPosition(rotation: Vector3){
+        this.center.rotation = rotation;
+        this._camera.orbitRotation = rotation;
+    }
+
     public update() {
         if (this.target){
             this.center.position = this.target.position;
         }
+    }
+
+    public reset(){
+        const rotation = new Vector3();
+        rotation.x = 0;
+        rotation.y = 0;
+        rotation.z = 0;
+        this.center.rotation = rotation;
+        this._camera.orbitRotation = rotation;
+        this._camera.zoom = 1;
+        this._camera.computeProjectionMatrix();
     }
 
     public destroy(){

@@ -2,6 +2,7 @@ import { Tweakpane } from '../../components/tweakpane';
 import { Model } from '../../constants/model';
 import { OrbitControls } from '../control/orbit';
 import { RGB, Coordinate, IVector3 } from '../interface';
+import { Vector3 } from '../math/vector/vector3';
 import { Mesh } from '../mesh';
 import { WebGL } from '../webgl';
 import { AnimationManager } from './animation';
@@ -285,10 +286,15 @@ export class StateManager {
 
   changeCoordinate(newCoordinate: Coordinate) {
     console.log(newCoordinate);
+    const temp = new Vector3(newCoordinate.x,newCoordinate.y,newCoordinate.z);
+    this.orbitControl.setPosition(temp);
+    this.orbitControl.update();
   }
 
   onResetCamera() {
     console.log('Reset Camera');
+    this.orbitControl.reset();
+    this.orbitControl.update();
   }
 
   onTranslateChanged(newTranslate?: Coordinate | IVector3) {
