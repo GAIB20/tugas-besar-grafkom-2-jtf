@@ -8,6 +8,7 @@ import { SceneManager } from './core/managers/scene.ts';
 import { SceneGraph } from './components/scenegraph.ts';
 import { OrbitControls } from './core/control/orbit.ts';
 import { AnimationManager } from './core/managers/animation.ts';
+
 document.addEventListener('DOMContentLoaded', function () {
   onMounted();
 });

@@ -546,6 +546,8 @@ export class Tweakpane {
 
     this.importObject = objectEditorFolder.addButton({
       title : ' Import Object '
+    }).on('click',()=>{
+      this.state.onImport();
     })
 
 

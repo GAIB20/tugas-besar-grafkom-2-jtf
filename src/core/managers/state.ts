@@ -1,9 +1,10 @@
+import { InputFile } from '../../components/inputfile';
 import { Tweakpane } from '../../components/tweakpane';
 import { Model } from '../../constants/model';
 import { BoxGeometry } from '../../mesh/geometry/basic/boxGeometry';
 import BasicMaterial from '../../mesh/material/basic/BasicMaterial';
 import { OrbitControls } from '../control/orbit';
-import { RGB, Coordinate, IVector3 } from '../interface';
+import { RGB, Coordinate, IVector3, IObject3D } from '../interface';
 import { Vector3 } from '../math/vector/vector3';
 import { Mesh } from '../mesh';
 import { WebGL } from '../webgl';
@@ -347,5 +348,12 @@ export class StateManager {
   onExport(){
     this.sceneManager.exportObject();
   }
+
+  onImport() {
+
+    const inputFileHandler = InputFile.getInstance();
+    inputFileHandler.triggerFileInput();
+}
+
 
 }

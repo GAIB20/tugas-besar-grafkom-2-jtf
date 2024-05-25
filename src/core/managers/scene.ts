@@ -336,7 +336,11 @@ export class SceneManager {
     document.body.removeChild(link);
   }
 
-  importObject(){
+  importObject(object: IObject3D){
+    const importedObject = SceneManager.loadJSON(object);
+    console.log(importedObject);
+    console.log(this.selectedMesh.name);
+    this.selectedMesh.add(importedObject);
   }
 
   static loadJSON(object: IObject3D): Object3D {
