@@ -17,8 +17,6 @@
     "vite": "^5.2.0"
   },
   "dependencies": {
-    "tweakpane": "^4.0.3",
-    "tweakpane-file-plugin": "^1.0.2",
-    "tweakpane-plugin-file-import": "^1.0.1"
+    "tweakpane": "^4.0.3"
   }
 }
