@@ -11,6 +11,7 @@ import BarneyJSON from '../../../test-data/articulated-model/barney.json';
 import BunnyJSON from '../../../test-data/articulated-model/bunny.json';
 import { Model } from '../../constants/model';
 import { HollowTriangle } from '../../mesh/geometry/hollow/HollowTriangle';
+import { HollowTrapesium } from '../../mesh/geometry/hollow/HollowTrapesium';
 
 export class SceneManager {
   scene: Scene;
@@ -23,6 +24,8 @@ export class SceneManager {
   private sceneD: Scene;
   private sceneE: Scene;
   private sceneF: Scene;
+  private sceneG: Scene;
+
   selectedMesh: Object3D;
   //Binding New Object
   name = '';
@@ -69,7 +72,12 @@ export class SceneManager {
       new Mesh(new HollowTriangle(400, 400, 200), new BasicMaterial())
     );
 
+    this.sceneG = new Scene().add(
+      new Mesh(new HollowTrapesium(200, 400, 200), new BasicMaterial())
+    );
+
     this.sceneF.name = 'Hollow Triangle';
+    this.sceneG.name = 'Hollow Trapesium';
 
     const body = new Mesh(new BoxGeometry(200, 200, 200), new BasicMaterial());
     body.name = 'Body';
@@ -301,6 +309,8 @@ export class SceneManager {
       this.scene = this.sceneE;
     } else if (newScene == 'F') {
       this.scene = this.sceneF
+    } else if (newScene == 'G') {
+      this.scene = this.sceneG
     }
 
     this.setSelectedMeshOnScene();
