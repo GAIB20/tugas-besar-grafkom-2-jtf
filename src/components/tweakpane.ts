@@ -92,6 +92,7 @@ export class Tweakpane {
           { text: 'D', value: 'D' },
           { text: 'E', value: 'E' },
           { text: 'F', value: 'F' },
+          { text: 'G', value: 'G' },
         ],
         value: Model.Person
       })
