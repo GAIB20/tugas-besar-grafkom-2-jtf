@@ -135,7 +135,6 @@ export class Matrix4 extends Matrix<Matrix4Type> {
     const a = 1 / (right - left);
     const b = 1 / (top - bottom);
     const c = 1 / (near - far);
-    console.log(zoom)
     const rows: Matrix4Type = [
       [2 * a * zoom, 0, 0, 0],
       [0, 2 * b * zoom, 0, 0],

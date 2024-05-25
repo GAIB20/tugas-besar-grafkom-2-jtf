@@ -3,6 +3,10 @@ import { BindingApi } from '@tweakpane/core';
 import { StateManager } from '../core/managers/state';
 import { Model } from '../constants/model';
 import { Ease } from '../constants/animation';
+ 
+
+
+
 
 export class Tweakpane {
   pane: Pane;
@@ -52,6 +56,14 @@ export class Tweakpane {
   rotateBinding: BindingApi;
   scaleBinding: BindingApi;
 
+  objectBinding: BindingApi;
+  newNameObject: BindingApi;
+  newObjectBinding: BindingApi;
+  addObject: ButtonApi;
+  removeObject: ButtonApi;
+  exportObject: ButtonApi;
+  importObject: ButtonApi;
+
   constructor() {
     this.state = StateManager.getInstance();
 
@@ -70,6 +82,7 @@ export class Tweakpane {
       // @ts-ignore
       container: leftTweakpaneContainer
     });
+
 
     // Model
     const modelFolder = this.pane.addFolder({
@@ -462,6 +475,13 @@ export class Tweakpane {
       expanded: true
     });
 
+    this.objectBinding = objectControllerFolder.addBinding(
+      this.state, 'status',{
+        label: 'Object',
+        readonly: true
+      }
+    )
+
     this.translateBinding = objectControllerFolder
       .addBinding(this.state, 'translate', {
         x: { min: -400, max: 400, step: 0.5 },
@@ -489,5 +509,51 @@ export class Tweakpane {
       .on('change', (ev) => {
         this.state.onScaleChanged(ev.value);
       });
+
+    // Object Editor
+    const objectEditorFolder = objectControllerFolder.addFolder({
+      title : 'Object Editor',
+      expanded : true,
+    })
+
+    this.newNameObject = objectEditorFolder.addBinding(
+      this.state.sceneManager, 'name', {
+        label: 'Name Object'
+      }
+    )
+
+    this.newObjectBinding = objectEditorFolder.addBinding(
+      this.state.sceneManager, 'newObject',{
+        label: 'Size Object',
+        x: { min: -400, max: 400, step: 0.5 },
+        y: { min: -400, max: 400, step: 0.5 },
+        z: { min: -400, max: 400, step: 0.5 }
+      }
+    )
+
+    this.addObject = objectEditorFolder.addButton({ title: ' Add Object ' }).on('click',()=>{
+      this.state.onCreate();
+    })
+
+    this.removeObject = objectEditorFolder.addButton({ title: ' Remove Object ' }).on('click',()=>{
+      this.state.onRemove();
+    })
+
+    this.exportObject = objectEditorFolder.addButton({
+      title : ' Export Object '
+    }).on('click',()=>{
+      this.state.onExport();
+    })
+
+    this.importObject = objectEditorFolder.addButton({
+      title : ' Import Object '
+    }).on('click',()=>{
+      this.state.onImport();
+    })
+
+
+
+
+    
   }
 }

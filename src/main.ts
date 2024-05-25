@@ -32,7 +32,7 @@ const onMounted = () => {
     orbitControl,
     animationManager
   );
-
+  
   const tweakpane = new Tweakpane();
   state.setTweakpane(tweakpane);
 

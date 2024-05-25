@@ -5,7 +5,7 @@ import BasicMaterial from '../../mesh/material/basic/BasicMaterial';
 import { Mesh } from '../mesh';
 import { Object3D } from '../object3D';
 import { Scene } from '../scene';
-import { IAnimation, IMesh, IObject3D } from '../interface';
+import { Coordinate, IAnimation, IMesh, IObject3D } from '../interface';
 import PersonJSON from '../../../test-data/articulated-model/person.json';
 import BarneyJSON from '../../../test-data/articulated-model/barney.json';
 import BunnyJSON from '../../../test-data/articulated-model/bunny.json';
@@ -27,6 +27,9 @@ export class SceneManager {
   private sceneG: Scene;
 
   selectedMesh: Object3D;
+  //Binding New Object
+  name = '';
+  newObject = { x: 0, y: 0, z: 0 } as Coordinate;
 
   constructor() {
     // Box
@@ -315,6 +318,39 @@ export class SceneManager {
 
   setSelectedMesh(mesh: Mesh) {
     this.selectedMesh = mesh;
+  }
+
+  createObject(){
+    const object = new Mesh(new BoxGeometry(this.newObject.x, this.newObject.y, this.newObject.z), new BasicMaterial());
+    object.name = this.name;
+    console.log(this.selectedMesh.toJSON())
+    this.selectedMesh.add(object);
+    console.log(this.selectedMesh.toJSON())
+  }
+
+  removeObject(){
+    this.selectedMesh.removeFromParent()
+  }
+
+  exportObject(){
+
+    const json = JSON.stringify(this.selectedMesh.toJSON());
+    const blob = new Blob([json], { type: 'application/json' });
+    const link = document.createElement('a');
+
+    link.href = URL.createObjectURL(blob);
+    link.download = 'object.json';
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  importObject(object: IObject3D){
+    const importedObject = SceneManager.loadJSON(object);
+    console.log(importedObject);
+    console.log(this.selectedMesh.name);
+    this.selectedMesh.add(importedObject);
   }
 
   static loadJSON(object: IObject3D): Object3D {

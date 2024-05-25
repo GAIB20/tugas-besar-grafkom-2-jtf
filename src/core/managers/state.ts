@@ -1,7 +1,10 @@
+import { InputFile } from '../../components/inputfile';
 import { Tweakpane } from '../../components/tweakpane';
 import { Model } from '../../constants/model';
+import { BoxGeometry } from '../../mesh/geometry/basic/boxGeometry';
+import BasicMaterial from '../../mesh/material/basic/BasicMaterial';
 import { OrbitControls } from '../control/orbit';
-import { RGB, Coordinate, IVector3 } from '../interface';
+import { RGB, Coordinate, IVector3, IObject3D } from '../interface';
 import { Vector3 } from '../math/vector/vector3';
 import { Mesh } from '../mesh';
 import { WebGL } from '../webgl';
@@ -44,6 +47,9 @@ export class StateManager {
   translate = { x: 0, y: 0, z: 0 } as Coordinate;
   rotate = { x: 0, y: 0, z: 0 } as Coordinate;
   scale = { x: 1, y: 1, z: 1 } as Coordinate;
+  
+  status = '';
+
 
   // Variables
   webGL: WebGL;
@@ -52,7 +58,6 @@ export class StateManager {
   cameraManager: CameraManager;
   orbitControl: OrbitControls;
   animationManager: AnimationManager;
-
   isChangingUI: boolean = false;
 
   private constructor(
@@ -165,6 +170,9 @@ export class StateManager {
     this.tweakpane?.scaleBinding.refresh();
 
     this.tweakpane?.frameBinding.refresh();
+
+    this.status = mesh.name;
+    this.tweakpane?.objectBinding.refresh();
 
     this.isChangingUI = false;
   }
@@ -326,4 +334,26 @@ export class StateManager {
 
     this.sceneManager.selectedMesh.computeWorldMatrix();
   }
+
+  onCreate(){
+    this.sceneManager.createObject();
+    this.emit('sceneChange',this.sceneManager.get());
+  }
+
+  onRemove(){
+    this.sceneManager.removeObject();
+    this.emit('sceneChange',this.sceneManager.get());
+  }
+
+  onExport(){
+    this.sceneManager.exportObject();
+  }
+
+  onImport() {
+
+    const inputFileHandler = InputFile.getInstance();
+    inputFileHandler.triggerFileInput();
+}
+
+
 }
