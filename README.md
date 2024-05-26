@@ -17,3 +17,28 @@ npm run dev
 ## How to Operate
 
 Can refer to guidebook on `docs` directory
+
+## Division of Work
+
+### 13521046 Jeffrey Chow
+
+- Articulated Model: Person
+- Animation: Person
+- Hollow Object: Box Hollow
+- Animation Controller
+- Animation Tweening
+- Animation Editor
+- UI Initialization
+- Managers
+
+### 13521080 Fajar Maulana Herawan
+
+- Articulated Model:
+- Animation:
+- Hollow Object:
+
+### 13521090 Tobias Natalio Sianipar
+
+- Articulated Model:
+- Animation:
+- Hollow Object:
