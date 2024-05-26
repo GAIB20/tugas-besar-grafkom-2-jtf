@@ -16,7 +16,7 @@ npm run dev
 
 ## How to Operate
 
-Can refer to guidebook on `docs` directory
+Can refer to guidebook on `docs` directory or [this link](https://docs.google.com/document/d/1clzNAjWmDOTEoRTMNgOXDdrLiAX2zTJ7chb2UNfQFto/edit?usp=sharing)
 
 ## Division of Work
 
