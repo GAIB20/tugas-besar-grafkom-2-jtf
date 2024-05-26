@@ -153,7 +153,8 @@ export class Tweakpane {
         options: [
           { text: 'No Texture', value: 'noTexture' },
           { text: 'Brick Wall', value: './test-data/textures/brick-wall/diffuse.png' },
-          { text: 'Barrel', value: './test-data/textures/barrel/diffuse.png' }
+          { text: 'Barrel', value: './test-data/textures/barrel/diffuse.png' },
+          { text: 'Rocky Road', value: './test-data/textures/rocky-road/diffuse.png' },
         ],
         value: 'A'
       })
@@ -182,7 +183,8 @@ export class Tweakpane {
       options: [
         { text: 'No Texture', value: 'noTexture' },
         { text: 'Brick Wall', value: './test-data/textures/brick-wall/specular.png' },
-        { text: 'Barrel', value: './test-data/textures/barrel/specular.png' }
+        { text: 'Barrel', value: './test-data/textures/barrel/specular.png' },
+        { text: 'Broken Brick', value: './test-data/textures/broken-brick/specular.png' }
       ],
       value: 'A'
     })
@@ -236,7 +238,8 @@ export class Tweakpane {
         options: [
           { text: 'No Texture', value: 'noTexture' },
           { text: 'Brick Wall', value: './test-data/textures/brick-wall/normal.png' },
-          { text: 'Sofa', value: './test-data/textures/sofa/normal.png' }
+          { text: 'Sofa', value: './test-data/textures/sofa/normal.png' },
+          { text: 'Water Drop', value: './test-data/textures/water-drop/normal.png' },
         ],
         value: 'A'
       })
@@ -251,7 +254,8 @@ export class Tweakpane {
         options: [
           { text: 'No Texture', value: 'noTexture' },
           { text: 'Brick Wall', value: './test-data/textures/brick-wall/parallax.png' },
-          { text: 'Conblock', value: './test-data/textures/conblock/parallax.png' }
+          { text: 'Conblock', value: './test-data/textures/conblock/parallax.png' },
+          { text: 'Wave', value: './test-data/textures/wave/parallax.png' },
         ],
         value: 'A'
       })
