@@ -39,6 +39,11 @@ Can refer to guidebook on `docs` directory
 
 ### 13521090 Tobias Natalio Sianipar
 
-- Articulated Model:
-- Animation:
-- Hollow Object:
+- Articulated Model: Barney
+- Animation: Barney
+- Hollow Object: Trapesium Hollow
+- Environment Map
+- Displacment Map
+- Normal Map
+- Phong Material
+- Scene Graph
