@@ -47,9 +47,8 @@ export class StateManager {
   translate = { x: 0, y: 0, z: 0 } as Coordinate;
   rotate = { x: 0, y: 0, z: 0 } as Coordinate;
   scale = { x: 1, y: 1, z: 1 } as Coordinate;
-  
-  status = '';
 
+  status = '';
 
   // Variables
   webGL: WebGL;
@@ -202,7 +201,7 @@ export class StateManager {
   }
 
   changeDiffuseTexture(newTexture: string) {
-    if(newTexture === 'noTexture') {
+    if (newTexture === 'noTexture') {
       this.webGL.disableTextureDiffuse();
       return;
     }
@@ -228,7 +227,7 @@ export class StateManager {
   }
 
   changeSpecularTexture(newTexture: string) {
-    if(newTexture === 'noTexture') {
+    if (newTexture === 'noTexture') {
       this.webGL.disableTextureSpecular();
       return;
     }
@@ -237,7 +236,7 @@ export class StateManager {
   }
 
   changeNormalTexture(newTexture: string) {
-    if(newTexture === 'noTexture') {
+    if (newTexture === 'noTexture') {
       this.webGL.disableTextureNormal();
       return;
     }
@@ -246,7 +245,7 @@ export class StateManager {
   }
 
   changeParallaxTexture(newTexture: string) {
-    if(newTexture === 'noTexture') {
+    if (newTexture === 'noTexture') {
       this.webGL.disableTextureParallax();
       return;
     }
@@ -255,18 +254,15 @@ export class StateManager {
   }
 
   onPlay() {
-    console.log('play');
     this.animationManager.play = true;
   }
 
   onPause() {
-    console.log('Pause');
     this.animationManager.play = false;
   }
 
   onNext() {
     this.animationManager.onNext();
-    // this.setUIWithSelectedMeshData();
   }
 
   onPrev() {
@@ -282,25 +278,21 @@ export class StateManager {
   }
 
   changeProjection(newProjection: string) {
-    console.log(newProjection);
     this.cameraManager.setCamera(newProjection);
     this.orbitControl.camera = this.cameraManager.get();
   }
 
   changeRadius(newRadius: number) {
-    console.log(newRadius);
     this.cameraManager.zoomCamera(newRadius);
   }
 
   changeCoordinate(newCoordinate: Coordinate) {
-    console.log(newCoordinate);
-    const temp = new Vector3(newCoordinate.x,newCoordinate.y,newCoordinate.z);
+    const temp = new Vector3(newCoordinate.x, newCoordinate.y, newCoordinate.z);
     this.orbitControl.setPosition(temp);
     this.orbitControl.update();
   }
 
   onResetCamera() {
-    console.log('Reset Camera');
     this.orbitControl.reset();
     this.orbitControl.update();
   }
@@ -335,25 +327,22 @@ export class StateManager {
     this.sceneManager.selectedMesh.computeWorldMatrix();
   }
 
-  onCreate(){
+  onCreate() {
     this.sceneManager.createObject();
-    this.emit('sceneChange',this.sceneManager.get());
+    this.emit('sceneChange', this.sceneManager.get());
   }
 
-  onRemove(){
+  onRemove() {
     this.sceneManager.removeObject();
-    this.emit('sceneChange',this.sceneManager.get());
+    this.emit('sceneChange', this.sceneManager.get());
   }
 
-  onExport(){
+  onExport() {
     this.sceneManager.exportObject();
   }
 
   onImport() {
-
     const inputFileHandler = InputFile.getInstance();
     inputFileHandler.triggerFileInput();
-}
-
-
+  }
 }

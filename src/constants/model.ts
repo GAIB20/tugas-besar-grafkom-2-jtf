@@ -1,6 +1,12 @@
 export enum Model {
   Person = 'person',
-  HollowBox = 'hollowBox',
   Barney = 'barney',
   Bunny = 'bunny',
+
+  HollowBox = 'hollowBox',
+  HollowTriangle = 'hollowTriangle',
+  HollowTrapesium = 'hollowTrapesium',
+
+  Box = 'box',
+  Plane = 'plane'
 }

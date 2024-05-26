@@ -3,10 +3,6 @@ import { BindingApi } from '@tweakpane/core';
 import { StateManager } from '../core/managers/state';
 import { Model } from '../constants/model';
 import { Ease } from '../constants/animation';
- 
-
-
-
 
 export class Tweakpane {
   pane: Pane;
@@ -83,7 +79,6 @@ export class Tweakpane {
       container: leftTweakpaneContainer
     });
 
-
     // Model
     const modelFolder = this.pane.addFolder({
       title: 'Model',
@@ -99,13 +94,11 @@ export class Tweakpane {
           { text: 'Person', value: Model.Person },
           { text: 'Barney', value: Model.Barney },
           { text: 'Bunny', value: Model.Bunny },
-          { text: 'A', value: 'A' },
-          { text: 'B', value: 'B' },
-          { text: 'C', value: 'C' },
-          { text: 'D', value: 'D' },
-          { text: 'E', value: 'E' },
-          { text: 'F', value: 'F' },
-          { text: 'G', value: 'G' },
+          { text: 'Hollow Box', value: Model.HollowBox },
+          { text: 'Hollow Triangle', value: Model.HollowTriangle },
+          { text: 'Hollow Trapesium', value: Model.HollowTrapesium },
+          { text: 'Box', value: Model.Box },
+          { text: 'Plane', value: Model.Plane }
         ],
         value: Model.Person
       })
@@ -125,7 +118,7 @@ export class Tweakpane {
         options: [
           { text: 'Basic', value: 'basic' },
           { text: 'Phong', value: 'phong' },
-          { text: 'Reflective', value: 'reflective' },
+          { text: 'Reflective', value: 'reflective' }
         ]
       })
       .on('change', (e) => {
@@ -152,9 +145,15 @@ export class Tweakpane {
         label: 'Texture',
         options: [
           { text: 'No Texture', value: 'noTexture' },
-          { text: 'Brick Wall', value: './test-data/textures/brick-wall/diffuse.png' },
+          {
+            text: 'Brick Wall',
+            value: './test-data/textures/brick-wall/diffuse.png'
+          },
           { text: 'Barrel', value: './test-data/textures/barrel/diffuse.png' },
-          { text: 'Rocky Road', value: './test-data/textures/rocky-road/diffuse.png' },
+          {
+            text: 'Rocky Road',
+            value: './test-data/textures/rocky-road/diffuse.png'
+          }
         ],
         value: 'A'
       })
@@ -177,20 +176,26 @@ export class Tweakpane {
 
     // Specular: Texture
     this.specularTextureBinding = specularFolder
-    .addBinding(this.state, 'specularTexture', {
-      view: 'list',
-      label: 'Specular',
-      options: [
-        { text: 'No Texture', value: 'noTexture' },
-        { text: 'Brick Wall', value: './test-data/textures/brick-wall/specular.png' },
-        { text: 'Barrel', value: './test-data/textures/barrel/specular.png' },
-        { text: 'Broken Brick', value: './test-data/textures/broken-brick/specular.png' }
-      ],
-      value: 'A'
-    })
-    .on('change', (e) => {
-      this.state.changeSpecularTexture(e.value);
-    });
+      .addBinding(this.state, 'specularTexture', {
+        view: 'list',
+        label: 'Specular',
+        options: [
+          { text: 'No Texture', value: 'noTexture' },
+          {
+            text: 'Brick Wall',
+            value: './test-data/textures/brick-wall/specular.png'
+          },
+          { text: 'Barrel', value: './test-data/textures/barrel/specular.png' },
+          {
+            text: 'Broken Brick',
+            value: './test-data/textures/broken-brick/specular.png'
+          }
+        ],
+        value: 'A'
+      })
+      .on('change', (e) => {
+        this.state.changeSpecularTexture(e.value);
+      });
 
     const brightnessFolder = modelFolder.addFolder({
       title: 'Brightness',
@@ -231,15 +236,21 @@ export class Tweakpane {
     });
 
     // Bump: Texture
-      this.normalTextureBinding = bumpFolder
+    this.normalTextureBinding = bumpFolder
       .addBinding(this.state, 'normalTexture', {
         view: 'list',
         label: 'Normal',
         options: [
           { text: 'No Texture', value: 'noTexture' },
-          { text: 'Brick Wall', value: './test-data/textures/brick-wall/normal.png' },
+          {
+            text: 'Brick Wall',
+            value: './test-data/textures/brick-wall/normal.png'
+          },
           { text: 'Sofa', value: './test-data/textures/sofa/normal.png' },
-          { text: 'Water Drop', value: './test-data/textures/water-drop/normal.png' },
+          {
+            text: 'Water Drop',
+            value: './test-data/textures/water-drop/normal.png'
+          }
         ],
         value: 'A'
       })
@@ -247,15 +258,21 @@ export class Tweakpane {
         this.state.changeNormalTexture(e.value);
       });
 
-      this.parallaxTextureBinding = bumpFolder
+    this.parallaxTextureBinding = bumpFolder
       .addBinding(this.state, 'parallaxTexture', {
         view: 'list',
         label: 'Displacement',
         options: [
           { text: 'No Texture', value: 'noTexture' },
-          { text: 'Brick Wall', value: './test-data/textures/brick-wall/parallax.png' },
-          { text: 'Conblock', value: './test-data/textures/conblock/parallax.png' },
-          { text: 'Wave', value: './test-data/textures/wave/parallax.png' },
+          {
+            text: 'Brick Wall',
+            value: './test-data/textures/brick-wall/parallax.png'
+          },
+          {
+            text: 'Conblock',
+            value: './test-data/textures/conblock/parallax.png'
+          },
+          { text: 'Wave', value: './test-data/textures/wave/parallax.png' }
         ],
         value: 'A'
       })
@@ -480,11 +497,13 @@ export class Tweakpane {
     });
 
     this.objectBinding = objectControllerFolder.addBinding(
-      this.state, 'status',{
+      this.state,
+      'status',
+      {
         label: 'Object',
         readonly: true
       }
-    )
+    );
 
     this.translateBinding = objectControllerFolder
       .addBinding(this.state, 'translate', {
@@ -516,48 +535,55 @@ export class Tweakpane {
 
     // Object Editor
     const objectEditorFolder = objectControllerFolder.addFolder({
-      title : 'Object Editor',
-      expanded : true,
-    })
+      title: 'Object Editor',
+      expanded: true
+    });
 
     this.newNameObject = objectEditorFolder.addBinding(
-      this.state.sceneManager, 'name', {
+      this.state.sceneManager,
+      'name',
+      {
         label: 'Name Object'
       }
-    )
+    );
 
     this.newObjectBinding = objectEditorFolder.addBinding(
-      this.state.sceneManager, 'newObject',{
+      this.state.sceneManager,
+      'newObject',
+      {
         label: 'Size Object',
         x: { min: -400, max: 400, step: 0.5 },
         y: { min: -400, max: 400, step: 0.5 },
         z: { min: -400, max: 400, step: 0.5 }
       }
-    )
+    );
 
-    this.addObject = objectEditorFolder.addButton({ title: ' Add Object ' }).on('click',()=>{
-      this.state.onCreate();
-    })
+    this.addObject = objectEditorFolder
+      .addButton({ title: ' Add Object ' })
+      .on('click', () => {
+        this.state.onCreate();
+      });
 
-    this.removeObject = objectEditorFolder.addButton({ title: ' Remove Object ' }).on('click',()=>{
-      this.state.onRemove();
-    })
+    this.removeObject = objectEditorFolder
+      .addButton({ title: ' Remove Object ' })
+      .on('click', () => {
+        this.state.onRemove();
+      });
 
-    this.exportObject = objectEditorFolder.addButton({
-      title : ' Export Object '
-    }).on('click',()=>{
-      this.state.onExport();
-    })
+    this.exportObject = objectEditorFolder
+      .addButton({
+        title: ' Export Object '
+      })
+      .on('click', () => {
+        this.state.onExport();
+      });
 
-    this.importObject = objectEditorFolder.addButton({
-      title : ' Import Object '
-    }).on('click',()=>{
-      this.state.onImport();
-    })
-
-
-
-
-    
+    this.importObject = objectEditorFolder
+      .addButton({
+        title: ' Import Object '
+      })
+      .on('click', () => {
+        this.state.onImport();
+      });
   }
 }

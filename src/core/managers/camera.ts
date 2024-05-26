@@ -6,8 +6,8 @@ import { PerspectiveCamera } from '../../camera/PerspectiveCamera';
 export class CameraManager {
   camera: Camera;
   private orthographicCamera: OrthographicCamera;
-  private obliqueCamera : ObliqueCamera;
-  private perspectiveCamera : PerspectiveCamera;
+  private obliqueCamera: ObliqueCamera;
+  private perspectiveCamera: PerspectiveCamera;
 
   constructor(canvas: HTMLCanvasElement) {
     this.orthographicCamera = new OrthographicCamera(
@@ -26,15 +26,15 @@ export class CameraManager {
       canvas.clientHeight / 2,
       -500,
       500,
-      45,
+      45
     );
 
     this.perspectiveCamera = new PerspectiveCamera(
       60,
       0.01,
       canvas.clientWidth / canvas.clientHeight,
-      999,
-    )
+      999
+    );
 
     this.camera = this.orthographicCamera;
   }
@@ -46,19 +46,17 @@ export class CameraManager {
   setCamera(newCamera: string) {
     if (newCamera == 'orthographic') {
       this.camera = this.orthographicCamera;
-    }else if(newCamera == 'oblique'){
+    } else if (newCamera == 'oblique') {
       this.camera = this.obliqueCamera;
-    }else if(newCamera == 'perspective'){
+    } else if (newCamera == 'perspective') {
       this.camera = this.perspectiveCamera;
     }
   }
 
-  zoomCamera(delta: number){
+  zoomCamera(delta: number) {
     this.camera.zoom = delta;
     this.camera.computeProjectionMatrix();
   }
 
-  resetCamera(){
-    
-  }
+  resetCamera() {}
 }
