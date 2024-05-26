@@ -75,7 +75,7 @@ export class OrbitControls {
 
     private onMouseWheel(event: WheelEvent){
         if (!this.allowZoom) return;
-        const delta = event.deltaY * -0.01; //
+        const delta = event.deltaY * -0.001; //
         const newZoom = this._camera.zoom + delta;
 
         this._camera.zoom = Math.min(Math.max(newZoom, 0), 2);
