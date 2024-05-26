@@ -33,9 +33,14 @@ Can refer to guidebook on `docs` directory
 
 ### 13521080 Fajar Maulana Herawan
 
-- Articulated Model:
-- Animation:
-- Hollow Object:
+- Articulated Model: Bunny
+- Animation: Bunny
+- Hollow Object: Triangle Hollow
+- Camera Ortho
+- Camera Oblique
+- Camera Perspective
+- Camera Controller
+- Object Editor
 
 ### 13521090 Tobias Natalio Sianipar
 
