@@ -78,6 +78,13 @@ export class HollowTrapesium extends BufferGeometry {
         hw-sw, hh-sw,  hd,  -hw, hh/4-sw, -hd,  hw-sw, hh-sw, -hd,
         -hw, hh/4-sw,  hd,  -hw, hh/4-sw, -hd,  hw-sw, hh-sw,  hd,
 
+        // Right face
+        hw, hh-sw, -hd,  hw,  hh,  hd,  hw, hh-sw,  hd,
+        hw, hh-sw, -hd,  hw,  hh, -hd,  hw,  hh,  hd,
+      
+        // Left face
+        -hw, hh/4-sw, -hd,  -hw, hh/4-sw,  hd,  -hw,  hh/4,  hd,
+        -hw, hh/4-sw, -hd,  -hw,  hh/4,  hd,  -hw,  hh/4, -hd,
         // Bottom Box
         // Front face
         -hw, -hh,  hd,   hw, -hh,  hd,   hw, -hh+sw,  hd,
