@@ -13,3 +13,7 @@ npm i
 ```bash
 npm run dev
 ```
+
+## How to Operate
+
+Can refer to guidebook on `docs` directory
